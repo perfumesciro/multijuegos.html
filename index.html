@@ -4,1117 +4,704 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLANET DESTROYER</title>
-
+<title>VITALIA — Tu bienestar</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
 
+:root {
+  --bg:#0b0e11;
+  --panel:#12171b;
+  --panel2:#181f23;
+  --green:#b7f28b;
+  --muted:#89949a;
+  --white:#f4f7f3;
+  --border:#263035;
+}
 *{box-sizing:border-box}
-
 body{
- margin:0;
- overflow:hidden;
- background:#030710;
- color:white;
- font-family:Inter,sans-serif;
+ margin:0;background:var(--bg);color:var(--white);
+ font-family:'DM Sans',sans-serif;
 }
-
-#game{
- position:fixed;
- inset:0;
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:1250px;margin:auto;padding:25px}
+header{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:12px 0 25px;border-bottom:1px solid var(--border);
 }
-
-canvas{display:block}
-
-.top{
- position:fixed;
- top:0;
- left:0;
- right:0;
- padding:20px 25px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- pointer-events:none;
- background:linear-gradient(#030710dd,transparent);
+.logo{font:800 25px Manrope;letter-spacing:3px}
+.logo span{color:var(--green)}
+.user-icon{
+ width:42px;height:42px;border-radius:50%;
+ background:var(--panel2);display:grid;place-items:center;
+ color:var(--green);font-weight:800;
 }
-
-.logo{
- font-family:Orbitron,sans-serif;
- font-weight:900;
- font-size:20px;
- letter-spacing:3px;
- color:#65d9ff;
+nav{
+ display:flex;gap:8px;margin:25px 0;
+ overflow-x:auto;padding-bottom:5px;
 }
-
-.logo span{color:white}
-
-.status{
- font-size:11px;
- color:#70f5b1;
- letter-spacing:2px;
-}
-
-.stats{
- position:fixed;
- top:90px;
- left:22px;
- width:205px;
- padding:17px;
- background:#081525dd;
- border:1px solid #24445b;
- border-radius:12px;
- backdrop-filter:blur(12px);
-}
-
-.section-title{
- font-family:Orbitron,sans-serif;
- font-size:11px;
- color:#65d9ff;
- letter-spacing:2px;
- margin-bottom:16px;
-}
-
-.stat{
- display:flex;
- justify-content:space-between;
- margin:13px 0;
- font-size:12px;
- color:#a7b8c9;
-}
-
-.stat b{color:white}
-
-.progress{
- height:6px;
- background:#1a2b3b;
- border-radius:10px;
- overflow:hidden;
- margin-top:7px;
-}
-
-.progress div{
- height:100%;
- width:0%;
- background:linear-gradient(90deg,#19a9ff,#55ffe1);
- transition:width .3s;
-}
-
-.weapons{
- position:fixed;
- right:20px;
- top:90px;
- width:220px;
- padding:17px;
- background:#081525eF;
- border:1px solid #24445b;
- border-radius:12px;
- backdrop-filter:blur(12px);
-}
-
-.weapon{
- width:100%;
- padding:13px;
- margin-bottom:9px;
- background:#101f30;
- border:1px solid #263e54;
- border-radius:8px;
- color:white;
- text-align:left;
- cursor:pointer;
- transition:.2s;
-}
-
-.weapon:hover{
- background:#18334b;
- border-color:#65d9ff;
-}
-
-.weapon.active{
- background:#12334b;
- border-color:#4bd8ff;
- box-shadow:0 0 15px #28baff22;
-}
-
-.weapon strong{
- display:block;
- font-size:12px;
- margin-bottom:4px;
-}
-
-.weapon small{
- color:#849bb0;
- font-size:10px;
-}
-
-.icon{
- font-size:19px;
- float:right;
-}
-
-.bottom{
- position:fixed;
- bottom:20px;
- left:50%;
- transform:translateX(-50%);
- display:flex;
- gap:10px;
- align-items:center;
-}
-
-.action{
- padding:12px 17px;
- border:1px solid #24445b;
- border-radius:8px;
- color:white;
- background:#0b1b2c;
- cursor:pointer;
- font-size:11px;
- font-weight:700;
- letter-spacing:1px;
-}
-
-.action:hover{background:#183a52}
-
-.hint{
- position:fixed;
- bottom:78px;
- left:50%;
- transform:translateX(-50%);
- color:#8099ad;
- font-size:11px;
- text-align:center;
+nav button{
+ background:transparent;border:1px solid transparent;
+ color:var(--muted);padding:11px 17px;border-radius:12px;
  white-space:nowrap;
 }
-
-#message{
- position:fixed;
- top:45%;
- left:50%;
- transform:translate(-50%,-50%);
- font-family:Orbitron,sans-serif;
- font-size:22px;
- font-weight:900;
- color:#8beaff;
- text-shadow:0 0 20px #00aaff;
- pointer-events:none;
- opacity:0;
- transition:opacity .3s;
- text-align:center;
+nav button.active{
+ background:var(--panel2);border-color:var(--border);
+ color:var(--green);
 }
-
-@media(max-width:700px){
- .stats{top:75px;left:8px;width:145px;padding:10px}
- .weapons{top:auto;bottom:90px;right:8px;width:155px;padding:9px}
- .weapon{padding:9px;margin-bottom:5px}
- .weapon strong{font-size:10px}
- .weapon small{font-size:9px}
- .top{padding:15px}
- .logo{font-size:14px}
- .status{font-size:8px}
- .bottom{bottom:12px}
- .action{padding:10px;font-size:9px}
- .hint{bottom:65px;font-size:9px}
+.page{display:none}
+.page.active{display:block}
+h1,h2,h3,p{margin-top:0}
+h1{font:800 34px Manrope;letter-spacing:-1px}
+h2{font:700 22px Manrope}
+h3{font-weight:700}
+.muted{color:var(--muted)}
+.green{color:var(--green)}
+.small{font-size:13px;color:var(--muted)}
+.grid{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:16px;
+}
+.card{
+ background:var(--panel);border:1px solid var(--border);
+ border-radius:19px;padding:22px;
+}
+.card-title{display:flex;justify-content:space-between;align-items:center}
+.big-number{font:800 34px Manrope;margin:15px 0 5px}
+.hero{
+ background:linear-gradient(120deg,#17251d,#15201b 65%,#192126);
+ border:1px solid #344b38;border-radius:22px;
+ padding:30px;margin-bottom:18px;
+}
+.hero h1{max-width:500px;margin-bottom:10px}
+.hero p{color:#bdc9bd;max-width:500px;line-height:1.7}
+.btn{
+ border:0;border-radius:12px;padding:13px 19px;
+ background:var(--green);color:#142016;font-weight:800;
+}
+.btn.secondary{
+ background:var(--panel2);color:var(--white);
+ border:1px solid var(--border);
+}
+.btn.danger{background:#3a2525;color:#ffaaaa}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.full{width:100%}
+.section{margin:28px 0}
+.progress{
+ height:9px;background:#252d30;border-radius:20px;
+ overflow:hidden;margin:13px 0;
+}
+.progress div{
+ height:100%;width:0;background:var(--green);
+ border-radius:20px;transition:.3s;
+}
+.habit{
+ display:flex;align-items:center;gap:13px;
+ padding:15px 0;border-bottom:1px solid var(--border);
+}
+.habit:last-child{border:0}
+.habit input{accent-color:var(--green);width:19px;height:19px}
+.habit-info{flex:1}
+.habit-info strong{display:block}
+.habit-info small{color:var(--muted)}
+.form-group{margin:17px 0}
+label{display:block;font-size:13px;color:#aab4b8;margin-bottom:8px}
+input,select,textarea{
+ width:100%;padding:14px;background:var(--panel2);
+ border:1px solid var(--border);border-radius:11px;
+ color:white;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--green)}
+select option{background:#151b1e}
+textarea{resize:vertical;min-height:90px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.meal{
+ padding:16px 0;border-bottom:1px solid var(--border);
+ display:flex;justify-content:space-between;gap:10px;
+}
+.meal:last-child{border:0}
+.tag{
+ font-size:11px;color:var(--green);
+ background:#203126;padding:6px 10px;border-radius:20px;
+}
+.water-controls{display:flex;gap:10px;align-items:center;margin-top:15px}
+.water-controls button{
+ width:40px;height:40px;border-radius:10px;
+ background:var(--panel2);color:var(--green);
+ border:1px solid var(--border);font-size:20px;
+}
+.water-glasses{display:flex;flex-wrap:wrap;gap:7px;margin-top:17px}
+.glass{
+ width:23px;height:32px;border:1px solid #475a60;
+ border-radius:5px 5px 9px 9px;
+}
+.glass.filled{background:#8bc7d7;border-color:#8bc7d7}
+.empty{
+ text-align:center;padding:35px 15px;color:var(--muted);
+}
+.entry{
+ padding:13px 0;border-bottom:1px solid var(--border);
+ display:flex;justify-content:space-between;gap:12px;
+}
+.entry button{background:none;border:0;color:#ff8585}
+.welcome{color:var(--muted);margin-bottom:25px}
+.notice{
+ padding:15px;border-radius:12px;background:#202b23;
+ border:1px solid #344b38;color:#c9ddc8;
+ font-size:13px;line-height:1.6;
+}
+footer{
+ text-align:center;color:#657176;font-size:12px;
+ padding:40px 0 20px;
+}
+.modal-bg{
+ display:none;position:fixed;inset:0;background:#000b;
+ z-index:10;align-items:center;justify-content:center;padding:15px;
+}
+.modal-bg.show{display:flex}
+.modal{
+ background:var(--panel);border:1px solid var(--border);
+ border-radius:20px;padding:25px;width:100%;max-width:480px;
+ max-height:90vh;overflow:auto;
+}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+@media(max-width:750px){
+ .app{padding:17px}
+ .grid{grid-template-columns:1fr 1fr}
+ .hero{padding:22px}
+ h1{font-size:28px}
+}
+@media(max-width:480px){
+ .grid{grid-template-columns:1fr}
+ .two{grid-template-columns:1fr}
+ nav{margin:18px 0}
+ .card{padding:18px}
 }
 </style>
 </head>
-
 <body>
 
-<div id="game"></div>
+<div class="app">
+<header>
+ <div class="logo">VITA<span>LIA.</span></div>
+ <div class="user-icon" id="avatar">V</div>
+</header>
 
-<div class="top">
- <div class="logo">PLANET <span>DESTROYER</span></div>
- <div class="status">● SISTEMA ACTIVO</div>
-</div>
+<nav>
+ <button class="active" data-page="home">Inicio</button>
+ <button data-page="diary">Mi diario</button>
+ <button data-page="habits">Hábitos</button>
+ <button data-page="profile">Mi perfil</button>
+</nav>
 
-<div class="stats">
- <div class="section-title">PLANETA / TIERRA</div>
-
- <div class="stat">
-  <span>Estado</span>
-  <b id="condition">100%</b>
+<!-- INICIO -->
+<section id="home" class="page active">
+ <div class="hero">
+  <span class="tag">TU BIENESTAR, TU RITMO</span>
+  <h1 id="greeting">Un día más para cuidarte.</h1>
+  <p>Pequeños hábitos, decisiones conscientes y progreso real. Sin comparaciones ni presiones.</p>
+  <button class="btn" onclick="go('habits')">Ver mis hábitos →</button>
  </div>
 
- <div class="progress"><div id="healthbar"></div></div>
+ <p class="welcome" id="today"></p>
 
- <div class="stat">
-  <span>Impactos</span>
-  <b id="hits">0</b>
+ <div class="grid">
+  <div class="card">
+   <div class="card-title"><span class="muted">Agua registrada</span> 💧</div>
+   <div class="big-number" id="waterTotal">0</div>
+   <span class="small">Vasos registrados hoy</span>
+   <div class="water-controls">
+    <button onclick="changeWater(-1)">−</button>
+    <button onclick="changeWater(1)">+</button>
+   </div>
+  </div>
+
+  <div class="card">
+   <div class="card-title"><span class="muted">Movimiento</span> 🏃</div>
+   <div class="big-number" id="movementTotal">0</div>
+   <span class="small">Minutos registrados hoy</span>
+   <button class="btn secondary full" style="margin-top:17px" onclick="openMovement()">Registrar</button>
+  </div>
+
+  <div class="card">
+   <div class="card-title"><span class="muted">Hábitos de hoy</span> ✓</div>
+   <div class="big-number" id="habitTotal">0/4</div>
+   <span class="small">Hábitos completados</span>
+   <div class="progress"><div id="habitProgress"></div></div>
+  </div>
  </div>
 
- <div class="stat">
-  <span>Destrucción</span>
-  <b id="damage">0%</b>
+ <div class="section grid">
+  <div class="card" style="grid-column:span 2">
+   <h2>Tu día, paso a paso</h2>
+   <p class="muted small">Tu actividad se actualiza con lo que registrás realmente.</p>
+   <div id="todayMeals"></div>
+   <button class="btn secondary full" onclick="go('diary')">Abrir mi diario</button>
+  </div>
+  <div class="card">
+   <h2>Una idea para hoy</h2>
+   <p style="line-height:1.8">No necesitás cambiar todo de golpe. Comer variado, descansar y disfrutar del movimiento también forman parte del bienestar.</p>
+   <span class="green small">PROGRESO SIN PRESIONES</span>
+  </div>
+ </div>
+</section>
+
+<!-- DIARIO -->
+<section id="diary" class="page">
+ <h1>Mi diario</h1>
+ <p class="muted">Registrá tus comidas y actividades sin obsesionarte con números.</p>
+
+ <div class="grid">
+  <div class="card" style="grid-column:span 2">
+   <h2>Registrar una comida 🍎</h2>
+   <div class="form-group">
+    <label>Momento del día</label>
+    <select id="mealType">
+     <option>Desayuno</option>
+     <option>Almuerzo</option>
+     <option>Merienda</option>
+     <option>Cena</option>
+     <option>Colación</option>
+    </select>
+   </div>
+   <div class="form-group">
+    <label>¿Qué comiste?</label>
+    <textarea id="mealDescription" placeholder="Ej. Arroz, pollo y ensalada..."></textarea>
+   </div>
+   <button class="btn full" onclick="addMeal()">Guardar comida</button>
+  </div>
+
+  <div class="card">
+   <h2>Hidratación 💧</h2>
+   <div class="big-number" id="waterDiary">0</div>
+   <p class="small">Vasos registrados</p>
+   <p class="muted small">El registro no representa una recomendación médica de consumo.</p>
+  </div>
  </div>
 
- <div class="stat">
-  <span>Arma actual</span>
-  <b id="current">Meteorito</b>
+ <div class="section card">
+  <h2>Mis comidas registradas</h2>
+  <div id="mealList"></div>
+ </div>
+
+ <div class="section card">
+  <h2>Mi movimiento</h2>
+  <div id="movementList"></div>
+ </div>
+</section>
+
+<!-- HABITOS -->
+<section id="habits" class="page">
+ <h1>Mis hábitos</h1>
+ <p class="muted">Marcá las actividades que realizaste hoy. No hay castigos por dejar alguna pendiente.</p>
+
+ <div class="card">
+  <div class="card-title">
+   <h2>Rutina diaria</h2>
+   <span class="tag" id="habitLabel">0 de 4</span>
+  </div>
+  <div id="habitList"></div>
+  <div class="progress"><div id="habitProgress2"></div></div>
+  <p class="small">El porcentaje refleja solamente tus registros.</p>
+ </div>
+
+ <div class="grid section">
+  <div class="card">
+   <h3>🥗 Alimentación variada</h3>
+   <p class="muted small">Intentá incluir distintos grupos de alimentos a lo largo del día.</p>
+  </div>
+  <div class="card">
+   <h3>💤 Descanso</h3>
+   <p class="muted small">El descanso es importante para la recuperación y el crecimiento.</p>
+  </div>
+  <div class="card">
+   <h3>⚽ Movimiento</h3>
+   <p class="muted small">Elegí actividades que disfrutes, como caminar, jugar o practicar deportes.</p>
+  </div>
+ </div>
+</section>
+
+<!-- PERFIL -->
+<section id="profile" class="page">
+ <h1>Mi perfil</h1>
+ <p class="muted">Tus preferencias y objetivos personales.</p>
+
+ <div class="card">
+  <div class="card-title">
+   <h2>Información personal</h2>
+   <button class="btn secondary" onclick="openProfile()">Editar</button>
+  </div>
+  <div class="section">
+   <p class="small">NOMBRE</p><strong id="profileName">Sin completar</strong>
+  </div>
+  <div class="section">
+   <p class="small">EDAD</p><strong id="profileAge">Sin completar</strong>
+  </div>
+  <div class="section">
+   <p class="small">ALTURA</p><strong id="profileHeight">Sin completar</strong>
+  </div>
+  <div class="section">
+   <p class="small">OBJETIVO</p><strong id="profileGoal">Sin completar</strong>
+  </div>
+  <div class="section">
+   <p class="small">ACTIVIDAD</p><strong id="profileActivity">Sin completar</strong>
+  </div>
+ </div>
+
+ <div class="notice section">
+  VITALIA no diagnostica, no establece objetivos de peso ni calcula restricciones de calorías. Si te preocupa tu peso o necesitás cambiarlo por motivos de salud, consultá con un profesional de salud junto a un adulto de confianza.
+ </div>
+
+ <div class="card section">
+  <h2>Mis datos</h2>
+  <p class="muted small">La información se guarda localmente en este navegador.</p>
+  <button class="btn secondary full" onclick="exportData()">Exportar mis registros</button>
+  <button class="btn danger full" style="margin-top:10px" onclick="clearData()">Borrar todos mis datos</button>
+ </div>
+</section>
+
+<footer>
+ VITALIA © 2026 · Tu bienestar importa.<br><br>
+ Los registros son informativos y no sustituyen una consulta profesional.
+</footer>
+</div>
+
+<!-- ENCUESTA INICIAL -->
+<div class="modal-bg" id="setupModal">
+ <div class="modal">
+  <span class="tag">BIENVENIDO A VITALIA</span>
+  <h2 style="margin-top:17px">Conozcámonos.</h2>
+  <p class="muted small">Respondé esta pequeña encuesta para adaptar tu experiencia.</p>
+
+  <div class="form-group">
+   <label>¿Cómo te llamás?</label>
+   <input id="name" maxlength="35" placeholder="Tu nombre">
+  </div>
+  <div class="two">
+   <div class="form-group">
+    <label>Edad</label>
+    <input id="age" type="number" min="5" max="100" placeholder="Ej. 14">
+   </div>
+   <div class="form-group">
+    <label>Altura (cm)</label>
+    <input id="height" type="number" min="50" max="250" placeholder="Ej. 160">
+   </div>
+  </div>
+  <div class="form-group">
+   <label>¿Qué querés mejorar?</label>
+   <select id="goal">
+    <option value="Mejorar mis hábitos">Mejorar mis hábitos</option>
+    <option value="Sentirme con más energía">Sentirme con más energía</option>
+    <option value="Mejorar mi rendimiento deportivo">Mejorar mi rendimiento deportivo</option>
+    <option value="Acompañar una recomendación profesional">Acompañar una recomendación profesional</option>
+   </select>
+  </div>
+  <div class="form-group">
+   <label>¿Cuánto movimiento realizás habitualmente?</label>
+   <select id="activity">
+    <option>Poco movimiento</option>
+    <option>Actividad moderada</option>
+    <option>Entreno frecuentemente</option>
+   </select>
+  </div>
+  <div class="form-group">
+   <label>¿Qué actividades disfrutás?</label>
+   <select id="sport">
+    <option>Fútbol</option>
+    <option>Caminar</option>
+    <option>Bicicleta</option>
+    <option>Gimnasio supervisado</option>
+    <option>Otros deportes</option>
+    <option>Varias actividades</option>
+   </select>
+  </div>
+  <div class="notice">
+   No necesitamos tu peso para ayudarte a construir hábitos saludables. Tus respuestas no se utilizan para emitir diagnósticos ni recomendaciones calóricas.
+  </div>
+  <button class="btn full" style="margin-top:18px" onclick="saveProfile()">Comenzar mi experiencia →</button>
  </div>
 </div>
 
-<div class="weapons">
- <div class="section-title">ARSENAL</div>
-
- <button class="weapon active" data-weapon="meteor">
-  <span class="icon">☄️</span>
-  <strong>Meteorito</strong>
-  <small>Impacto de roca espacial</small>
- </button>
-
- <button class="weapon" data-weapon="laser">
-  <span class="icon">⚡</span>
-  <strong>Rayo láser</strong>
-  <small>Descarga de energía</small>
- </button>
-
- <button class="weapon" data-weapon="plasma">
-  <span class="icon">🔵</span>
-  <strong>Plasma</strong>
-  <small>Explosión energética</small>
- </button>
-
- <button class="weapon" data-weapon="ice">
-  <span class="icon">❄️</span>
-  <strong>Congelación</strong>
-  <small>Onda de hielo ficticia</small>
- </button>
-
- <button class="weapon" data-weapon="fire">
-  <span class="icon">🔥</span>
-  <strong>Supernova</strong>
-  <small>Gran explosión de energía</small>
- </button>
+<!-- REGISTRAR MOVIMIENTO -->
+<div class="modal-bg" id="movementModal">
+ <div class="modal">
+  <h2>Registrar movimiento</h2>
+  <div class="form-group">
+   <label>Actividad</label>
+   <select id="movementType">
+    <option>Fútbol</option>
+    <option>Caminata</option>
+    <option>Bicicleta</option>
+    <option>Educación física</option>
+    <option>Otro deporte</option>
+   </select>
+  </div>
+  <div class="form-group">
+   <label>Duración en minutos</label>
+   <input id="movementMinutes" type="number" min="1" max="600" placeholder="Ej. 45">
+  </div>
+  <div class="modal-actions">
+   <button class="btn secondary" onclick="closeMovement()">Cancelar</button>
+   <button class="btn" onclick="addMovement()">Guardar</button>
+  </div>
+ </div>
 </div>
 
-<div id="message">IMPACTO DETECTADO</div>
+<script>
+const $ = id => document.getElementById(id);
+const STORAGE = 'vitalia_data_v1';
 
-<div class="hint">
- MANTENÉ Y ARRASTRÁ PARA GIRAR EL PLANETA · RUEDA PARA HACER ZOOM · CLIC PARA ATACAR
-</div>
+const defaultData = {
+ profile:null,
+ records:{},
+};
 
-<div class="bottom">
- <button class="action" id="rotate">⟳ ROTAR</button>
- <button class="action" id="reset">↻ REINICIAR</button>
- <button class="action" id="zoom">◎ ZOOM</button>
-</div>
+let data;
+try {
+ data=JSON.parse(localStorage.getItem(STORAGE)) || defaultData;
+ if(!data.records) data.records={};
+} catch(e) {
+ data=defaultData;
+}
 
-<script type="importmap">
-{
- "imports":{
-  "three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"
+const habits=[
+ {id:'breakfast',name:'Desayuné tranquilamente',desc:'Empezar el día con energía'},
+ {id:'variety',name:'Comí alimentos variados',desc:'Diferentes alimentos durante el día'},
+ {id:'movement',name:'Me mantuve en movimiento',desc:'Una actividad que disfruté'},
+ {id:'rest',name:'Cuidé mi descanso',desc:'Dedicar tiempo a descansar'}
+];
+
+function todayKey(){
+ return new Date().toLocaleDateString('en-CA');
+}
+function getDay(){
+ const key=todayKey();
+ if(!data.records[key]){
+  data.records[key]={water:0,meals:[],movements:[],habits:[]};
+ }
+ return data.records[key];
+}
+function save(){
+ try{
+  localStorage.setItem(STORAGE,JSON.stringify(data));
+ }catch(e){
+  alert('No se pudieron guardar los datos. Revisá el almacenamiento del navegador.');
  }
 }
-</script>
+function go(page){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ $(page).classList.add('active');
+ document.querySelector(`[data-page="${page}"]`).classList.add('active');
+ render();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
 
-<script type="module">
-import * as THREE from "three";
-
-const container=document.getElementById("game");
-
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x030710);
-
-const camera=new THREE.PerspectiveCamera(
- 45,
- window.innerWidth/window.innerHeight,
- 0.1,
- 1000
-);
-
-camera.position.set(0,0,5.5);
-
-const renderer=new THREE.WebGLRenderer({
- antialias:true,
- powerPreference:"high-performance"
+document.querySelectorAll('nav button').forEach(btn=>{
+ btn.addEventListener('click',()=>go(btn.dataset.page));
 });
 
-renderer.setSize(window.innerWidth,window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-container.appendChild(renderer.domElement);
+function saveProfile(){
+ const name=$('name').value.trim();
+ const age=Number($('age').value);
+ const height=Number($('height').value);
 
-// LUCES
-
-scene.add(new THREE.AmbientLight(0xffffff,1.1));
-
-const sunlight=new THREE.DirectionalLight(0xffffff,2.4);
-sunlight.position.set(5,3,5);
-scene.add(sunlight);
-
-const blueLight=new THREE.PointLight(0x168cff,2,20);
-blueLight.position.set(-5,1,3);
-scene.add(blueLight);
-
-// ESTRELLAS
-
-const starGeometry=new THREE.BufferGeometry();
-const starPositions=[];
-
-for(let i=0;i<3500;i++){
- starPositions.push(
-  (Math.random()-.5)*180,
-  (Math.random()-.5)*180,
-  (Math.random()-.5)*180
- );
-}
-
-starGeometry.setAttribute(
- "position",
- new THREE.Float32BufferAttribute(starPositions,3)
-);
-
-const stars=new THREE.Points(
- starGeometry,
- new THREE.PointsMaterial({
-  color:0xffffff,
-  size:.09,
-  transparent:true,
-  opacity:.85
- })
-);
-
-scene.add(stars);
-
-// TEXTURA DEL PLANETA
-
-function createEarthTexture(){
-
- const canvas=document.createElement("canvas");
- canvas.width=2048;
- canvas.height=1024;
-
- const ctx=canvas.getContext("2d");
-
- const ocean=ctx.createLinearGradient(0,0,0,1024);
- ocean.addColorStop(0,"#123e72");
- ocean.addColorStop(.5,"#0879aa");
- ocean.addColorStop(1,"#092a55");
-
- ctx.fillStyle=ocean;
- ctx.fillRect(0,0,2048,1024);
-
- // Líneas oceánicas
- ctx.strokeStyle="#66b7d8";
- ctx.globalAlpha=.14;
- ctx.lineWidth=2;
-
- for(let x=0;x<2048;x+=80){
-  ctx.beginPath();
-  ctx.moveTo(x,0);
-  ctx.lineTo(x,1024);
-  ctx.stroke();
+ if(!name || !Number.isInteger(age) || age<5 || age>100 ||
+ !Number.isFinite(height) || height<50 || height>250){
+  alert('Completá correctamente el nombre, la edad y la altura.');
+  return;
  }
 
- for(let y=0;y<1024;y+=80){
-  ctx.beginPath();
-  ctx.moveTo(0,y);
-  ctx.lineTo(2048,y);
-  ctx.stroke();
- }
-
- ctx.globalAlpha=1;
-
- // Continentes aproximados
- const continents=[
- [
-  [170,250],[250,160],[380,140],[450,220],
-  [410,300],[350,340],[310,450],[260,520],
-  [220,440],[160,350]
- ],
- [
-  [430,520],[510,490],[570,550],[560,660],
-  [500,820],[440,740],[410,620]
- ],
- [
-  [870,180],[960,130],[1080,160],[1150,220],
-  [1080,290],[970,270],[910,340],[850,270]
- ],
- [
-  [950,350],[1100,320],[1170,430],[1130,570],
-  [1080,720],[990,680],[920,530],[890,420]
- ],
- [
-  [1120,160],[1300,120],[1430,200],[1530,190],
-  [1620,280],[1510,370],[1390,350],[1280,280]
- ],
- [
-  [1500,470],[1620,440],[1720,510],[1690,650],
-  [1580,710],[1490,610]
- ],
- [
-  [1760,240],[1870,180],[1980,250],[1980,440],
-  [1880,470],[1800,370]
- ]
- ];
-
- continents.forEach(points=>{
-  ctx.beginPath();
-  points.forEach((p,i)=>{
-   if(i===0)ctx.moveTo(p[0],p[1]);
-   else ctx.lineTo(p[0],p[1]);
-  });
-  ctx.closePath();
-
-  ctx.fillStyle="#488b55";
-  ctx.fill();
-
-  ctx.strokeStyle="#8fba69";
-  ctx.lineWidth=5;
-  ctx.stroke();
- });
-
- // Detalles de terreno
- for(let i=0;i<18000;i++){
-  const x=Math.random()*2048;
-  const y=Math.random()*1024;
-  ctx.fillStyle=Math.random()>.5?
-   "rgba(220,205,130,.10)":
-   "rgba(0,30,20,.12)";
-  ctx.fillRect(x,y,Math.random()*5+1,Math.random()*5+1);
- }
-
- return new THREE.CanvasTexture(canvas);
-}
-
-const earthGroup=new THREE.Group();
-scene.add(earthGroup);
-
-const earthGeometry=new THREE.SphereGeometry(1.5,96,96);
-
-const earthMaterial=new THREE.MeshPhongMaterial({
- map:createEarthTexture(),
- shininess:18,
- specular:new THREE.Color(0x235577)
-});
-
-const earth=new THREE.Mesh(earthGeometry,earthMaterial);
-earthGroup.add(earth);
-
-// ATMÓSFERA
-
-const atmosphere=new THREE.Mesh(
- new THREE.SphereGeometry(1.56,64,64),
- new THREE.MeshBasicMaterial({
-  color:0x299cff,
-  transparent:true,
-  opacity:.12,
-  side:THREE.BackSide
- })
-);
-
-earthGroup.add(atmosphere);
-
-// NUBE EXTERIOR
-
-const cloudMaterial=new THREE.MeshBasicMaterial({
- color:0xc9eaff,
- transparent:true,
- opacity:.08,
- wireframe:true
-});
-
-const clouds=new THREE.Mesh(
- new THREE.SphereGeometry(1.515,48,48),
- cloudMaterial
-);
-
-earthGroup.add(clouds);
-
-// RESPLANDOR EXTERIOR
-
-const glow=new THREE.Mesh(
- new THREE.SphereGeometry(1.75,64,64),
- new THREE.MeshBasicMaterial({
-  color:0x087cff,
-  transparent:true,
-  opacity:.045,
-  side:THREE.BackSide
- })
-);
-
-earthGroup.add(glow);
-
-// VARIABLES
-
-let selectedWeapon="meteor";
-let hits=0;
-let destruction=0;
-let autoRotate=true;
-
-let dragging=false;
-let previousX=0;
-let previousY=0;
-let rotationVelocity=0;
-
-const raycaster=new THREE.Raycaster();
-const mouse=new THREE.Vector2();
-
-const effects=[];
-const marks=[];
-
-// SELECCIÓN DE ARMAS
-
-document.querySelectorAll(".weapon").forEach(button=>{
-
- button.addEventListener("click",()=>{
-
-  document.querySelectorAll(".weapon")
-   .forEach(b=>b.classList.remove("active"));
-
-  button.classList.add("active");
-
-  selectedWeapon=button.dataset.weapon;
-
-  const names={
-   meteor:"Meteorito",
-   laser:"Láser",
-   plasma:"Plasma",
-   ice:"Congelación",
-   fire:"Supernova"
-  };
-
-  document.getElementById("current").textContent=
-   names[selectedWeapon];
-
- });
-});
-
-// MENSAJE
-
-function showMessage(text){
-
- const element=document.getElementById("message");
-
- element.textContent=text;
- element.style.opacity=1;
-
- clearTimeout(element.timer);
-
- element.timer=setTimeout(()=>{
-  element.style.opacity=0;
- },1000);
-}
-
-// ACTUALIZAR ESTADÍSTICAS
-
-function updateStats(){
-
- const health=Math.max(0,100-destruction);
-
- document.getElementById("hits").textContent=hits;
- document.getElementById("damage").textContent=
-  Math.min(100,Math.round(destruction))+"%";
-
- document.getElementById("condition").textContent=
-  Math.round(health)+"%";
-
- document.getElementById("healthbar").style.width=
-  health+"%";
-}
-
-// MARCAS DE IMPACTO
-
-function addMark(point,color){
-
- const material=new THREE.MeshBasicMaterial({
-  color:color,
-  transparent:true,
-  opacity:.8,
-  side:THREE.DoubleSide,
-  depthWrite:false
- });
-
- const mark=new THREE.Mesh(
-  new THREE.CircleGeometry(.045,24),
-  material
- );
-
- const normal=point.clone().normalize();
-
- mark.position.copy(normal.multiplyScalar(1.505));
- mark.quaternion.setFromUnitVectors(
-  new THREE.Vector3(0,0,1),
-  normal
- );
-
- earthGroup.add(mark);
- marks.push(mark);
-
- if(marks.length>120){
-  earthGroup.remove(marks.shift());
- }
-}
-
-// ANILLO DE EXPLOSIÓN
-
-function addRing(point,color){
-
- const normal=point.clone().normalize();
-
- const ring=new THREE.Mesh(
-  new THREE.TorusGeometry(.08,.012,8,48),
-  new THREE.MeshBasicMaterial({
-   color:color,
-   transparent:true,
-   opacity:1
-  })
- );
-
- ring.position.copy(normal.multiplyScalar(1.52));
- ring.quaternion.setFromUnitVectors(
-  new THREE.Vector3(0,0,1),
-  normal
- );
-
- earthGroup.add(ring);
-
- effects.push({
-  object:ring,
-  type:"ring",
-  life:0,
-  duration:1,
-  start:.08
- });
-}
-
-// EXPLOSIÓN
-
-function explosion(point,color,power=1){
-
- const sphere=new THREE.Mesh(
-  new THREE.SphereGeometry(.1,20,20),
-  new THREE.MeshBasicMaterial({
-   color:color,
-   transparent:true,
-   opacity:.9
-  })
- );
-
- const normal=point.clone().normalize();
-
- sphere.position.copy(normal.multiplyScalar(1.51));
- earthGroup.add(sphere);
-
- effects.push({
-  object:sphere,
-  type:"explosion",
-  life:0,
-  duration:.65,
-  power
- });
-
- addRing(point,color);
- addMark(point,color);
-}
-
-// METEORITO
-
-function meteorImpact(point){
-
- const meteor=new THREE.Group();
-
- const rock=new THREE.Mesh(
-  new THREE.IcosahedronGeometry(.10,1),
-  new THREE.MeshStandardMaterial({
-   color:0x777777,
-   roughness:1,
-   emissive:0x331100
-  })
- );
-
- meteor.add(rock);
-
- const fireball=new THREE.Mesh(
-  new THREE.SphereGeometry(.14,16,16),
-  new THREE.MeshBasicMaterial({
-   color:0xff6500,
-   transparent:true,
-   opacity:.45
-  })
- );
-
- fireball.position.z=-.09;
- meteor.add(fireball);
-
- const direction=point.clone().normalize();
-
- const start=direction.clone().multiplyScalar(4);
-
- meteor.position.copy(start);
- scene.add(meteor);
-
- effects.push({
-  object:meteor,
-  type:"meteor",
-  life:0,
-  duration:.55,
-  start:start,
-  end:direction.clone().multiplyScalar(1.48),
-  point:point.clone()
- });
-}
-
-// LÁSER
-
-function laserImpact(point){
-
- const start=new THREE.Vector3(0,0,0);
- camera.getWorldDirection(start);
- start.multiplyScalar(-1);
-
- const origin=camera.position.clone();
-
- const lineGeometry=new THREE.BufferGeometry()
-  .setFromPoints([origin,point.clone()]);
-
- const beam=new THREE.Line(
-  lineGeometry,
-  new THREE.LineBasicMaterial({
-   color:0x39edff,
-   transparent:true,
-   opacity:1
-  })
- );
-
- scene.add(beam);
-
- effects.push({
-  object:beam,
-  type:"laser",
-  life:0,
-  duration:.35
- });
-
- explosion(point,0x29dfff,1.2);
-}
-
-// PLASMA
-
-function plasmaImpact(point){
-
- explosion(point,0x8655ff,1.5);
- addRing(point,0x9d6cff);
-
-}
-
-// CONGELACIÓN
-
-function iceImpact(point){
-
- explosion(point,0x8ceeff,1.4);
-
- const ice=new THREE.Mesh(
-  new THREE.SphereGeometry(.17,16,16),
-  new THREE.MeshBasicMaterial({
-   color:0x75eaff,
-   transparent:true,
-   opacity:.45,
-   wireframe:true
-  })
- );
-
- const normal=point.clone().normalize();
-
- ice.position.copy(normal.multiplyScalar(1.54));
- earthGroup.add(ice);
-
- effects.push({
-  object:ice,
-  type:"ice",
-  life:0,
-  duration:1.3
- });
-}
-
-// SUPERNOVA
-
-function supernovaImpact(point){
-
- explosion(point,0xff6a20,2);
-
- const sphere=new THREE.Mesh(
-  new THREE.SphereGeometry(.2,24,24),
-  new THREE.MeshBasicMaterial({
-   color:0xff8a28,
-   transparent:true,
-   opacity:.75
-  })
- );
-
- const normal=point.clone().normalize();
-
- sphere.position.copy(normal.multiplyScalar(1.53));
- earthGroup.add(sphere);
-
- effects.push({
-  object:sphere,
-  type:"supernova",
-  life:0,
-  duration:1.1
- });
-}
-
-// ATAQUE
-
-function attack(point){
-
- hits++;
-
- const power={
-  meteor:1.8,
-  laser:1.2,
-  plasma:2.5,
-  ice:.7,
-  fire:4
+ data.profile={
+  name,age,height,
+  goal:$('goal').value,
+  activity:$('activity').value,
+  sport:$('sport').value
  };
-
- destruction+=power[selectedWeapon];
-
- destruction=Math.min(destruction,100);
-
- if(selectedWeapon==="meteor"){
-  meteorImpact(point);
-  showMessage("METEORITO DETECTADO");
- }
-
- if(selectedWeapon==="laser"){
-  laserImpact(point);
-  showMessage("DESCARGA LÁSER");
- }
-
- if(selectedWeapon==="plasma"){
-  plasmaImpact(point);
-  showMessage("EXPLOSIÓN DE PLASMA");
- }
-
- if(selectedWeapon==="ice"){
-  iceImpact(point);
-  showMessage("ONDA DE CONGELACIÓN");
- }
-
- if(selectedWeapon==="fire"){
-  supernovaImpact(point);
-  showMessage("SUPERNOVA");
- }
-
- updateStats();
+ save();
+ $('setupModal').classList.remove('show');
+ render();
 }
 
-// DETECTAR CLIC SOBRE LA TIERRA
-
-function shoot(event){
-
- const rect=renderer.domElement.getBoundingClientRect();
-
- mouse.x=((event.clientX-rect.left)/rect.width)*2-1;
- mouse.y=-((event.clientY-rect.top)/rect.height)*2+1;
-
- raycaster.setFromCamera(mouse,camera);
-
- const intersections=raycaster.intersectObject(earth);
-
- if(intersections.length){
-
-  const point=intersections[0].point.clone();
-
-  earthGroup.worldToLocal(point);
-
-  attack(point);
+function openProfile(){
+ if(data.profile){
+  $('name').value=data.profile.name;
+  $('age').value=data.profile.age;
+  $('height').value=data.profile.height;
+  $('goal').value=data.profile.goal;
+  $('activity').value=data.profile.activity;
+  $('sport').value=data.profile.sport;
  }
+ $('setupModal').classList.add('show');
 }
 
-// CONTROL DEL MOUSE
-
-renderer.domElement.addEventListener("pointerdown",event=>{
-
- if(event.button!==0)return;
-
- dragging=true;
- previousX=event.clientX;
- previousY=event.clientY;
-
- renderer.domElement.setPointerCapture(event.pointerId);
-
-});
-
-renderer.domElement.addEventListener("pointermove",event=>{
-
- if(!dragging)return;
-
- const dx=event.clientX-previousX;
- const dy=event.clientY-previousY;
-
- earthGroup.rotation.y+=dx*.006;
- earthGroup.rotation.x+=dy*.006;
-
- rotationVelocity=dx*.0004;
-
- previousX=event.clientX;
- previousY=event.clientY;
-
-});
-
-renderer.domElement.addEventListener("pointerup",event=>{
-
- if(!dragging)return;
-
- dragging=false;
-
- if(Math.abs(event.clientX-previousX)<3 &&
-    Math.abs(event.clientY-previousY)<3){
-  shoot(event);
+function changeWater(amount){
+ const day=getDay();
+ if(day.water+amount<0)return;
+ if(day.water+amount>50){
+  alert('Revisá el registro antes de continuar.');
+  return;
  }
-
-});
-
-renderer.domElement.addEventListener("wheel",event=>{
-
- camera.position.z+=event.deltaY*.003;
- camera.position.z=THREE.MathUtils.clamp(
-  camera.position.z,2.5,9
- );
-
-});
-
-// BOTONES
-
-document.getElementById("rotate").onclick=()=>{
-
- autoRotate=!autoRotate;
-
- document.getElementById("rotate").textContent=
-  autoRotate?"⟳ ROTAR":"Ⅱ PAUSAR";
-};
-
-document.getElementById("zoom").onclick=()=>{
-
- camera.position.z=camera.position.z>4?3:5.5;
-
-};
-
-document.getElementById("reset").onclick=()=>{
-
- hits=0;
- destruction=0;
-
- marks.forEach(mark=>earthGroup.remove(mark));
- marks.length=0;
-
- effects.forEach(effect=>scene.remove(effect.object));
- effects.length=0;
-
- earthGroup.rotation.set(0,0,0);
- camera.position.set(0,0,5.5);
-
- updateStats();
-
- showMessage("PLANETA RESTAURADO");
-};
-
-// ANIMACIÓN
-
-const clock=new THREE.Clock();
-
-function animate(){
-
- requestAnimationFrame(animate);
-
- const delta=Math.min(clock.getDelta(),.05);
-
- if(autoRotate && !dragging){
-  earthGroup.rotation.y+=.0018;
- }
-
- if(!dragging){
-  earthGroup.rotation.y+=rotationVelocity;
-  rotationVelocity*=.95;
- }
-
- clouds.rotation.y+=delta*.008;
- stars.rotation.y+=delta*.0005;
-
- for(let i=effects.length-1;i>=0;i--){
-
-  const effect=effects[i];
-
-  effect.life+=delta;
-
-  const t=Math.min(effect.life/effect.duration,1);
-
-  if(effect.type==="meteor"){
-
-   effect.object.position.lerpVectors(
-    effect.start,
-    effect.end,
-    t
-   );
-
-   effect.object.rotation.x+=.15;
-   effect.object.rotation.y+=.1;
-
-   if(t>=1){
-    scene.remove(effect.object);
-
-    explosion(effect.point,0xff7825,1.3);
-   }
-  }
-
-  if(effect.type==="laser"){
-
-   effect.object.material.opacity=1-t;
-  }
-
-  if(effect.type==="explosion"){
-
-   const scale=1+t*effect.power*2.5;
-
-   effect.object.scale.setScalar(scale);
-   effect.object.material.opacity=1-t;
-  }
-
-  if(effect.type==="ring"){
-
-   effect.object.scale.setScalar(1+t*7);
-   effect.object.material.opacity=1-t;
-  }
-
-  if(effect.type==="ice"){
-
-   effect.object.scale.setScalar(1+t*.5);
-   effect.object.material.opacity=.45*(1-t);
-  }
-
-  if(effect.type==="supernova"){
-
-   effect.object.scale.setScalar(1+t*7);
-   effect.object.material.opacity=.75*(1-t);
-  }
-
-  if(t>=1){
-
-   scene.remove(effect.object);
-   effects.splice(i,1);
-  }
- }
-
- renderer.render(scene,camera);
+ day.water+=amount;
+ save();
+ render();
 }
 
-animate();
+function addMeal(){
+ const description=$('mealDescription').value.trim();
+ if(!description){
+  alert('Escribí qué comida querés registrar.');
+  return;
+ }
+ const day=getDay();
+ day.meals.push({
+  id:Date.now(),
+  type:$('mealType').value,
+  description,
+  time:new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
+ });
+ $('mealDescription').value='';
+ save();
+ render();
+}
 
-// ADAPTAR PANTALLA
+function deleteMeal(id){
+ if(!confirm('¿Eliminar este registro?'))return;
+ const day=getDay();
+ day.meals=day.meals.filter(m=>m.id!==id);
+ save();render();
+}
 
-window.addEventListener("resize",()=>{
+function openMovement(){
+ $('movementModal').classList.add('show');
+}
+function closeMovement(){
+ $('movementModal').classList.remove('show');
+}
 
- camera.aspect=window.innerWidth/window.innerHeight;
- camera.updateProjectionMatrix();
+function addMovement(){
+ const minutes=Number($('movementMinutes').value);
+ if(!Number.isInteger(minutes)||minutes<1||minutes>600){
+  alert('Ingresá una duración válida.');
+  return;
+ }
+ const day=getDay();
+ day.movements.push({
+  id:Date.now(),
+  type:$('movementType').value,
+  minutes,
+  time:new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
+ });
+ $('movementMinutes').value='';
+ closeMovement();
+ save();render();
+}
 
- renderer.setSize(window.innerWidth,window.innerHeight);
+function deleteMovement(id){
+ if(!confirm('¿Eliminar este registro?'))return;
+ const day=getDay();
+ day.movements=day.movements.filter(m=>m.id!==id);
+ save();render();
+}
 
-});
+function toggleHabit(id,checked){
+ const day=getDay();
+ if(checked&&!day.habits.includes(id))day.habits.push(id);
+ if(!checked)day.habits=day.habits.filter(h=>h!==id);
+ save();render();
+}
+
+function render(){
+ const p=data.profile;
+ const day=getDay();
+
+ const date=new Date().toLocaleDateString('es-AR',{
+  weekday:'long',day:'numeric',month:'long',year:'numeric'
+ });
+ $('today').textContent=date.charAt(0).toUpperCase()+date.slice(1);
+
+ if(p){
+  $('greeting').textContent='Hola, '+p.name+'.';
+  $('avatar').textContent=p.name.charAt(0).toUpperCase();
+  $('profileName').textContent=p.name;
+  $('profileAge').textContent=p.age+' años';
+  $('profileHeight').textContent=p.height+' cm';
+  $('profileGoal').textContent=p.goal;
+  $('profileActivity').textContent=p.activity;
+ }
+
+ $('waterTotal').textContent=day.water;
+ $('waterDiary').textContent=day.water;
+ $('movementTotal').textContent=day.movements.reduce((s,m)=>s+m.minutes,0);
+
+ const completed=day.habits.length;
+ const percent=Math.round(completed/4*100);
+ $('habitTotal').textContent=completed+'/4';
+ $('habitLabel').textContent=completed+' de 4';
+ $('habitProgress').style.width=percent+'%';
+ $('habitProgress2').style.width=percent+'%';
+
+ $('habitList').innerHTML=habits.map(h=>`
+  <div class="habit">
+   <input type="checkbox" ${day.habits.includes(h.id)?'checked':''}
+   onchange="toggleHabit('${h.id}',this.checked)">
+   <div class="habit-info">
+    <strong>${h.name}</strong><small>${h.desc}</small>
+   </div>
+  </div>`).join('');
+
+ const mealHTML=day.meals.map(m=>`
+  <div class="entry">
+   <div><strong>${escapeHTML(m.type)}</strong><br>
+   <span class="small">${escapeHTML(m.description)} · ${m.time}</span></div>
+   <button onclick="deleteMeal(${m.id})">Eliminar</button>
+  </div>`).join('');
+
+ $('mealList').innerHTML=mealHTML||'<div class="empty">Todavía no registraste comidas hoy.</div>';
+ $('todayMeals').innerHTML=day.meals.length?
+  day.meals.slice(-3).map(m=>`
+   <div class="meal"><div><strong>${escapeHTML(m.type)}</strong><br>
+   <span class="small">${escapeHTML(m.description)}</span></div>
+   <span class="small">${m.time}</span></div>`).join(''):
+  '<div class="empty">Tus registros aparecerán acá.</div>';
+
+ $('movementList').innerHTML=day.movements.length?
+ day.movements.map(m=>`
+  <div class="entry">
+   <div><strong>${escapeHTML(m.type)}</strong><br>
+   <span class="small">${m.minutes} minutos · ${m.time}</span></div>
+   <button onclick="deleteMovement(${m.id})">Eliminar</button>
+  </div>`).join(''):
+ '<div class="empty">Todavía no registraste actividad.</div>';
+}
+
+function escapeHTML(str){
+ return String(str).replace(/[&<>"']/g,c=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ }[c]));
+}
+
+function exportData(){
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+ a.href=url;
+ a.download='vitalia-registros.json';
+ a.click();
+ URL.revokeObjectURL(url);
+}
+
+function clearData(){
+ if(!confirm('¿Seguro que querés borrar todos tus datos? Esta acción no se puede deshacer.'))return;
+ localStorage.removeItem(STORAGE);
+ data={profile:null,records:{}};
+ location.reload();
+}
+
+if(!data.profile){
+ $('setupModal').classList.add('show');
+}
+render();
 </script>
-
 </body>
 </html>
