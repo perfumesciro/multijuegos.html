@@ -1,707 +1,465 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VITALIA — Tu bienestar</title>
+<meta name="theme-color" content="#f7faf7">
+<title>VITALIA | Bienestar y entrenamiento</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
-
-:root {
-  --bg:#0b0e11;
-  --panel:#12171b;
-  --panel2:#181f23;
-  --green:#b7f28b;
-  --muted:#89949a;
-  --white:#f4f7f3;
-  --border:#263035;
-}
+:root{--green:#a8f45b;--green2:#70c83b;--ink:#18231b;--muted:#718074;--line:#e7eee7;--bg:#f6f9f6;--card:#fff;--soft:#eff8e9;--shadow:0 8px 28px rgba(30,55,35,.07)}
 *{box-sizing:border-box}
-body{
- margin:0;background:var(--bg);color:var(--white);
- font-family:'DM Sans',sans-serif;
-}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.app{max-width:1250px;margin:auto;padding:25px}
-header{
- display:flex;justify-content:space-between;align-items:center;
- padding:12px 0 25px;border-bottom:1px solid var(--border);
-}
-.logo{font:800 25px Manrope;letter-spacing:3px}
-.logo span{color:var(--green)}
-.user-icon{
- width:42px;height:42px;border-radius:50%;
- background:var(--panel2);display:grid;place-items:center;
- color:var(--green);font-weight:800;
-}
-nav{
- display:flex;gap:8px;margin:25px 0;
- overflow-x:auto;padding-bottom:5px;
-}
-nav button{
- background:transparent;border:1px solid transparent;
- color:var(--muted);padding:11px 17px;border-radius:12px;
- white-space:nowrap;
-}
-nav button.active{
- background:var(--panel2);border-color:var(--border);
- color:var(--green);
-}
-.page{display:none}
-.page.active{display:block}
-h1,h2,h3,p{margin-top:0}
-h1{font:800 34px Manrope;letter-spacing:-1px}
-h2{font:700 22px Manrope}
-h3{font-weight:700}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-width:320px}
+button,input,select,textarea{font:inherit;color:var(--ink)}
+button{cursor:pointer;border:0}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}
+.sidebar{background:#fff;border-right:1px solid var(--line);padding:22px 15px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;padding:4px 10px 15px;font-size:22px;font-weight:850;letter-spacing:-1px}
+.logo{width:38px;height:38px;border-radius:13px;background:var(--green);display:grid;place-items:center;font-weight:900;color:#16320e}
+.nav{display:grid;gap:5px}
+.nav button{background:transparent;color:#536157;text-align:left;padding:11px 13px;border-radius:12px;display:flex;align-items:center;gap:12px}
+.nav button:hover,.nav button.active{background:var(--soft);color:#285b1b;font-weight:750}
+.nav .ico{width:21px;text-align:center;font-size:18px}
+.side-note{margin-top:auto;background:var(--soft);padding:13px;border-radius:14px;color:#45623c;font-size:12px}
+main{padding:28px;max-width:1500px;width:100%;margin:auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:25px}
+.eyebrow{color:var(--muted);font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:1px}
+h1{font-size:30px;letter-spacing:-1.1px;margin:3px 0}
+h2{font-size:20px;margin:0 0 14px;letter-spacing:-.4px}
+h3{font-size:15px;margin:0 0 7px}
 .muted{color:var(--muted)}
-.green{color:var(--green)}
-.small{font-size:13px;color:var(--muted)}
-.grid{
- display:grid;grid-template-columns:repeat(3,1fr);
- gap:16px;
+.small{font-size:12px}
+.btn{background:var(--green);color:#18300e;padding:11px 16px;border-radius:12px;font-weight:800;box-shadow:0 4px 12px #a8f45b44}
+.btn:hover{background:#98e94c}
+.btn.secondary{background:#f0f4ef;box-shadow:none;color:#354339}
+.btn.ghost{background:transparent;border:1px solid var(--line);box-shadow:none;color:var(--ink)}
+.btn.danger{background:#fff0ee;color:#a13c30;box-shadow:none}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.between{justify-content:space-between}
+.grid{display:grid;gap:16px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}
+.two{grid-template-columns:1.2fr .8fr}
+.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.metric{font-size:27px;font-weight:850;letter-spacing:-1px}
+.metric-label{font-size:12px;color:var(--muted)}
+.pill{display:inline-flex;padding:5px 9px;background:var(--soft);border-radius:30px;font-size:11px;font-weight:750;color:#426b2f}
+.section{display:none}
+.section.active{display:block}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.quick button{background:#f5faef;border:1px solid #e6f1df;border-radius:14px;padding:15px;text-align:left;font-weight:750;color:#31552a}
+.quick span{display:block;font-size:22px;margin-bottom:6px}
+.field{width:100%;border:1px solid #dfe8df;background:#fff;border-radius:11px;padding:11px 12px;outline:none}
+.field:focus{border-color:#82ca4a;box-shadow:0 0 0 3px #a8f45b33}
+label{font-size:12px;color:#526156;font-weight:750;display:block;margin:9px 0 5px}
+.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.list{display:grid;gap:9px}
+.item{display:flex;gap:12px;align-items:center;padding:11px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.thumb{width:58px;height:58px;border-radius:11px;background:#eff5ed;display:grid;place-items:center;font-size:25px;flex-shrink:0;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.item-main{flex:1;min-width:0}
+.item-title{font-weight:800}
+.tag{font-size:11px;color:var(--muted)}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.tabs button{padding:8px 12px;border-radius:30px;background:#f0f4ef;color:#59665c;font-size:12px;font-weight:750}
+.tabs button.active{background:var(--green);color:#213719}
+.bar{height:9px;background:#edf1ec;border-radius:30px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--green2);border-radius:30px;width:0;transition:width .25s}
+.mealgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.meal{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:white}
+.meal img{width:100%;height:125px;object-fit:cover;background:#edf2ec}
+.meal .pad{padding:11px}
+.meal strong{display:block}
+.meal button{margin-top:8px;width:100%}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.dayname,.day{padding:9px 3px;text-align:center;font-size:12px}
+.dayname{color:var(--muted);font-weight:800}
+.day{border-radius:50%;width:38px;height:38px;margin:auto;background:transparent}
+.day:hover{background:#eff7e8}
+.day.selected{background:var(--green);font-weight:900}
+.day.has{box-shadow:inset 0 -3px 0 #6ebd3d}
+.timer{font-size:44px;font-weight:900;letter-spacing:1px;text-align:center;margin:12px}
+.camera-box{background:#18231b;border-radius:16px;overflow:hidden;min-height:240px;display:grid;place-items:center;color:white;position:relative}
+.camera-box video,.camera-box img{width:100%;max-height:420px;object-fit:contain}
+.camera-placeholder{text-align:center;padding:35px}
+.nutrition{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.nutri{padding:10px;background:#f6f9f5;border-radius:10px}
+.nutri b{display:block;font-size:17px}
+.notice{background:#fff9e8;border:1px solid #f3e8c6;padding:12px;border-radius:12px;font-size:12px;color:#6c5a2b}
+.good{background:#eff8e9;border:1px solid #dcefd2;padding:12px;border-radius:12px;font-size:13px;color:#3c6230}
+.hidden{display:none!important}
+.mobilebar{display:none}
+html{scroll-behavior:smooth}
+img{max-width:100%}
+button:focus-visible{outline:3px solid #70c83b;outline-offset:2px}
+@media(max-width:900px){
+.app{grid-template-columns:1fr}
+.sidebar{display:none}
+main{padding:18px 14px 90px}
+.mobilebar{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:10;justify-content:space-around;padding:8px 3px calc(8px + env(safe-area-inset-bottom))}
+.mobilebar button{background:transparent;color:#667267;font-size:10px;display:grid;gap:2px;justify-items:center}
+.mobilebar button.active{color:#43872b;font-weight:800}
+.mobilebar span{font-size:19px}
+.stats{grid-template-columns:repeat(2,1fr)}
+.two,.three{grid-template-columns:1fr}
+.mealgrid{grid-template-columns:repeat(2,1fr)}
+.quick{grid-template-columns:repeat(2,1fr)}
 }
-.card{
- background:var(--panel);border:1px solid var(--border);
- border-radius:19px;padding:22px;
-}
-.card-title{display:flex;justify-content:space-between;align-items:center}
-.big-number{font:800 34px Manrope;margin:15px 0 5px}
-.hero{
- background:linear-gradient(120deg,#17251d,#15201b 65%,#192126);
- border:1px solid #344b38;border-radius:22px;
- padding:30px;margin-bottom:18px;
-}
-.hero h1{max-width:500px;margin-bottom:10px}
-.hero p{color:#bdc9bd;max-width:500px;line-height:1.7}
-.btn{
- border:0;border-radius:12px;padding:13px 19px;
- background:var(--green);color:#142016;font-weight:800;
-}
-.btn.secondary{
- background:var(--panel2);color:var(--white);
- border:1px solid var(--border);
-}
-.btn.danger{background:#3a2525;color:#ffaaaa}
-.btn:disabled{opacity:.4;cursor:not-allowed}
-.full{width:100%}
-.section{margin:28px 0}
-.progress{
- height:9px;background:#252d30;border-radius:20px;
- overflow:hidden;margin:13px 0;
-}
-.progress div{
- height:100%;width:0;background:var(--green);
- border-radius:20px;transition:.3s;
-}
-.habit{
- display:flex;align-items:center;gap:13px;
- padding:15px 0;border-bottom:1px solid var(--border);
-}
-.habit:last-child{border:0}
-.habit input{accent-color:var(--green);width:19px;height:19px}
-.habit-info{flex:1}
-.habit-info strong{display:block}
-.habit-info small{color:var(--muted)}
-.form-group{margin:17px 0}
-label{display:block;font-size:13px;color:#aab4b8;margin-bottom:8px}
-input,select,textarea{
- width:100%;padding:14px;background:var(--panel2);
- border:1px solid var(--border);border-radius:11px;
- color:white;outline:none;
-}
-input:focus,select:focus,textarea:focus{border-color:var(--green)}
-select option{background:#151b1e}
-textarea{resize:vertical;min-height:90px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.meal{
- padding:16px 0;border-bottom:1px solid var(--border);
- display:flex;justify-content:space-between;gap:10px;
-}
-.meal:last-child{border:0}
-.tag{
- font-size:11px;color:var(--green);
- background:#203126;padding:6px 10px;border-radius:20px;
-}
-.water-controls{display:flex;gap:10px;align-items:center;margin-top:15px}
-.water-controls button{
- width:40px;height:40px;border-radius:10px;
- background:var(--panel2);color:var(--green);
- border:1px solid var(--border);font-size:20px;
-}
-.water-glasses{display:flex;flex-wrap:wrap;gap:7px;margin-top:17px}
-.glass{
- width:23px;height:32px;border:1px solid #475a60;
- border-radius:5px 5px 9px 9px;
-}
-.glass.filled{background:#8bc7d7;border-color:#8bc7d7}
-.empty{
- text-align:center;padding:35px 15px;color:var(--muted);
-}
-.entry{
- padding:13px 0;border-bottom:1px solid var(--border);
- display:flex;justify-content:space-between;gap:12px;
-}
-.entry button{background:none;border:0;color:#ff8585}
-.welcome{color:var(--muted);margin-bottom:25px}
-.notice{
- padding:15px;border-radius:12px;background:#202b23;
- border:1px solid #344b38;color:#c9ddc8;
- font-size:13px;line-height:1.6;
-}
-footer{
- text-align:center;color:#657176;font-size:12px;
- padding:40px 0 20px;
-}
-.modal-bg{
- display:none;position:fixed;inset:0;background:#000b;
- z-index:10;align-items:center;justify-content:center;padding:15px;
-}
-.modal-bg.show{display:flex}
-.modal{
- background:var(--panel);border:1px solid var(--border);
- border-radius:20px;padding:25px;width:100%;max-width:480px;
- max-height:90vh;overflow:auto;
-}
-.modal-actions{display:flex;gap:10px;margin-top:20px}
-@media(max-width:750px){
- .app{padding:17px}
- .grid{grid-template-columns:1fr 1fr}
- .hero{padding:22px}
- h1{font-size:28px}
-}
-@media(max-width:480px){
- .grid{grid-template-columns:1fr}
- .two{grid-template-columns:1fr}
- nav{margin:18px 0}
- .card{padding:18px}
+@media(max-width:430px){
+h1{font-size:25px}
+.card{padding:14px}
+.mealgrid{grid-template-columns:1fr 1fr}
+.formgrid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
-
 <div class="app">
-<header>
- <div class="logo">VITA<span>LIA.</span></div>
- <div class="user-icon" id="avatar">V</div>
-</header>
+<aside class="sidebar">
+  <div class="brand"><div class="logo">V</div> VITALIA</div>
+  <nav class="nav" id="sideNav"></nav>
+  <div class="side-note"><b>Tu bienestar primero</b><br>Información clara, hábitos sostenibles y progreso deportivo.</div>
+</aside>
+<main>
+  <header class="top">
+    <div><div class="eyebrow">Bienestar · Alimentación · Movimiento</div><h1 id="pageTitle">Inicio</h1><div class="muted small" id="todayLabel"></div></div>
+    <button class="btn secondary" id="exportBtn">↓ Exportar mis datos</button>
+  </header>
 
-<nav>
- <button class="active" data-page="home">Inicio</button>
- <button data-page="diary">Mi diario</button>
- <button data-page="habits">Hábitos</button>
- <button data-page="profile">Mi perfil</button>
-</nav>
+  <section class="section active" id="home">
+    <div class="grid stats">
+      <div class="card"><div class="metric" id="activityCount">0</div><div class="metric-label">Actividades completadas</div></div>
+      <div class="card"><div class="metric" id="mealCount">0</div><div class="metric-label">Comidas registradas</div></div>
+      <div class="card"><div class="metric" id="streakCount">0</div><div class="metric-label">Días con registros</div></div>
+      <div class="card"><div class="metric" id="waterCount">0</div><div class="metric-label">Vasos registrados hoy</div></div>
+    </div>
+    <div class="grid two">
+      <div class="card"><div class="row between"><h2>Tu semana</h2><span class="pill">Progreso registrado</span></div><p class="muted small">Completá actividades para actualizar esta barra.</p><div class="row between small"><b id="weekText">0 de 5 actividades</b><b id="weekPct">0%</b></div><div class="bar"><i id="weekBar"></i></div><div style="height:18px"></div><h3>Accesos rápidos</h3><div class="quick">
+        <button data-go="scanner"><span>📷</span>Escanear comida</button><button data-go="workouts"><span>🏃</span>Entrenamientos</button><button data-go="meals"><span>🥗</span>Platillos</button><button data-go="calendar"><span>🗓️</span>Calendario</button>
+      </div></div>
+      <div class="card"><h2>Tu actividad reciente</h2><div id="recentList" class="list"><p class="muted small">Todavía no hay registros. Cuando agregues comidas o completes ejercicios, aparecerán acá.</p></div></div>
+    </div>
+    <div class="notice" style="margin-top:16px">VITALIA registra hábitos y rendimiento. No calcula fechas para adelgazar ni establece límites restrictivos de comida. Si tenés dudas sobre tu peso o alimentación durante el crecimiento, consultalo con un profesional de salud.</div>
+  </section>
 
-<!-- INICIO -->
-<section id="home" class="page active">
- <div class="hero">
-  <span class="tag">TU BIENESTAR, TU RITMO</span>
-  <h1 id="greeting">Un día más para cuidarte.</h1>
-  <p>Pequeños hábitos, decisiones conscientes y progreso real. Sin comparaciones ni presiones.</p>
-  <button class="btn" onclick="go('habits')">Ver mis hábitos →</button>
- </div>
+  <section class="section" id="plan">
+    <div class="card"><div class="row between"><div><h2>Mi plan personal</h2><p class="muted small">Elegí actividades y preferencias. Podés modificarlas cuando quieras.</p></div><button class="btn" id="updatePlan">Actualizar plan</button></div>
+      <h3>Deportes y actividades</h3><div class="formgrid" id="sportChoices"></div>
+      <h3 style="margin-top:18px">Qué querés mejorar</h3><div class="formgrid" id="goalChoices"></div>
+      <p class="muted small">Se guardan tus selecciones y el historial. Los planes sugeridos son orientativos y deben adaptarse a tu nivel, descanso y supervisión adecuada.</p>
+      <div class="good" id="planMessage">Todavía no actualizaste tus preferencias.</div>
+    </div>
+  </section>
 
- <p class="welcome" id="today"></p>
+  <section class="section" id="scanner">
+    <div class="grid two">
+      <div class="card"><h2>Escáner de comidas</h2><p class="muted small">La cámara se abre dentro de VITALIA. Permití el acceso cuando el navegador lo solicite. El permiso suele quedar guardado por el navegador.</p>
+        <div class="camera-box" id="cameraBox"><div class="camera-placeholder"><div style="font-size:40px">📷</div><b>Tu cámara aparecerá acá</b><p class="small">Usá el botón para iniciar.</p></div></div>
+        <div class="row" style="margin-top:12px"><button class="btn" id="startCamera">Abrir cámara</button><button class="btn secondary" id="capturePhoto" disabled>Sacar foto</button><button class="btn ghost" id="stopCamera" disabled>Cerrar cámara</button></div>
+        <canvas id="photoCanvas" class="hidden"></canvas>
+        <div class="notice" style="margin-top:12px">Importante: esta versión no identifica automáticamente los alimentos por IA. La foto queda en esta sesión; podés describir el plato y registrar datos nutricionales verificados de su etiqueta o de una fuente confiable.</div>
+      </div>
+      <div class="card"><h2>Describir el platillo</h2>
+        <label>Nombre completo del platillo</label><input class="field" id="foodName" placeholder="Ej. Pechuga de pollo con arroz integral">
+        <label>Ingredientes y cantidades</label><textarea class="field" id="foodIngredients" rows="3" placeholder="Ej. 120 g de pollo, 1 taza de arroz cocido, brócoli..."></textarea>
+        <label>Momento de comida</label><select class="field" id="mealType"><option>Desayuno</option><option>Almuerzo</option><option>Merienda</option><option>Cena</option><option>Otro momento</option></select>
+        <h3 style="margin-top:15px">Datos nutricionales verificados (opcional)</h3><p class="muted small">Ingresalos desde una etiqueta o fuente fiable. Si no los conocés, dejalos vacíos.</p>
+        <div class="formgrid">
+          <div><label>Calorías</label><input class="field" type="number" min="0" id="fCalories" placeholder="No informado"></div>
+          <div><label>Proteínas (g)</label><input class="field" type="number" min="0" step=".1" id="fProtein" placeholder="No informado"></div>
+          <div><label>Carbohidratos (g)</label><input class="field" type="number" min="0" step=".1" id="fCarbs" placeholder="No informado"></div>
+          <div><label>Grasas totales (g)</label><input class="field" type="number" min="0" step=".1" id="fFat" placeholder="No informado"></div>
+          <div><label>Fibra (g)</label><input class="field" type="number" min="0" step=".1" id="fFiber" placeholder="No informado"></div>
+          <div><label>Sodio (mg)</label><input class="field" type="number" min="0" step=".1" id="fSodium" placeholder="No informado"></div>
+        </div>
+        <button class="btn" style="width:100%;margin-top:14px" id="saveMeal">Guardar comida</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px"><h2>Mis comidas registradas</h2><div id="mealHistory" class="list"><p class="muted small">Todavía no guardaste comidas.</p></div></div>
+  </section>
 
- <div class="grid">
-  <div class="card">
-   <div class="card-title"><span class="muted">Agua registrada</span> 💧</div>
-   <div class="big-number" id="waterTotal">0</div>
-   <span class="small">Vasos registrados hoy</span>
-   <div class="water-controls">
-    <button onclick="changeWater(-1)">−</button>
-    <button onclick="changeWater(1)">+</button>
-   </div>
-  </div>
+  <section class="section" id="meals">
+    <div class="card"><div class="row between"><div><h2>Platillos recomendados</h2><p class="muted small">Ideas de recetas; comprobá cantidades y nutrientes según los ingredientes que uses.</p></div><span class="pill">Catálogo ampliable</span></div>
+      <input class="field" id="recipeSearch" placeholder="Buscar por platillo o ingrediente...">
+      <div class="tabs" id="recipeTabs"><button class="active" data-filter="Todos">Todos</button><button data-filter="Económicos">Económicos</button><button data-filter="Principales">Principales</button><button data-filter="Proteicos">Proteicos</button><button data-filter="Desayunos">Desayunos</button><button data-filter="Almuerzos">Almuerzos</button><button data-filter="Meriendas">Meriendas</button><button data-filter="Cenas">Cenas</button></div>
+      <div class="mealgrid" id="recipeGrid"></div>
+      <p class="muted small" style="margin-top:12px">Este archivo incluye una selección inicial de ideas, no 500 recetas verificadas. Para ofrecer más de 500 con datos y fotos correctos hay que conectar una base de recetas real.</p>
+    </div>
+  </section>
 
-  <div class="card">
-   <div class="card-title"><span class="muted">Movimiento</span> 🏃</div>
-   <div class="big-number" id="movementTotal">0</div>
-   <span class="small">Minutos registrados hoy</span>
-   <button class="btn secondary full" style="margin-top:17px" onclick="openMovement()">Registrar</button>
-  </div>
+  <section class="section" id="drinks">
+    <div class="card"><h2>Bebidas</h2><input class="field" id="drinkSearch" placeholder="Buscar bebidas..."><div class="mealgrid" id="drinkGrid" style="margin-top:14px"></div><p class="muted small" style="margin-top:12px">Las cantidades y nutrientes dependen de la receta y el tamaño de la porción.</p></div>
+  </section>
 
-  <div class="card">
-   <div class="card-title"><span class="muted">Hábitos de hoy</span> ✓</div>
-   <div class="big-number" id="habitTotal">0/4</div>
-   <span class="small">Hábitos completados</span>
-   <div class="progress"><div id="habitProgress"></div></div>
-  </div>
- </div>
+  <section class="section" id="workouts">
+    <div class="grid two">
+      <div class="card"><h2>Entrenamientos</h2><p class="muted small">Elegí una actividad para ver una propuesta general. Ajustá intensidad y descansos a cómo te sentís.</p><input class="field" id="workoutSearch" placeholder="Buscar ejercicio o deporte..."><div class="list" id="workoutList" style="margin-top:12px"></div></div>
+      <div class="card"><h2 id="exerciseTitle">Temporizador de ejercicios</h2><p class="muted small" id="exerciseInfo">Seleccioná un ejercicio para ver sus indicaciones.</p><div class="timer" id="timerDisplay">00:30</div><div class="row" style="justify-content:center"><button class="btn" id="timerStart">▶ Iniciar</button><button class="btn secondary" id="timerPause">Ⅱ Pausar</button><button class="btn ghost" id="timerReset">↺ Reiniciar</button></div><div class="bar" style="margin-top:18px"><i id="timerBar"></i></div><p class="muted small" id="timerStatus" style="text-align:center">Temporizador listo.</p><button class="btn" style="width:100%;margin-top:14px" id="completeWorkout">Marcar actividad completada</button><div class="good" style="margin-top:12px">La demostración visual de ejercicios 3D requiere modelos y animaciones externos. Este prototipo incluye instrucciones escritas y temporizador funcional.</div></div>
+    </div>
+  </section>
 
- <div class="section grid">
-  <div class="card" style="grid-column:span 2">
-   <h2>Tu día, paso a paso</h2>
-   <p class="muted small">Tu actividad se actualiza con lo que registrás realmente.</p>
-   <div id="todayMeals"></div>
-   <button class="btn secondary full" onclick="go('diary')">Abrir mi diario</button>
-  </div>
-  <div class="card">
-   <h2>Una idea para hoy</h2>
-   <p style="line-height:1.8">No necesitás cambiar todo de golpe. Comer variado, descansar y disfrutar del movimiento también forman parte del bienestar.</p>
-   <span class="green small">PROGRESO SIN PRESIONES</span>
-  </div>
- </div>
-</section>
+  <section class="section" id="calendar">
+    <div class="card"><div class="row between"><h2>Calendario</h2><div class="row"><button class="btn secondary" id="prevMonth">‹</button><b id="monthLabel"></b><button class="btn secondary" id="nextMonth">›</button></div></div><div class="calendar" id="calendarGrid" style="margin-top:14px"></div><div class="good" style="margin-top:14px" id="selectedDateInfo">Seleccioná un día para consultar o agregar actividades.</div><label>Agregar actividad</label><div class="row"><input class="field" id="calendarTask" placeholder="Ej. Entrenamiento de fútbol"><button class="btn" id="addCalendarTask">Agregar</button></div><div class="list" id="calendarEvents" style="margin-top:12px"></div></div>
+  </section>
 
-<!-- DIARIO -->
-<section id="diary" class="page">
- <h1>Mi diario</h1>
- <p class="muted">Registrá tus comidas y actividades sin obsesionarte con números.</p>
+  <section class="section" id="stats">
+    <div class="grid three">
+      <div class="card"><div class="metric" id="statWorkouts">0</div><div class="metric-label">Entrenamientos registrados</div></div>
+      <div class="card"><div class="metric" id="statMeals">0</div><div class="metric-label">Comidas registradas</div></div>
+      <div class="card"><div class="metric" id="statWater">0</div><div class="metric-label">Vasos registrados</div></div>
+    </div>
+    <div class="card" style="margin-top:16px"><h2>Tu actividad acumulada</h2><div id="statsBars" class="list"></div><p class="muted small">Estas estadísticas muestran tus registros, no miden tu cuerpo ni determinan tu estado de salud.</p></div>
+  </section>
 
- <div class="grid">
-  <div class="card" style="grid-column:span 2">
-   <h2>Registrar una comida 🍎</h2>
-   <div class="form-group">
-    <label>Momento del día</label>
-    <select id="mealType">
-     <option>Desayuno</option>
-     <option>Almuerzo</option>
-     <option>Merienda</option>
-     <option>Cena</option>
-     <option>Colación</option>
-    </select>
-   </div>
-   <div class="form-group">
-    <label>¿Qué comiste?</label>
-    <textarea id="mealDescription" placeholder="Ej. Arroz, pollo y ensalada..."></textarea>
-   </div>
-   <button class="btn full" onclick="addMeal()">Guardar comida</button>
-  </div>
+  <section class="section" id="water">
+    <div class="grid two">
+      <div class="card"><h2>Hidratación</h2><p class="muted small">Registrá cada vaso que tomes. La necesidad de agua cambia según el clima, la actividad y cada persona.</p><div class="metric" id="waterToday">0</div><div class="metric-label">Vasos registrados hoy</div><div class="bar" style="margin:15px 0"><i id="waterBar"></i></div><button class="btn" id="addWater">+ Registrar un vaso</button></div>
+      <div class="card"><h2>Registro reciente</h2><div class="list" id="waterLog"></div></div>
+    </div>
+  </section>
 
-  <div class="card">
-   <h2>Hidratación 💧</h2>
-   <div class="big-number" id="waterDiary">0</div>
-   <p class="small">Vasos registrados</p>
-   <p class="muted small">El registro no representa una recomendación médica de consumo.</p>
-  </div>
- </div>
+  <section class="section" id="recommendations">
+    <div class="card"><h2>Recomendaciones</h2><div class="list">
+      <div class="item"><div class="thumb">🥗</div><div class="item-main"><b>Comé variado</b><div class="muted small">Incluí diferentes alimentos a lo largo del día para obtener distintos nutrientes.</div></div></div>
+      <div class="item"><div class="thumb">💧</div><div class="item-main"><b>Prestá atención a la hidratación</b><div class="muted small">Tomá agua regularmente y especialmente cuando hacés actividad física.</div></div></div>
+      <div class="item"><div class="thumb">⚽</div><div class="item-main"><b>Entrená con buena técnica</b><div class="muted small">Aprendé los movimientos correctamente y respetá los descansos.</div></div></div>
+      <div class="item"><div class="thumb">🌙</div><div class="item-main"><b>Priorizá el descanso</b><div class="muted small">Dormir bien ayuda a recuperarte y aprender nuevas habilidades.</div></div></div>
+    </div></div>
+  </section>
 
- <div class="section card">
-  <h2>Mis comidas registradas</h2>
-  <div id="mealList"></div>
- </div>
+  <section class="section" id="motivation">
+    <div class="card"><h2>Motivación</h2><p class="muted">El progreso no es una carrera. Cada pequeño hábito cuenta.</p><div class="good">No necesitás hacerlo perfecto. Lo importante es construir hábitos que puedas sostener y disfrutar.</div></div>
+  </section>
 
- <div class="section card">
-  <h2>Mi movimiento</h2>
-  <div id="movementList"></div>
- </div>
-</section>
+  <section class="section" id="history">
+    <div class="card"><h2>Mi historial</h2><div id="fullHistory" class="list"></div></div>
+  </section>
 
-<!-- HABITOS -->
-<section id="habits" class="page">
- <h1>Mis hábitos</h1>
- <p class="muted">Marcá las actividades que realizaste hoy. No hay castigos por dejar alguna pendiente.</p>
-
- <div class="card">
-  <div class="card-title">
-   <h2>Rutina diaria</h2>
-   <span class="tag" id="habitLabel">0 de 4</span>
-  </div>
-  <div id="habitList"></div>
-  <div class="progress"><div id="habitProgress2"></div></div>
-  <p class="small">El porcentaje refleja solamente tus registros.</p>
- </div>
-
- <div class="grid section">
-  <div class="card">
-   <h3>🥗 Alimentación variada</h3>
-   <p class="muted small">Intentá incluir distintos grupos de alimentos a lo largo del día.</p>
-  </div>
-  <div class="card">
-   <h3>💤 Descanso</h3>
-   <p class="muted small">El descanso es importante para la recuperación y el crecimiento.</p>
-  </div>
-  <div class="card">
-   <h3>⚽ Movimiento</h3>
-   <p class="muted small">Elegí actividades que disfrutes, como caminar, jugar o practicar deportes.</p>
-  </div>
- </div>
-</section>
-
-<!-- PERFIL -->
-<section id="profile" class="page">
- <h1>Mi perfil</h1>
- <p class="muted">Tus preferencias y objetivos personales.</p>
-
- <div class="card">
-  <div class="card-title">
-   <h2>Información personal</h2>
-   <button class="btn secondary" onclick="openProfile()">Editar</button>
-  </div>
-  <div class="section">
-   <p class="small">NOMBRE</p><strong id="profileName">Sin completar</strong>
-  </div>
-  <div class="section">
-   <p class="small">EDAD</p><strong id="profileAge">Sin completar</strong>
-  </div>
-  <div class="section">
-   <p class="small">ALTURA</p><strong id="profileHeight">Sin completar</strong>
-  </div>
-  <div class="section">
-   <p class="small">OBJETIVO</p><strong id="profileGoal">Sin completar</strong>
-  </div>
-  <div class="section">
-   <p class="small">ACTIVIDAD</p><strong id="profileActivity">Sin completar</strong>
-  </div>
- </div>
-
- <div class="notice section">
-  VITALIA no diagnostica, no establece objetivos de peso ni calcula restricciones de calorías. Si te preocupa tu peso o necesitás cambiarlo por motivos de salud, consultá con un profesional de salud junto a un adulto de confianza.
- </div>
-
- <div class="card section">
-  <h2>Mis datos</h2>
-  <p class="muted small">La información se guarda localmente en este navegador.</p>
-  <button class="btn secondary full" onclick="exportData()">Exportar mis registros</button>
-  <button class="btn danger full" style="margin-top:10px" onclick="clearData()">Borrar todos mis datos</button>
- </div>
-</section>
-
-<footer>
- VITALIA © 2026 · Tu bienestar importa.<br><br>
- Los registros son informativos y no sustituyen una consulta profesional.
-</footer>
+  <section class="section" id="settings">
+    <div class="card"><h2>Configuración</h2><p class="muted small">Tus registros se guardan en este navegador, en este dispositivo.</p><button class="btn danger" id="clearData">Borrar todos mis datos</button></div>
+  </section>
+</main>
 </div>
-
-<!-- ENCUESTA INICIAL -->
-<div class="modal-bg" id="setupModal">
- <div class="modal">
-  <span class="tag">BIENVENIDO A VITALIA</span>
-  <h2 style="margin-top:17px">Conozcámonos.</h2>
-  <p class="muted small">Respondé esta pequeña encuesta para adaptar tu experiencia.</p>
-
-  <div class="form-group">
-   <label>¿Cómo te llamás?</label>
-   <input id="name" maxlength="35" placeholder="Tu nombre">
-  </div>
-  <div class="two">
-   <div class="form-group">
-    <label>Edad</label>
-    <input id="age" type="number" min="5" max="100" placeholder="Ej. 14">
-   </div>
-   <div class="form-group">
-    <label>Altura (cm)</label>
-    <input id="height" type="number" min="50" max="250" placeholder="Ej. 160">
-   </div>
-  </div>
-  <div class="form-group">
-   <label>¿Qué querés mejorar?</label>
-   <select id="goal">
-    <option value="Mejorar mis hábitos">Mejorar mis hábitos</option>
-    <option value="Sentirme con más energía">Sentirme con más energía</option>
-    <option value="Mejorar mi rendimiento deportivo">Mejorar mi rendimiento deportivo</option>
-    <option value="Acompañar una recomendación profesional">Acompañar una recomendación profesional</option>
-   </select>
-  </div>
-  <div class="form-group">
-   <label>¿Cuánto movimiento realizás habitualmente?</label>
-   <select id="activity">
-    <option>Poco movimiento</option>
-    <option>Actividad moderada</option>
-    <option>Entreno frecuentemente</option>
-   </select>
-  </div>
-  <div class="form-group">
-   <label>¿Qué actividades disfrutás?</label>
-   <select id="sport">
-    <option>Fútbol</option>
-    <option>Caminar</option>
-    <option>Bicicleta</option>
-    <option>Gimnasio supervisado</option>
-    <option>Otros deportes</option>
-    <option>Varias actividades</option>
-   </select>
-  </div>
-  <div class="notice">
-   No necesitamos tu peso para ayudarte a construir hábitos saludables. Tus respuestas no se utilizan para emitir diagnósticos ni recomendaciones calóricas.
-  </div>
-  <button class="btn full" style="margin-top:18px" onclick="saveProfile()">Comenzar mi experiencia →</button>
- </div>
-</div>
-
-<!-- REGISTRAR MOVIMIENTO -->
-<div class="modal-bg" id="movementModal">
- <div class="modal">
-  <h2>Registrar movimiento</h2>
-  <div class="form-group">
-   <label>Actividad</label>
-   <select id="movementType">
-    <option>Fútbol</option>
-    <option>Caminata</option>
-    <option>Bicicleta</option>
-    <option>Educación física</option>
-    <option>Otro deporte</option>
-   </select>
-  </div>
-  <div class="form-group">
-   <label>Duración en minutos</label>
-   <input id="movementMinutes" type="number" min="1" max="600" placeholder="Ej. 45">
-  </div>
-  <div class="modal-actions">
-   <button class="btn secondary" onclick="closeMovement()">Cancelar</button>
-   <button class="btn" onclick="addMovement()">Guardar</button>
-  </div>
- </div>
-</div>
+<nav class="mobilebar" id="mobileNav"></nav>
 
 <script>
-const $ = id => document.getElementById(id);
-const STORAGE = 'vitalia_data_v1';
-
-const defaultData = {
- profile:null,
- records:{},
-};
-
-let data;
-try {
- data=JSON.parse(localStorage.getItem(STORAGE)) || defaultData;
- if(!data.records) data.records={};
-} catch(e) {
- data=defaultData;
-}
-
-const habits=[
- {id:'breakfast',name:'Desayuné tranquilamente',desc:'Empezar el día con energía'},
- {id:'variety',name:'Comí alimentos variados',desc:'Diferentes alimentos durante el día'},
- {id:'movement',name:'Me mantuve en movimiento',desc:'Una actividad que disfruté'},
- {id:'rest',name:'Cuidé mi descanso',desc:'Dedicar tiempo a descansar'}
+const pages=[
+['home','⌂','Inicio'],['plan','◈','Mi plan'],['scanner','📷','Escáner'],['meals','🥗','Platillos'],['drinks','🥤','Bebidas'],['workouts','🏃','Entrenamientos'],['calendar','🗓️','Calendario'],['stats','▥','Estadísticas'],['water','💧','Hidratación'],['recommendations','✦','Consejos'],['motivation','★','Motivación'],['history','◷','Historial'],['settings','⚙','Configuración']
 ];
-
-function todayKey(){
- return new Date().toLocaleDateString('en-CA');
-}
-function getDay(){
- const key=todayKey();
- if(!data.records[key]){
-  data.records[key]={water:0,meals:[],movements:[],habits:[]};
- }
- return data.records[key];
-}
-function save(){
- try{
-  localStorage.setItem(STORAGE,JSON.stringify(data));
- }catch(e){
-  alert('No se pudieron guardar los datos. Revisá el almacenamiento del navegador.');
- }
-}
-function go(page){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
- $(page).classList.add('active');
- document.querySelector(`[data-page="${page}"]`).classList.add('active');
- render();
+const $=id=>document.getElementById(id);
+function go(id){
+ document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));
+ document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+ const p=pages.find(x=>x[0]===id);$('pageTitle').textContent=p?p[2]:'Inicio';
  window.scrollTo({top:0,behavior:'smooth'});
+ if(id==='calendar')renderCalendar();
 }
-
-document.querySelectorAll('nav button').forEach(btn=>{
- btn.addEventListener('click',()=>go(btn.dataset.page));
-});
-
-function saveProfile(){
- const name=$('name').value.trim();
- const age=Number($('age').value);
- const height=Number($('height').value);
-
- if(!name || !Number.isInteger(age) || age<5 || age>100 ||
- !Number.isFinite(height) || height<50 || height>250){
-  alert('Completá correctamente el nombre, la edad y la altura.');
-  return;
- }
-
- data.profile={
-  name,age,height,
-  goal:$('goal').value,
-  activity:$('activity').value,
-  sport:$('sport').value
- };
+function navBuild(){
+ $('sideNav').innerHTML=pages.map(p=>`<button data-page="${p[0]}" onclick="go('${p[0]}')"><span class="ico">${p[1]}</span>${p[2]}</button>`).join('');
+ $('mobileNav').innerHTML=pages.slice(0,5).map(p=>`<button data-page="${p[0]}" onclick="go('${p[0]}')"><span>${p[1]}</span>${p[2]}</button>`).join('');
+ document.querySelector('[data-page="home"]').classList.add('active');
+}
+const today=()=>new Date().toLocaleDateString('en-CA');
+const fmtDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+function loadData(){
+ try{return JSON.parse(localStorage.getItem('vitaliaData'))||{sports:[],goals:[],workouts:[],meals:[],water:[],recent:[],events:{}}}
+ catch(e){return {sports:[],goals:[],workouts:[],meals:[],water:[],recent:[],events:{}}}
+}
+let data=loadData();
+function save(){localStorage.setItem('vitaliaData',JSON.stringify(data));renderAll()}
+function logRecent(text){data.recent.unshift({text,date:today()});data.recent=data.recent.slice(0,50)}
+const sports=['Fútbol','Caminar','Correr','Gimnasio','Ciclismo','Natación','Calistenia'];
+const goals=['Mejorar resistencia','Mejorar velocidad','Mejorar coordinación','Ganar fuerza de forma segura','Mejorar técnica deportiva','Tener más energía'];
+function renderChoices(){
+ $('sportChoices').innerHTML=sports.map(x=>`<label><input type="checkbox" name="sport" value="${x}" ${data.sports.includes(x)?'checked':''}> ${x}</label>`).join('');
+ $('goalChoices').innerHTML=goals.map(x=>`<label><input type="checkbox" name="goal" value="${x}" ${data.goals.includes(x)?'checked':''}> ${x}</label>`).join('');
+}
+$('updatePlan').onclick=()=>{
+ data.sports=[...document.querySelectorAll('[name="sport"]:checked')].map(x=>x.value);
+ data.goals=[...document.querySelectorAll('[name="goal"]:checked')].map(x=>x.value);
+ $('planMessage').textContent='Tu plan fue actualizado. Podés cambiar tus preferencias cuando quieras.';
  save();
- $('setupModal').classList.remove('show');
- render();
+};
+const recipes=[
+{name:'Avena con banana',cat:['Desayunos','Económicos'],desc:'Avena, leche o bebida vegetal y banana.',emoji:'🥣'},
+{name:'Tostadas con huevo',cat:['Desayunos','Económicos'],desc:'Pan tostado con huevo y tomate.',emoji:'🍳'},
+{name:'Yogur con frutas',cat:['Desayunos','Meriendas'],desc:'Yogur natural con fruta de estación.',emoji:'🍓'},
+{name:'Arroz con pollo',cat:['Principales','Almuerzos'],desc:'Arroz, pollo y verduras salteadas.',emoji:'🍚'},
+{name:'Tarta de verduras',cat:['Principales','Cenas','Económicos'],desc:'Tarta casera con verduras variadas.',emoji:'🥧'},
+{name:'Ensalada completa',cat:['Principales','Almuerzos'],desc:'Verduras, legumbres y huevo.',emoji:'🥗'},
+{name:'Fideos con salsa',cat:['Principales','Cenas','Económicos'],desc:'Pasta con salsa de tomate casera.',emoji:'🍝'},
+{name:'Sándwich de pollo',cat:['Almuerzos','Meriendas'],desc:'Pan, pollo cocido y vegetales.',emoji:'🥪'},
+{name:'Lentejas guisadas',cat:['Principales','Cenas','Económicos'],desc:'Lentejas con verduras.',emoji:'🍲'},
+{name:'Panqueques de avena',cat:['Desayunos','Meriendas'],desc:'Avena, huevo y fruta.',emoji:'🥞'},
+{name:'Papas al horno',cat:['Principales','Cenas','Económicos'],desc:'Papas al horno con especias y ensalada.',emoji:'🥔'},
+{name:'Ensalada de garbanzos',cat:['Principales','Almuerzos','Proteicos'],desc:'Garbanzos, tomate, pepino y huevo.',emoji:'🫘'}
+];
+let recipeFilter='Todos';
+function renderRecipes(){
+ let q=$('recipeSearch').value.toLowerCase();
+ $('recipeGrid').innerHTML=recipes.filter(r=>(recipeFilter==='Todos'||r.cat.includes(recipeFilter))&&(r.name+' '+r.desc).toLowerCase().includes(q)).map(r=>`<div class="meal"><div style="height:125px;display:grid;place-items:center;background:#eff8e9;font-size:54px">${r.emoji}</div><div class="pad"><strong>${r.name}</strong><p class="muted small">${r.desc}</p><div class="tag">${r.cat.join(' · ')}</div></div></div>`).join('')||'<p class="muted">No se encontraron platillos.</p>';
 }
-
-function openProfile(){
- if(data.profile){
-  $('name').value=data.profile.name;
-  $('age').value=data.profile.age;
-  $('height').value=data.profile.height;
-  $('goal').value=data.profile.goal;
-  $('activity').value=data.profile.activity;
-  $('sport').value=data.profile.sport;
+$('recipeSearch').addEventListener('input',renderRecipes);
+$('recipeTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('recipeTabs').querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');recipeFilter=b.dataset.filter;renderRecipes()});
+const drinks=[
+{name:'Agua',desc:'Una opción sencilla para hidratarte.',emoji:'💧'},
+{name:'Limonada casera',desc:'Agua, limón y menta.',emoji:'🍋'},
+{name:'Licuado de banana',desc:'Banana y leche.',emoji:'🥛'},
+{name:'Licuado de frutilla',desc:'Frutillas y yogur o leche.',emoji:'🍓'},
+{name:'Agua con naranja',desc:'Agua fresca con rodajas de naranja.',emoji:'🍊'},
+{name:'Leche',desc:'Puede aportar calcio y proteínas.',emoji:'🥛'}
+];
+function renderDrinks(){
+ let q=$('drinkSearch').value.toLowerCase();
+ $('drinkGrid').innerHTML=drinks.filter(x=>(x.name+' '+x.desc).toLowerCase().includes(q)).map(x=>`<div class="meal"><div style="height:100px;display:grid;place-items:center;background:#eff8e9;font-size:48px">${x.emoji}</div><div class="pad"><strong>${x.name}</strong><p class="muted small">${x.desc}</p></div></div>`).join('');
+}
+$('drinkSearch').oninput=renderDrinks;
+const workouts=[
+{name:'Fútbol',info:'Practicá conducción, pases, control orientado y cambios de dirección. Priorizá técnica y pausas.'},
+{name:'Caminata',info:'Actividad suave para moverte y despejarte. Elegí un ritmo cómodo.'},
+{name:'Carrera suave',info:'Empezá con ritmo cómodo y alterná con caminata si lo necesitás.'},
+{name:'Bicicleta',info:'Trabaja coordinación y resistencia. Usá casco y un lugar seguro.'},
+{name:'Natación',info:'Actividad de cuerpo completo. Hacela en un espacio supervisado.'},
+{name:'Calistenia básica',info:'Practicá movimientos con tu propio peso y buena técnica, sin forzar.'},
+{name:'Movilidad',info:'Movimientos suaves de articulaciones para preparar el cuerpo.'},
+{name:'Plancha',info:'Mantené una posición estable y respiración normal. Detenete si sentís molestias.'}
+];
+let selectedWorkout=null,timerTotal=30,timerLeft=30,timerInterval=null;
+function renderWorkouts(){
+ let q=$('workoutSearch').value.toLowerCase();
+ $('workoutList').innerHTML=workouts.filter(w=>(w.name+' '+w.info).toLowerCase().includes(q)).map((w,i)=>`<button class="item" style="text-align:left" onclick="selectWorkout('${w.name}')"><div class="thumb">🏃</div><div class="item-main"><b>${w.name}</b><div class="muted small">${w.info}</div></div></button>`).join('');
+}
+$('workoutSearch').oninput=renderWorkouts;
+function selectWorkout(name){
+ selectedWorkout=workouts.find(w=>w.name===name);
+ $('exerciseTitle').textContent=name;
+ $('exerciseInfo').textContent=selectedWorkout.info;
+ timerTotal=30;timerLeft=30;stopTimer();renderTimer();
+}
+function renderTimer(){
+ let m=String(Math.floor(timerLeft/60)).padStart(2,'0'),s=String(timerLeft%60).padStart(2,'0');
+ $('timerDisplay').textContent=m+':'+s;
+ $('timerBar').style.width=((timerTotal-timerLeft)/timerTotal*100)+'%';
+}
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null}}
+$('timerStart').onclick=()=>{
+ if(timerInterval)return;
+ $('timerStatus').textContent='Temporizador en marcha';
+ timerInterval=setInterval(()=>{if(timerLeft>0){timerLeft--;renderTimer()}else{stopTimer();$('timerStatus').textContent='¡Tiempo terminado! Descansá y revisá cómo te sentís.'}},1000);
+};
+$('timerPause').onclick=()=>{stopTimer();$('timerStatus').textContent='Temporizador pausado'};
+$('timerReset').onclick=()=>{stopTimer();timerLeft=timerTotal;renderTimer();$('timerStatus').textContent='Temporizador reiniciado'};
+$('completeWorkout').onclick=()=>{
+ let name=$('exerciseTitle').textContent;
+ if(name==='Temporizador de ejercicios'){alert('Primero elegí un ejercicio.');return}
+ data.workouts.push({name,date:today()});logRecent('Completaste: '+name);save();
+ $('timerStatus').textContent='Actividad guardada en tu progreso.';
+};
+$('saveMeal').onclick=()=>{
+ let name=$('foodName').value.trim();
+ if(!name){alert('Escribí el nombre del platillo.');return}
+ let vals={calories:'fCalories',protein:'fProtein',carbs:'fCarbs',fat:'fFat',fiber:'fFiber',sodium:'fSodium'};
+ let nutrients={};
+ Object.entries(vals).forEach(([k,id])=>{let v=$(id).value;nutrients[k]=v===''?null:Number(v)});
+ data.meals.push({name,ingredients:$('foodIngredients').value,type:$('mealType').value,nutrients,date:today()});
+ logRecent('Registraste comida: '+name);
+ ['foodName','foodIngredients','fCalories','fProtein','fCarbs','fFat','fFiber','fSodium'].forEach(id=>$(id).value='');
+ save();alert('Comida guardada. Los campos vacíos quedan como datos no informados.');
+};
+function renderMeals(){
+ $('mealHistory').innerHTML=data.meals.slice().reverse().map(m=>`<div class="item"><div class="thumb">🍽️</div><div class="item-main"><b>${esc(m.name)}</b><div class="muted small">${m.type} · ${m.date}</div><div class="small">${m.nutrients.calories==null?'Calorías no informadas':m.nutrients.calories+' calorías'} · Proteínas: ${m.nutrients.protein==null?'sin dato':m.nutrients.protein+' g'} · Carbohidratos: ${m.nutrients.carbs==null?'sin dato':m.nutrients.carbs+' g'} · Grasas: ${m.nutrients.fat==null?'sin dato':m.nutrients.fat+' g'}</div><div class="tag">${esc(m.ingredients||'Ingredientes no detallados')}</div></div></div>`).join('')||'<p class="muted small">Todavía no guardaste comidas.</p>';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+let stream=null;
+async function startCamera(){
+ if(!navigator.mediaDevices?.getUserMedia){alert('La cámara no está disponible en este navegador. Probá con HTTPS o localhost.');return}
+ try{
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+  let box=$('cameraBox');
+  box.innerHTML='<video id="cameraVideo" autoplay playsinline></video>';
+  $('cameraVideo').srcObject=stream;
+  $('capturePhoto').disabled=false;$('stopCamera').disabled=false;$('startCamera').disabled=true;
+ }catch(e){alert('No se pudo abrir la cámara. Revisá el permiso del navegador y que estés usando HTTPS o localhost.')}
+}
+function stopCamera(){
+ if(stream)stream.getTracks().forEach(t=>t.stop());
+ stream=null;
+ $('cameraBox').innerHTML='<div class="camera-placeholder"><div style="font-size:40px">📷</div><b>Cámara cerrada</b></div>';
+ $('capturePhoto').disabled=true;$('stopCamera').disabled=true;$('startCamera').disabled=false;
+}
+$('startCamera').onclick=startCamera;
+$('stopCamera').onclick=stopCamera;
+$('capturePhoto').onclick=()=>{
+ let v=$('cameraVideo'),c=$('photoCanvas');
+ if(!v||!v.videoWidth)return;
+ c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
+ let url=c.toDataURL('image/jpeg',.85);
+ if(stream)stream.getTracks().forEach(t=>t.stop());
+ stream=null;
+ $('cameraBox').innerHTML=`<img src="${url}" alt="Foto de comida capturada">`;
+ $('capturePhoto').disabled=true;$('stopCamera').disabled=true;$('startCamera').disabled=false;
+ $('foodIngredients').placeholder='Describí los ingredientes que aparecen en la foto...';
+};
+let monthCursor=new Date(),selectedDate=new Date();
+function renderCalendar(){
+ let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),first=new Date(y,m,1),last=new Date(y,m+1,0),start=(first.getDay()+6)%7;
+ $('monthLabel').textContent=first.toLocaleDateString('es-AR',{month:'long',year:'numeric'});
+ let g=$('calendarGrid');
+ g.innerHTML=['L','M','X','J','V','S','D'].map(x=>`<div class="dayname">${x}</div>`).join('');
+ for(let i=0;i<start;i++)g.innerHTML+='<div></div>';
+ for(let d=1;d<=last.getDate();d++){
+  let date=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,has=!!data.events[date]?.length;
+  g.innerHTML+=`<button class="day ${date===fmtDate(selectedDate)?'selected':''} ${has?'has':''}" data-date="${date}">${d}</button>`;
  }
- $('setupModal').classList.add('show');
+ g.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>{selectedDate=new Date(b.dataset.date+'T12:00:00');renderCalendar()});
+ $('selectedDateInfo').textContent='Fecha seleccionada: '+selectedDate.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ let ev=data.events[fmtDate(selectedDate)]||[];
+ $('calendarEvents').innerHTML=ev.map((x,i)=>`<div class="item"><div class="item-main">${esc(x)}</div><button class="btn danger" onclick="removeEvent(${i})">Quitar</button></div>`).join('')||'<p class="muted small">No hay actividades para esta fecha.</p>';
 }
-
-function changeWater(amount){
- const day=getDay();
- if(day.water+amount<0)return;
- if(day.water+amount>50){
-  alert('Revisá el registro antes de continuar.');
-  return;
+$('prevMonth').onclick=()=>{monthCursor.setMonth(monthCursor.getMonth()-1);renderCalendar()};
+$('nextMonth').onclick=()=>{monthCursor.setMonth(monthCursor.getMonth()+1);renderCalendar()};
+$('addCalendarTask').onclick=()=>{
+ let t=$('calendarTask').value.trim();if(!t)return;
+ let k=fmtDate(selectedDate);data.events[k]??=[];data.events[k].push(t);
+ $('calendarTask').value='';logRecent('Agregaste al calendario: '+t);save();renderCalendar();
+};
+function removeEvent(i){let k=fmtDate(selectedDate);data.events[k].splice(i,1);save();renderCalendar()}
+$('addWater').onclick=()=>{data.water.push({date:today(),name:'Vaso de agua'});logRecent('Registraste un vaso de agua');save()};
+function renderHistory(){
+ $('fullHistory').innerHTML=data.recent.map(x=>`<div class="item"><div class="thumb">✓</div><div class="item-main"><b>${esc(x.text)}</b><div class="muted small">${esc(x.date)}</div></div></div>`).join('')||'<p class="muted">Todavía no hay actividad.</p>';
+}
+function renderAll(){
+ let t=today(),todayWater=data.water.filter(x=>x.date===t).length;
+ $('activityCount').textContent=data.workouts.length;
+ $('mealCount').textContent=data.meals.length;
+ $('streakCount').textContent=new Set([...data.workouts.map(x=>x.date),...data.meals.map(x=>x.date)]).size;
+ $('waterCount').textContent=todayWater;$('waterToday').textContent=todayWater;
+ $('waterBar').style.width=Math.min(100,todayWater*12.5)+'%';
+ $('statWorkouts').textContent=data.workouts.length;$('statMeals').textContent=data.meals.length;
+ $('statWater').textContent=data.water.length;
+ $('statDays').textContent=new Set(data.workouts.map(x=>x.date)).size;
+ let pct=Math.min(100,data.workouts.length/5*100);
+ $('weekPct').textContent=Math.round(pct)+'%';
+ $('weekText').textContent=`${Math.min(5,data.workouts.length)} de 5 actividades`;
+ $('weekBar').style.width=pct+'%';
+ $('recentList').innerHTML=data.recent.slice(0,5).map(x=>`<div class="item"><div class="thumb">✓</div><div class="item-main"><b>${esc(x.text)}</b><div class="muted small">${esc(x.date)}</div></div></div>`).join('')||'<p class="muted small">Todavía no hay registros.</p>';
+ $('waterLog').innerHTML=data.water.slice(-8).reverse().map(x=>`<div class="item"><div class="thumb">💧</div><div class="item-main"><b>${esc(x.name)}</b><div class="muted small">${x.date}</div></div></div>`).join('');
+ $('statsBars').innerHTML=[['Entrenamientos',data.workouts.length],['Comidas registradas',data.meals.length],['Bebidas registradas',data.water.length]].map(x=>`<div><div class="row between small"><b>${x[0]}</b><span>${x[1]}</span></div><div class="bar"><i style="width:${Math.min(100,x[1]*10)}%"></i></div></div>`).join('');
+ renderMeals();renderHistory();
+}
+$('exportBtn').onclick=()=>{
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ let url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='vitalia-mis-datos.json';a.click();URL.revokeObjectURL(url);
+};
+$('clearData').onclick=()=>{
+ if(confirm('¿Seguro que querés borrar todos los registros guardados en este navegador? Esta acción no se puede deshacer.')){
+  localStorage.removeItem('vitaliaData');data=loadData();renderChoices();save();go('home');
  }
- day.water+=amount;
- save();
- render();
-}
-
-function addMeal(){
- const description=$('mealDescription').value.trim();
- if(!description){
-  alert('Escribí qué comida querés registrar.');
-  return;
- }
- const day=getDay();
- day.meals.push({
-  id:Date.now(),
-  type:$('mealType').value,
-  description,
-  time:new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
- });
- $('mealDescription').value='';
- save();
- render();
-}
-
-function deleteMeal(id){
- if(!confirm('¿Eliminar este registro?'))return;
- const day=getDay();
- day.meals=day.meals.filter(m=>m.id!==id);
- save();render();
-}
-
-function openMovement(){
- $('movementModal').classList.add('show');
-}
-function closeMovement(){
- $('movementModal').classList.remove('show');
-}
-
-function addMovement(){
- const minutes=Number($('movementMinutes').value);
- if(!Number.isInteger(minutes)||minutes<1||minutes>600){
-  alert('Ingresá una duración válida.');
-  return;
- }
- const day=getDay();
- day.movements.push({
-  id:Date.now(),
-  type:$('movementType').value,
-  minutes,
-  time:new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
- });
- $('movementMinutes').value='';
- closeMovement();
- save();render();
-}
-
-function deleteMovement(id){
- if(!confirm('¿Eliminar este registro?'))return;
- const day=getDay();
- day.movements=day.movements.filter(m=>m.id!==id);
- save();render();
-}
-
-function toggleHabit(id,checked){
- const day=getDay();
- if(checked&&!day.habits.includes(id))day.habits.push(id);
- if(!checked)day.habits=day.habits.filter(h=>h!==id);
- save();render();
-}
-
-function render(){
- const p=data.profile;
- const day=getDay();
-
- const date=new Date().toLocaleDateString('es-AR',{
-  weekday:'long',day:'numeric',month:'long',year:'numeric'
- });
- $('today').textContent=date.charAt(0).toUpperCase()+date.slice(1);
-
- if(p){
-  $('greeting').textContent='Hola, '+p.name+'.';
-  $('avatar').textContent=p.name.charAt(0).toUpperCase();
-  $('profileName').textContent=p.name;
-  $('profileAge').textContent=p.age+' años';
-  $('profileHeight').textContent=p.height+' cm';
-  $('profileGoal').textContent=p.goal;
-  $('profileActivity').textContent=p.activity;
- }
-
- $('waterTotal').textContent=day.water;
- $('waterDiary').textContent=day.water;
- $('movementTotal').textContent=day.movements.reduce((s,m)=>s+m.minutes,0);
-
- const completed=day.habits.length;
- const percent=Math.round(completed/4*100);
- $('habitTotal').textContent=completed+'/4';
- $('habitLabel').textContent=completed+' de 4';
- $('habitProgress').style.width=percent+'%';
- $('habitProgress2').style.width=percent+'%';
-
- $('habitList').innerHTML=habits.map(h=>`
-  <div class="habit">
-   <input type="checkbox" ${day.habits.includes(h.id)?'checked':''}
-   onchange="toggleHabit('${h.id}',this.checked)">
-   <div class="habit-info">
-    <strong>${h.name}</strong><small>${h.desc}</small>
-   </div>
-  </div>`).join('');
-
- const mealHTML=day.meals.map(m=>`
-  <div class="entry">
-   <div><strong>${escapeHTML(m.type)}</strong><br>
-   <span class="small">${escapeHTML(m.description)} · ${m.time}</span></div>
-   <button onclick="deleteMeal(${m.id})">Eliminar</button>
-  </div>`).join('');
-
- $('mealList').innerHTML=mealHTML||'<div class="empty">Todavía no registraste comidas hoy.</div>';
- $('todayMeals').innerHTML=day.meals.length?
-  day.meals.slice(-3).map(m=>`
-   <div class="meal"><div><strong>${escapeHTML(m.type)}</strong><br>
-   <span class="small">${escapeHTML(m.description)}</span></div>
-   <span class="small">${m.time}</span></div>`).join(''):
-  '<div class="empty">Tus registros aparecerán acá.</div>';
-
- $('movementList').innerHTML=day.movements.length?
- day.movements.map(m=>`
-  <div class="entry">
-   <div><strong>${escapeHTML(m.type)}</strong><br>
-   <span class="small">${m.minutes} minutos · ${m.time}</span></div>
-   <button onclick="deleteMovement(${m.id})">Eliminar</button>
-  </div>`).join(''):
- '<div class="empty">Todavía no registraste actividad.</div>';
-}
-
-function escapeHTML(str){
- return String(str).replace(/[&<>"']/g,c=>({
-  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
- }[c]));
-}
-
-function exportData(){
- const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
- const url=URL.createObjectURL(blob);
- const a=document.createElement('a');
- a.href=url;
- a.download='vitalia-registros.json';
- a.click();
- URL.revokeObjectURL(url);
-}
-
-function clearData(){
- if(!confirm('¿Seguro que querés borrar todos tus datos? Esta acción no se puede deshacer.'))return;
- localStorage.removeItem(STORAGE);
- data={profile:null,records:{}};
- location.reload();
-}
-
-if(!data.profile){
- $('setupModal').classList.add('show');
-}
-render();
+};
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+navBuild();renderChoices();renderRecipes();renderDrinks();renderWorkouts();renderTimer();renderAll();
+$('todayLabel').textContent=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+renderCalendar();
 </script>
 </body>
 </html>
