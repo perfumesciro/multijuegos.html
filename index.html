@@ -1,523 +1,630 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#102a20">
-<title>VITALIA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<title>VITALIA | Tu bienestar</title>
+
 <style>
-:root{--deep:#10291f;--green:#a5f52e;--green2:#78d91e;--pale:#effbdc;--bg:#f4f6f5;--ink:#17221c;--muted:#77817b;--line:#e8ece9;--white:#fff;--shadow:0 5px 20px #15291b0d}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--green);outline-offset:2px}
-.layout{min-height:100vh;display:grid;grid-template-columns:232px 1fr}
-.side{background:var(--deep);padding:18px 12px;position:sticky;top:0;height:100vh;color:white;display:flex;flex-direction:column;gap:20px}
-.brand{height:90px;border-radius:18px;background:#0b2119;display:grid;place-items:center;align-content:center;gap:3px;font-size:23px;font-weight:900;letter-spacing:1px}
-.brand svg{width:38px;height:32px;color:var(--green)}
-.nav{display:grid;gap:3px}
-.nav button{border:0;background:transparent;color:#e6eee8;text-align:left;padding:11px 12px;border-radius:12px;display:flex;gap:12px;align-items:center;font-size:13px}
-.nav button svg{width:18px;height:18px}
-.nav button.active,.nav button:hover{background:linear-gradient(90deg,#d8ffb7,#efffdc);color:#183321;font-weight:800}
-.sidefoot{margin-top:auto;background:#dff8c8;color:#24452b;padding:12px;border-radius:13px;font-size:12px;font-weight:700}
-main{padding:25px 30px;max-width:1500px;width:100%;margin:auto}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
-.top h1{font-size:24px;margin:0}
-.sub{font-size:12px;color:var(--muted);margin-top:4px}
-.btn{border:0;border-radius:12px;background:var(--green);padding:11px 16px;font-weight:800;color:#18331c}
-.btn:hover{background:var(--green2)}
-.btn.light{background:#f0f3f0;color:#334138}
-.btn.small{padding:7px 10px;font-size:12px}
-.section{display:none}
-.section.active{display:block}
-.grid{display:grid;gap:15px}
-.stats{grid-template-columns:repeat(4,1fr);margin-bottom:16px}
-.two{grid-template-columns:1.1fr .9fr}
-.three{grid-template-columns:repeat(3,1fr)}
-.card{background:white;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:var(--shadow);min-width:0}
-.card h2{font-size:17px;margin:0 0 12px}
-.card h3{font-size:14px;margin:0 0 7px}
-.metric{font-size:25px;font-weight:900;letter-spacing:-.8px}
-.muted{color:var(--muted)}
-.tiny{font-size:11px}
-.statrow{display:flex;align-items:center;gap:12px}
-.staticon{width:38px;height:38px;background:var(--pale);border-radius:13px;display:grid;place-items:center;color:#4a9e1b}
-.staticon svg{width:21px;height:21px}
-.ring{width:142px;height:142px;border-radius:50%;background:conic-gradient(var(--green2) 0 78%,#eaf0e8 78%);display:grid;place-items:center;position:relative;flex-shrink:0}
-.ring:before{content:"";position:absolute;inset:10px;border-radius:50%;background:#fff}
-.ring>div{position:relative;text-align:center}
-.ring b{font-size:28px}
-.ring small{display:block;font-size:10px;color:var(--muted)}
-.homehero{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
-.heroaside{flex:1;display:grid;gap:8px;min-width:170px}
-.minirow{display:flex;align-items:center;gap:10px;background:#f8faf8;border:1px solid var(--line);padding:9px;border-radius:12px}
-.minirow .emoji{font-size:21px}
-.minirow b{display:block;font-size:13px}
-.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.quick button{border:1px solid var(--line);border-radius:13px;background:#f8faf7;padding:13px;text-align:left;font-weight:750}
-.quick svg{width:23px;height:23px;color:#4c9d20;display:block;margin-bottom:7px}
-.photo{width:100%;height:125px;object-fit:cover;display:block;background:#e8eee8}
-.mealgrid,.traininggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.tile{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
-.tile .content{padding:11px}
-.tile strong{display:block;font-size:13px}
-.tile p{font-size:11px;color:var(--muted);margin:5px 0}
-.pill{border:0;border-radius:30px;padding:8px 13px;background:#f1f3f1;font-size:12px}
-.pill.active{background:var(--green);font-weight:800}
-.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
-.search{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:#f7f8f7}
-.list{display:grid;gap:9px}
-.listitem{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:13px;padding:10px;background:#fff}
-.listitem img{width:62px;height:55px;border-radius:10px;object-fit:cover}
-.grow{flex:1;min-width:0}
-.bar{height:8px;border-radius:30px;background:#edf1ed;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--green2);border-radius:30px}
-.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
-.days span{font-size:11px;color:var(--muted);padding:7px 0}
-.days button{width:34px;height:34px;margin:auto;border:0;border-radius:50%;background:transparent}
-.days button.today{background:var(--green);font-weight:900}
-.days button.has{box-shadow:inset 0 -3px #69bd28}
-.days button.selected{outline:2px solid #6dbd2b;outline-offset:2px}
-.calendarhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.field{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.formrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.label{font-size:12px;font-weight:750;display:block;margin:9px 0 5px}
-.tag{font-size:10px;color:#54802f;background:#f0f9e8;padding:4px 7px;border-radius:20px;display:inline-block}
-.steps{padding-left:20px;margin:8px 0}
-.steps li{padding:4px 0;font-size:13px}
-.modalback{position:fixed;inset:0;background:#08170ed9;z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
-.modalback.show{display:flex}
-.modal{background:white;border-radius:20px;padding:22px;width:min(560px,100%);max-height:90vh;overflow:auto}
-.modal h2{margin-top:0}
-.choice{display:flex;gap:8px;align-items:center;padding:8px 0;font-size:13px}
-.choice input{accent-color:#78d91e}
-.camera{background:#14251c;border-radius:15px;min-height:230px;display:grid;place-items:center;overflow:hidden;color:white}
-.camera video,.camera img{width:100%;max-height:380px;object-fit:contain}
-.exercisehero{width:100%;height:250px;object-fit:cover;border-radius:14px}
-.timer{font-size:44px;font-weight:900;text-align:center;margin:10px}
-.safe{font-size:11px;color:#62705f;background:#f3f8ef;border-radius:11px;padding:10px;margin-top:12px}
-.mobile{display:none}
-.toast{position:fixed;bottom:22px;right:22px;background:#183322;color:white;padding:12px 18px;border-radius:12px;display:none;z-index:80}
-@media(max-width:900px){
-.layout{grid-template-columns:1fr}
-.side{display:none}
-main{padding:17px 13px 85px}
-.mobile{display:flex;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);z-index:20;justify-content:space-around;padding:7px 2px calc(7px + env(safe-area-inset-bottom))}
-.mobile button{border:0;background:none;color:#637067;font-size:10px;display:grid;justify-items:center;gap:3px}
-.mobile svg{width:19px;height:19px}
-.mobile button.active{color:#4d9d20;font-weight:900}
-.stats{grid-template-columns:repeat(2,1fr)}
-.two{grid-template-columns:1fr}
-.mealgrid,.traininggrid{grid-template-columns:repeat(2,1fr)}
-.quick{grid-template-columns:repeat(2,1fr)}
+:root{
+ --green:#a5f52e;
+ --green-dark:#65b91d;
+ --green-soft:#effbdc;
+ --dark:#17251d;
+ --gray:#78827b;
+ --line:#e9eee9;
+ --bg:#f6f8f6;
+ --white:#fff;
+ --shadow:0 5px 25px rgba(20,45,25,.055);
 }
-@media(max-width:440px){
-.top h1{font-size:20px}
-.card{padding:13px}
-.mealgrid,.traininggrid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.ring{width:120px;height:120px}
-.formrow{grid-template-columns:1fr}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:Inter,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--green-dark);outline-offset:2px}
+.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
+.sidebar{height:100vh;position:sticky;top:0;background:#10291e;padding:17px 12px;color:white;display:flex;flex-direction:column}
+.logo{height:105px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;font-size:23px;font-weight:900;letter-spacing:2px}
+.logo-mark{font-size:34px;color:var(--green)}
+.navigation{display:grid;gap:4px;margin-top:12px}
+.navigation button{border:0;background:transparent;color:#e7eee8;border-radius:12px;padding:12px;text-align:left;display:flex;align-items:center;gap:12px;font-size:13px}
+.navigation button:hover,.navigation button.active{background:linear-gradient(90deg,#cfff9e,#edffdd);color:#193321;font-weight:800}
+.navicon{width:20px;text-align:center;font-size:17px}
+.side-bottom{margin-top:auto;background:#e5f8d4;color:#21422a;padding:13px;border-radius:13px;font-size:12px}
+main{padding:26px 30px;max-width:1500px;width:100%;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:23px}
+header h1{font-size:25px;margin:0}
+.muted{color:var(--gray)}
+.small{font-size:12px}
+.page{display:none}
+.page.active{display:block}
+.grid{display:grid;gap:15px}
+.grid-2{grid-template-columns:1.1fr .9fr}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:var(--shadow);min-width:0}
+.card h2{font-size:17px;margin:0 0 13px}
+.card h3{font-size:14px;margin:0 0 8px}
+.btn{background:var(--green);color:#18351e;border:0;border-radius:12px;padding:12px 17px;font-weight:800;transition:.18s}
+.btn:hover{background:#91e921;transform:translateY(-1px)}
+.btn.secondary{background:#f0f3f0;color:#3c493f}
+.btn.danger{background:#fff0ee;color:#a33d31}
+.btn.full{width:100%}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.metric{font-size:27px;font-weight:900}
+.stat{display:flex;align-items:center;gap:12px}
+.stat-icon{height:42px;width:42px;border-radius:13px;background:var(--green-soft);display:grid;place-items:center;font-size:20px}
+.hero{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.progress-ring{width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--green-dark) var(--progress,0%),#edf1ed 0);display:grid;place-items:center;position:relative}
+.progress-ring:before{content:"";position:absolute;inset:11px;background:white;border-radius:50%}
+.progress-ring div{position:relative;text-align:center}
+.progress-ring strong{font-size:28px}
+.progress-ring small{display:block;font-size:10px;color:var(--gray)}
+.hero-info{display:grid;gap:9px;flex:1;min-width:180px}
+.info-row{display:flex;align-items:center;gap:10px;padding:10px;background:#f8faf8;border-radius:12px}
+.info-row b{display:block;font-size:13px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.quick button{background:#f8faf7;border:1px solid var(--line);padding:14px;border-radius:13px;text-align:left;font-weight:750}
+.quick button:hover{background:var(--green-soft);border-color:var(--green-dark)}
+.quick .qicon{display:block;font-size:22px;margin-bottom:8px}
+.bar{height:8px;background:#edf1ed;border-radius:20px;overflow:hidden}
+.bar span{height:100%;display:block;background:var(--green-dark);border-radius:20px;transition:width .3s}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0}
+.pill{border:1px solid transparent;border-radius:30px;background:#f0f3f0;padding:9px 14px;font-size:12px;color:#455047}
+.pill.active,.pill.selected{background:var(--green-soft);border-color:#8bd53d;color:#244a25;font-weight:850;box-shadow:0 0 0 2px #a5f52e55}
+.search,.field,textarea,select{width:100%;border:1px solid var(--line);background:#fafbfa;padding:11px 12px;border-radius:11px;color:var(--dark)}
+.field-label{display:block;font-size:12px;font-weight:750;margin:12px 0 6px}
+.photo{width:100%;height:145px;object-fit:cover;display:block;background:#e9eee9}
+.cards-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.tile{background:white;border:1px solid var(--line);border-radius:15px;overflow:hidden;transition:.18s}
+.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.tile img{height:145px}
+.tile-body{padding:12px}
+.tile-body strong{font-size:13px;display:block}
+.tile-body p{font-size:11px;color:var(--gray);line-height:1.5}
+.tile-body .btn{padding:8px 11px;font-size:11px}
+.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.choice{border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;align-items:center;gap:9px;cursor:pointer;background:white;font-size:13px;transition:.15s}
+.choice:has(input:checked){background:var(--green-soft);border-color:var(--green-dark);box-shadow:0 0 0 2px #a5f52e55}
+.choice input{accent-color:#70c522;width:17px;height:17px}
+.list{display:grid;gap:9px}
+.list-row{border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;gap:11px;align-items:center;background:white}
+.list-row .grow{flex:1;min-width:0}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
+.days .weekday{font-size:11px;color:var(--gray);padding:8px 0}
+.days button{width:35px;height:35px;border:0;border-radius:50%;background:transparent;margin:auto}
+.days button:hover{background:var(--green-soft)}
+.days button.today{background:var(--green);color:#15251a;font-weight:900}
+.days button.has-event{box-shadow:inset 0 -3px var(--green-dark)}
+.days button.chosen{outline:2px solid var(--green-dark);outline-offset:2px}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
+.timer{font-size:45px;text-align:center;font-weight:900;margin:16px}
+.exercise-image{width:100%;height:240px;object-fit:cover;border-radius:14px}
+.safe-note{padding:12px;background:#f3f8ed;border-radius:12px;font-size:12px;color:#52624e;line-height:1.6;margin-top:12px}
+.camera-box{min-height:250px;background:#14271d;border-radius:15px;display:grid;place-items:center;overflow:hidden;color:white}
+.camera-box video,.camera-box img{width:100%;max-height:400px;object-fit:contain}
+.modal-bg{display:none;position:fixed;inset:0;background:#0b1c12cc;z-index:50;align-items:center;justify-content:center;padding:15px}
+.modal-bg.open{display:flex}
+.modal{width:min(580px,100%);max-height:92vh;overflow:auto;background:white;border-radius:20px;padding:22px}
+.modal h2{margin-top:0}
+.mobile-nav{display:none}
+@media(max-width:900px){
+ .app{grid-template-columns:1fr}
+ .sidebar{display:none}
+ main{padding:18px 13px 85px}
+ .mobile-nav{display:flex;position:fixed;z-index:20;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);justify-content:space-around;padding:8px 2px calc(8px + env(safe-area-inset-bottom))}
+ .mobile-nav button{border:0;background:none;color:#68746b;font-size:10px;display:grid;justify-items:center;gap:4px}
+ .mobile-nav button.active{color:#4d9b20;font-weight:900}
+ .grid-4{grid-template-columns:repeat(2,1fr)}
+ .grid-2{grid-template-columns:1fr}
+}
+@media(max-width:550px){
+ main{padding-left:11px;padding-right:11px}
+ .cards-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .tile img{height:115px}
+ .grid-3{grid-template-columns:repeat(2,1fr)}
+ .quick{grid-template-columns:repeat(2,1fr)}
+ .card{padding:13px}
+ header h1{font-size:21px}
+ .progress-ring{width:120px;height:120px}
 }
 </style>
 </head>
+
 <body>
-
-<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden">
-<symbol id="home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
-<symbol id="calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 3v4m10-4v4M3 10h18m-13 4h3m-3 3h3" stroke="currentColor" stroke-width="1.8"/></symbol>
-<symbol id="chart" viewBox="0 0 24 24"><path d="M4 20V12m5 8V5m5 15v-9m5 9V3" stroke="currentColor" stroke-width="2"/></symbol>
-<symbol id="camera" viewBox="0 0 24 24"><path d="M4 7h4l2-3h4l2 3h4v13H4z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-<symbol id="food" viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0Zm9-9v3m-5-2 2 3m8-3-2 3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
-<symbol id="drink" viewBox="0 0 24 24"><path d="M6 3h12l-1 18H7L6 3Zm3 4h6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-<symbol id="run" viewBox="0 0 24 24"><circle cx="15" cy="4" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m12 8-3 4 4 2 2 6m-6-8-4 2m7-6 4 3 4 1m-11 8-3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
-<symbol id="heart" viewBox="0 0 24 24"><path d="M20.8 8.7c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11A4.7 4.7 0 0 1 12 6a4.7 4.7 0 0 1 8.8 2.7Z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-<symbol id="history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5m4-1v5l4 2" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
-<symbol id="settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m19 13 2 1-2 4-2-1-2 1v2h-5v-2l-2-1-2 1-2-4 2-1v-2l-2-1 2-4 2 1 2-1V4h5v2l2 1 2-1 2 4-2 1z" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
-</svg>
-
-<div class="layout">
-<aside class="side">
-<div class="brand"><svg viewBox="0 0 40 32" fill="none"><path d="M3 4c10 1 16 8 17 24C11 21 6 14 3 4Zm34 0C27 5 21 12 20 28 29 21 34 14 37 4ZM13 16l7 12 7-12" fill="currentColor"/></svg>VITALIA</div>
-<nav class="nav" id="nav"></nav>
-<div class="sidefoot">Tu salud, nuestra prioridad　✦</div>
+<div class="app">
+<aside class="sidebar">
+ <div class="logo"><div class="logo-mark">◢V◣</div>VITALIA</div>
+ <nav class="navigation" id="sideNav"></nav>
+ <div class="side-bottom">Tu bienestar es lo importante.</div>
 </aside>
 
 <main>
-<header class="top">
-<div><h1 id="title">Inicio</h1><div class="sub" id="dateLabel"></div></div>
-<button class="btn light" onclick="exportData()">⇩ Exportar</button>
+<header>
+ <div><h1 id="pageTitle">Inicio</h1><div class="muted small" id="todayLabel"></div></div>
+ <button class="btn secondary" onclick="exportData()">Exportar datos ↓</button>
 </header>
 
-<section class="section active" id="inicio">
-<div class="grid stats">
-<div class="card statrow"><div class="staticon"><svg><use href="#run"/></svg></div><div><div class="metric" id="sActivities">0</div><div class="tiny muted">Actividades registradas</div></div></div>
-<div class="card statrow"><div class="staticon">🥗</div><div><div class="metric" id="sMeals">0</div><div class="tiny muted">Comidas registradas</div></div></div>
-<div class="card statrow"><div class="staticon">💧</div><div><div class="metric" id="sWater">0</div><div class="tiny muted">Vasos hoy</div></div></div>
-<div class="card statrow"><div class="staticon">⭐</div><div><div class="metric" id="sDays">0</div><div class="tiny muted">Días activos</div></div></div>
-</div>
-<div class="grid two">
-<div class="card">
-<h2>¡Hola! Seguimos con tu plan 💪</h2>
-<div class="homehero">
-<div class="ring"><div><b id="weekPercent">0%</b><small>de tu semana</small></div></div>
-<div class="heroaside">
-<div class="minirow"><span class="emoji">🔥</span><div><b id="weekActivities">0 actividades</b><small class="muted">Esta semana</small></div></div>
-<div class="minirow"><span class="emoji">💧</span><div><b id="homeWater">0 vasos</b><small class="muted">Registrados hoy</small></div></div>
-<div class="minirow"><span class="emoji">🥗</span><div><b id="homeMeals">0 comidas</b><small class="muted">Registradas hoy</small></div></div>
-</div>
-</div>
-<div class="bar" style="margin-top:15px"><i id="weekBar" style="width:0%"></i></div>
-<p class="tiny muted">El progreso refleja tus registros, no una obligación de entrenar todos los días.</p>
-<h2 style="margin-top:18px">Tu día</h2>
-<div class="quick">
-<button onclick="show('plan')"><svg><use href="#calendar"/></svg>Plan semanal</button>
-<button onclick="show('entrenamientos')"><svg><use href="#run"/></svg>Entrenar</button>
-<button onclick="show('camara')"><svg><use href="#camera"/></svg>Cámara</button>
-<button onclick="show('platillos')"><svg><use href="#food"/></svg>Platillos</button>
-</div>
-</div>
-<div class="card"><h2>Actividad reciente</h2><div id="recent" class="list"><p class="muted">Todavía no hay registros.</p></div></div>
-</div>
-<div class="safe">VITALIA está pensada para acompañar hábitos saludables, aprendizaje y rendimiento deportivo. Respetá los descansos y consultá con un adulto o profesional si necesitás orientación de salud.</div>
+<!-- INICIO -->
+<section class="page active" id="home">
+ <div class="grid grid-4" style="margin-bottom:15px">
+  <div class="card stat"><div class="stat-icon">⌁</div><div><div class="metric" id="totalWorkouts">0</div><div class="muted small">Actividades</div></div></div>
+  <div class="card stat"><div class="stat-icon">▤</div><div><div class="metric" id="totalMeals">0</div><div class="muted small">Comidas</div></div></div>
+  <div class="card stat"><div class="stat-icon">◉</div><div><div class="metric" id="totalWater">0</div><div class="muted small">Vasos registrados</div></div></div>
+  <div class="card stat"><div class="stat-icon">✓</div><div><div class="metric" id="activeDays">0</div><div class="muted small">Días activos</div></div></div>
+ </div>
+ <div class="grid grid-2">
+  <div class="card">
+   <h2>¡Hola! Este es tu espacio.</h2>
+   <div class="hero">
+    <div class="progress-ring" id="weekRing"><div><strong id="weekValue">0%</strong><small>actividad semanal</small></div></div>
+    <div class="hero-info">
+     <div class="info-row"><span>⌁</span><div><b id="weekCount">0 actividades</b><small class="muted">Esta semana</small></div></div>
+     <div class="info-row"><span>◉</span><div><b id="todayWater">0 vasos</b><small class="muted">Agua registrada hoy</small></div></div>
+     <div class="info-row"><span>▤</span><div><b id="todayMeals">0 comidas</b><small class="muted">Comidas registradas hoy</small></div></div>
+    </div>
+   </div>
+   <div class="bar" style="margin-top:18px"><span id="weekBar" style="width:0%"></span></div>
+   <p class="muted small">Tu progreso se basa en tus propios registros. Los descansos también cuentan.</p>
+   <h2 style="margin-top:22px">Accesos rápidos</h2>
+   <div class="quick">
+    <button onclick="go('plan')"><span class="qicon">▦</span>Mi plan</button>
+    <button onclick="go('training')"><span class="qicon">⌁</span>Entrenamientos</button>
+    <button onclick="go('scanner')"><span class="qicon">▣</span>Escanear comida</button>
+    <button onclick="go('recipes')"><span class="qicon">▤</span>Platillos</button>
+   </div>
+  </div>
+  <div class="card">
+   <h2>Actividad reciente</h2>
+   <div class="list" id="recentList"><p class="muted small">Todavía no hay registros.</p></div>
+   <div class="safe-note">VITALIA acompaña hábitos saludables y actividad física. No reemplaza el consejo de profesionales de salud.</div>
+  </div>
+ </div>
 </section>
 
-<section class="section" id="plan">
-<div class="grid two">
-<div class="card">
-<h2>Plan semanal</h2>
-<div class="calendarhead"><button class="btn light small" onclick="changeWeek(-1)">‹</button><b id="weekLabel"></b><button class="btn light small" onclick="changeWeek(1)">›</button></div>
-<div class="days" id="weekDays"></div>
-<p class="tiny muted">Verde: hoy. Punto verde: actividad registrada.</p>
-<div id="dayDetails" class="safe">Seleccioná un día para ver su plan.</div>
-</div>
-<div class="card">
-<h2>Tu plan de actividades</h2>
-<p class="muted tiny">Elegí las actividades que te interesan. Podés cambiarlas más adelante.</p>
-<div id="planSports"></div>
-<button class="btn" style="width:100%;margin-top:12px" onclick="savePlan()">↻ Actualizar plan</button>
-</div>
-</div>
+<!-- PLAN -->
+<section class="page" id="plan">
+ <div class="grid grid-2">
+  <div class="card">
+   <h2>Plan semanal</h2>
+   <div class="calendar-head"><button class="btn secondary" onclick="shiftWeek(-1)">‹</button><b id="weekTitle"></b><button class="btn secondary" onclick="shiftWeek(1)">›</button></div>
+   <div class="days" id="weekCalendar"></div>
+   <p class="muted small">Verde: hoy. Línea verde: actividad registrada.</p>
+   <div class="safe-note" id="weekDetail">Elegí un día para ver tus registros.</div>
+  </div>
+  <div class="card">
+   <h2>Editar mi plan</h2>
+   <p class="muted small">Podés elegir varias actividades y objetivos. Cambiarlos no borra tu historial.</p>
+   <h3>Actividades</h3>
+   <div class="choice-grid" id="planSports"></div>
+   <h3 style="margin-top:17px">Objetivos deportivos</h3>
+   <div class="choice-grid" id="planGoals"></div>
+   <button class="btn full" style="margin-top:17px" onclick="savePlan()">Actualizar plan</button>
+  </div>
+ </div>
 </section>
 
-<section class="section" id="entrenamientos">
-<div class="card">
-<h2>Entrenamientos</h2>
-<div class="tabs" id="trainingTabs">
-<button class="pill active" data-filter="Todos">Todos</button>
-<button class="pill" data-filter="Fuerza">Fuerza</button>
-<button class="pill" data-filter="Resistencia">Resistencia</button>
-<button class="pill" data-filter="Deportes">Deportes</button>
-</div>
-<div class="traininggrid" id="trainingGrid"></div>
-</div>
+<!-- ESTADISTICAS -->
+<section class="page" id="stats">
+ <div class="grid grid-3">
+  <div class="card"><div class="metric" id="statsWorkouts">0</div><div class="muted small">Actividades registradas</div></div>
+  <div class="card"><div class="metric" id="statsMeals">0</div><div class="muted small">Comidas registradas</div></div>
+  <div class="card"><div class="metric" id="statsWater">0</div><div class="muted small">Vasos registrados</div></div>
+ </div>
+ <div class="card" style="margin-top:15px">
+  <h2>Tu actividad</h2><div id="statsBars" class="list"></div>
+  <div class="safe-note">Las estadísticas muestran registros reales de la aplicación. No estiman cambios corporales ni peso.</div>
+ </div>
 </section>
 
-<section class="section" id="detalle"><div class="card"><button class="btn light small" onclick="show('entrenamientos')">← Volver</button><div id="exerciseDetail" style="margin-top:12px"></div></div></section>
-
-<section class="section" id="camara">
-<div class="grid two">
-<div class="card">
-<h2>Escáner de comidas</h2>
-<p class="tiny muted">Sacá una foto de tu plato. En esta versión podés capturar la imagen, pero la identificación automática requiere conectar una IA de visión.</p>
-<div class="camera" id="camera"><div style="text-align:center;padding:20px">📷<p>Tu cámara aparecerá acá</p></div></div>
-<div class="tabs"><button class="btn" id="openCamera">Abrir cámara</button><button class="btn light" id="takePhoto" disabled>Capturar</button><button class="btn light" id="closeCamera" disabled>Cerrar</button></div>
-<canvas id="canvas" hidden></canvas>
-</div>
-<div class="card">
-<h2>Registrar comida</h2>
-<label class="label">Nombre del platillo</label><input class="field" id="foodName" placeholder="Ej. Pollo con arroz y verduras">
-<label class="label">Ingredientes y cantidades</label><input class="field" id="foodDesc" placeholder="Ingredientes aproximados">
-<label class="label">Momento</label><select class="field" id="foodMoment"><option>Desayuno</option><option>Almuerzo</option><option>Merienda</option><option>Cena</option></select>
-<button class="btn" style="width:100%;margin-top:14px" onclick="saveMeal()">Guardar comida</button>
-<p class="tiny muted">Los datos nutricionales no se inventan: para calcularlos con precisión hace falta conocer cantidades y marcas.</p>
-</div>
-</div>
-<div class="card" style="margin-top:15px"><h2>Mis registros</h2><div id="mealRecords" class="list"></div></div>
+<!-- ESCANER -->
+<section class="page" id="scanner">
+ <div class="grid grid-2">
+  <div class="card">
+   <h2>Escáner de alimentos</h2>
+   <p class="muted small">La cámara captura la imagen dentro de la aplicación. La identificación automática todavía requiere una conexión con IA.</p>
+   <div class="camera-box" id="cameraBox"><div style="text-align:center">▣<p>Tu cámara aparecerá acá</p></div></div>
+   <div class="tabs">
+    <button class="btn" id="cameraOpen">Abrir cámara</button>
+    <button class="btn secondary" id="cameraCapture" disabled>Capturar foto</button>
+    <button class="btn secondary" id="cameraClose" disabled>Cerrar</button>
+   </div>
+   <canvas id="cameraCanvas" hidden></canvas>
+  </div>
+  <div class="card">
+   <h2>Confirmar alimento</h2>
+   <label class="field-label">¿Qué comida aparece en la foto?</label>
+   <input class="field" id="scanName" placeholder="Ej. Pollo con arroz y verduras">
+   <label class="field-label">Ingredientes y cantidades aproximadas</label>
+   <textarea id="scanIngredients" rows="3" placeholder="Ej. 1 porción de pollo, arroz, zanahoria..."></textarea>
+   <label class="field-label">Momento del día</label>
+   <select id="scanMoment" class="field"><option>Desayuno</option><option>Almuerzo</option><option>Merienda</option><option>Cena</option></select>
+   <button class="btn full" style="margin-top:14px" onclick="saveScannedMeal()">Guardar registro</button>
+   <div class="safe-note">No se mostrarán calorías o nutrientes estimados sin una fuente nutricional confiable y cantidades suficientes.</div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:15px"><h2>Mis comidas registradas</h2><div id="mealLog" class="list"></div></div>
 </section>
 
-<section class="section" id="platillos">
-<div class="card">
-<h2>Platillos recomendados</h2>
-<input class="search" id="recipeSearch" placeholder="⌕ Buscar platillos o ingredientes">
-<div class="tabs" id="recipeTabs">
-<button class="pill active" data-cat="Todos">Todos</button><button class="pill" data-cat="Proteicos">Proteicos</button><button class="pill" data-cat="Económicos">Económicos</button><button class="pill" data-cat="Principales">Principales</button><button class="pill" data-cat="Desayunos">Desayunos</button><button class="pill" data-cat="Meriendas">Meriendas</button>
-</div>
-<div class="mealgrid" id="recipeGrid"></div>
-</div>
+<!-- PLATILLOS -->
+<section class="page" id="recipes">
+ <div class="card">
+  <h2>Platillos recomendados</h2>
+  <input class="search" id="recipeSearch" placeholder="Buscar por nombre o ingrediente...">
+  <div class="tabs" id="recipeTabs">
+   <button class="pill active" data-category="Todos">Todos</button>
+   <button class="pill" data-category="Económicos">Económicos</button>
+   <button class="pill" data-category="Principales">Principales</button>
+   <button class="pill" data-category="Desayunos">Desayunos</button>
+   <button class="pill" data-category="Meriendas">Meriendas</button>
+   <button class="pill" data-category="Proteicos">Proteicos</button>
+  </div>
+  <div class="cards-grid" id="recipeGrid"></div>
+ </div>
 </section>
 
-<section class="section" id="bebidas"><div class="card"><h2>Bebidas</h2><div class="mealgrid" id="drinkGrid"></div><p class="tiny muted">La hidratación necesaria varía según la actividad, el clima y cada persona.</p></div></section>
-
-<section class="section" id="calendario">
-<div class="card">
-<div class="calendarhead"><button class="btn light" onclick="moveMonth(-1)">‹</button><h2 id="monthTitle" style="margin:0"></h2><button class="btn light" onclick="moveMonth(1)">›</button></div>
-<div class="days" id="monthDays"></div>
-<div class="safe" id="calendarSelected"></div>
-<div style="margin-top:12px"><label class="label">Agregar actividad o descanso</label><div class="formrow"><input class="field" id="eventText" placeholder="Ej. Fútbol / Descanso"><button class="btn" onclick="addEvent()">Agregar</button></div></div>
-<div id="eventsList" class="list" style="margin-top:12px"></div>
-</div>
+<!-- BEBIDAS -->
+<section class="page" id="drinks">
+ <div class="card"><h2>Bebidas</h2><div class="cards-grid" id="drinkGrid"></div>
+ <div class="safe-note">La cantidad de agua que una persona necesita varía según su edad, actividad, clima y salud. No hay una cifra universal para todos.</div></div>
 </section>
 
-<section class="section" id="estadisticas">
-<div class="grid three">
-<div class="card"><div class="metric" id="statActivities">0</div><div class="tiny muted">Actividades completadas</div></div>
-<div class="card"><div class="metric" id="statMeals">0</div><div class="tiny muted">Comidas registradas</div></div>
-<div class="card"><div class="metric" id="statWater">0</div><div class="tiny muted">Vasos registrados</div></div>
-</div>
-<div class="card" style="margin-top:15px"><h2>Tu constancia</h2><div id="statBars" class="list"></div><p class="tiny muted">No medimos peso, grasa corporal ni cambios físicos a partir de fotos.</p></div>
+<!-- ENTRENAMIENTOS -->
+<section class="page" id="training">
+ <div class="card">
+  <h2>Entrenamientos</h2>
+  <div class="tabs" id="trainingTabs">
+   <button class="pill active" data-filter="Todos">Todos</button>
+   <button class="pill" data-filter="Fuerza">Fuerza</button>
+   <button class="pill" data-filter="Resistencia">Resistencia</button>
+   <button class="pill" data-filter="Deportes">Deportes</button>
+   <button class="pill" data-filter="Movilidad">Movilidad</button>
+  </div>
+  <div class="cards-grid" id="trainingGrid"></div>
+ </div>
 </section>
 
-<section class="section" id="agua">
-<div class="grid two">
-<div class="card"><h2>Hidratación</h2><div class="metric" id="waterNum">0</div><div class="muted tiny">Vasos registrados hoy</div><button class="btn" style="margin-top:15px" onclick="addWater()">＋ Registrar un vaso</button></div>
-<div class="card"><h2>Historial de agua</h2><div id="waterRecords" class="list"></div></div>
-</div>
+<section class="page" id="exerciseDetail">
+ <div class="card"><button class="btn secondary" onclick="go('training')">← Volver</button><div id="exerciseContent" style="margin-top:15px"></div></div>
 </section>
 
-<section class="section" id="recomendaciones">
-<div class="card"><h2>Recomendaciones</h2><div class="list">
-<div class="listitem"><div class="staticon">🥦</div><div class="grow"><b>Variedad en las comidas</b><div class="tiny muted">Sumá alimentos distintos para incorporar diferentes nutrientes.</div></div></div>
-<div class="listitem"><div class="staticon">💧</div><div class="grow"><b>Hidratate regularmente</b><div class="tiny muted">Prestá atención a la sed, el calor y la actividad.</div></div></div>
-<div class="listitem"><div class="staticon">🌙</div><div class="grow"><b>Descansá</b><div class="tiny muted">La recuperación también forma parte del entrenamiento.</div></div></div>
-<div class="listitem"><div class="staticon">⚽</div><div class="grow"><b>Mejorá tu técnica</b><div class="tiny muted">La calidad del movimiento importa más que hacer muchas repeticiones.</div></div></div>
-</div></div>
+<!-- CALENDARIO -->
+<section class="page" id="calendar">
+ <div class="card">
+  <div class="calendar-head">
+   <button class="btn secondary" onclick="shiftMonth(-1)">‹</button>
+   <h2 id="monthLabel"></h2>
+   <button class="btn secondary" onclick="shiftMonth(1)">›</button>
+  </div>
+  <div class="days" id="monthCalendar"></div>
+  <div class="safe-note" id="selectedDateLabel"></div>
+  <label class="field-label">Agregar actividad o descanso a este día</label>
+  <div style="display:flex;gap:8px"><input class="field" id="eventInput" placeholder="Ej. Fútbol / Descanso"><button class="btn" onclick="addCalendarEvent()">Agregar</button></div>
+  <div class="list" id="eventList" style="margin-top:14px"></div>
+ </div>
 </section>
 
-<section class="section" id="motivacion"><div class="card"><h2>Un paso a la vez ✨</h2><p>La constancia se construye con hábitos realistas. Descansar también es progresar.</p><div class="safe">No hace falta entrenar todos los días ni compararte con otras personas. Buscá disfrutar el movimiento y sentirte bien.</div></div></section>
-<section class="section" id="historial"><div class="card"><h2>Historial</h2><div id="allHistory" class="list"></div></div></section>
-<section class="section" id="configuracion"><div class="card"><h2>Configuración</h2><p class="tiny muted">Los datos se guardan localmente en este navegador.</p><button class="btn light" onclick="exportData()">Exportar mis datos</button> <button class="btn" style="background:#ffe8e5;color:#873b32" onclick="clearData()">Borrar mis datos</button></div></section>
+<!-- AGUA -->
+<section class="page" id="water">
+ <div class="grid grid-2">
+  <div class="card"><h2>Agua</h2><div class="metric" id="waterToday">0</div><p class="muted small">Vasos que registraste hoy</p><button class="btn" onclick="addWater()">＋ Registrar un vaso</button></div>
+  <div class="card"><h2>Historial de agua</h2><div id="waterLog" class="list"></div></div>
+ </div>
+</section>
+
+<!-- RECOMENDACIONES -->
+<section class="page" id="recommendations">
+ <div class="card"><h2>Recomendaciones</h2><div class="list">
+  <div class="list-row"><div class="stat-icon">01</div><div class="grow"><b>Comé variado</b><p class="muted small">Combiná frutas, verduras, cereales, proteínas y otros alimentos.</p></div></div>
+  <div class="list-row"><div class="stat-icon">02</div><div class="grow"><b>Priorizá la técnica</b><p class="muted small">Aprender a moverte correctamente es más importante que hacer muchas repeticiones.</p></div></div>
+  <div class="list-row"><div class="stat-icon">03</div><div class="grow"><b>Respetá el descanso</b><p class="muted small">La recuperación ayuda al cuerpo a adaptarse a la actividad.</p></div></div>
+  <div class="list-row"><div class="stat-icon">04</div><div class="grow"><b>Hidratate regularmente</b><p class="muted small">Tené agua disponible y prestá atención a la sed y al calor.</p></div></div>
+ </div></div>
+</section>
+
+<section class="page" id="motivation"><div class="card"><h2>Un paso a la vez.</h2><p>Los avances no siempre se ven de un día para otro. Aprender, practicar, descansar y volver a intentarlo también es progresar.</p><div class="safe-note">No necesitás compararte con nadie. Buscá una actividad que disfrutes y que puedas realizar de manera segura.</div></div></section>
+
+<section class="page" id="history"><div class="card"><h2>Historial</h2><div class="list" id="historyList"></div></div></section>
+
+<section class="page" id="settings"><div class="card"><h2>Configuración</h2><p class="muted small">Tus datos se guardan en este navegador.</p><button class="btn secondary" onclick="openSurvey(true)">Editar encuesta</button> <button class="btn secondary" onclick="exportData()">Exportar mis datos</button> <button class="btn danger" onclick="eraseData()">Borrar mis datos</button></div></section>
 </main>
 </div>
 
-<nav class="mobile" id="mobileNav"></nav>
+<nav class="mobile-nav" id="mobileNav"></nav>
 
-<div class="modalback" id="survey">
-<div class="modal">
-<div class="brand" style="height:65px;color:white;margin-bottom:15px">VITALIA ✦</div>
-<h2>¡Bienvenido/a! Vamos a preparar tu experiencia</h2>
-<p class="muted tiny">Respondé esta encuesta inicial. Podés cambiar tus respuestas después.</p>
-<label class="label">¿Qué actividad te interesa?</label><div id="surveySports"></div>
-<label class="label">¿Qué te gustaría mejorar?</label><div id="surveyGoals"></div>
-<label class="label">¿Qué nivel de actividad hacés actualmente?</label>
-<select id="surveyLevel" class="field"><option>Estoy empezando</option><option>Hago actividad algunas veces</option><option>Entreno regularmente</option></select>
-<label class="label">¿Qué días te suelen quedar cómodos? (opcional)</label>
-<div id="surveyDays" class="formrow"></div>
-<div class="safe">No pedimos peso ni medidas corporales. La encuesta sirve para adaptar las actividades y la navegación.</div>
-<button class="btn" style="width:100%;margin-top:15px" onclick="finishSurvey()">Guardar y empezar</button>
-<button class="btn light" style="width:100%;margin-top:8px" onclick="closeSurvey()">Ahora no</button>
-</div>
+<!-- ENCUESTA -->
+<div class="modal-bg" id="surveyModal">
+ <div class="modal">
+  <div class="logo" style="height:65px;color:#173421">VITALIA <span style="color:#75c92a">✦</span></div>
+  <h2>Conocé tu punto de partida</h2>
+  <p class="muted small">Esta encuesta ayuda a organizar tus actividades. No calcula dietas ni objetivos de peso.</p>
+  <label class="field-label">Edad</label>
+  <input class="field" id="surveyAge" type="number" min="13" max="100" placeholder="Tu edad">
+  <label class="field-label">¿Qué actividades te interesan?</label>
+  <div class="choice-grid" id="surveySports"></div>
+  <label class="field-label">¿Qué te gustaría desarrollar?</label>
+  <div class="choice-grid" id="surveyGoals"></div>
+  <label class="field-label">Tu experiencia actual</label>
+  <select class="field" id="surveyExperience"><option>Estoy empezando</option><option>Hago actividad algunas veces</option><option>Practico deporte regularmente</option></select>
+  <label class="field-label">¿Cuánto tiempo tenés disponible normalmente?</label>
+  <select class="field" id="surveyTime"><option>15 a 20 minutos</option><option>20 a 30 minutos</option><option>30 a 45 minutos</option><option>Depende del día</option></select>
+  <div class="safe-note">No hace falta compartir tu peso o altura para organizar actividades seguras. Si tenés dudas sobre tu crecimiento, alimentación o peso, hablalo con un profesional de salud.</div>
+  <button class="btn full" style="margin-top:15px" onclick="saveSurvey()">Guardar respuestas</button>
+  <button class="btn secondary full" style="margin-top:8px" onclick="closeSurvey()">Ahora no</button>
+ </div>
 </div>
 
-<div class="modalback" id="recipeModal"><div class="modal" id="recipeContent"></div></div>
-<div class="toast" id="toast"></div>
+<!-- RECETA -->
+<div class="modal-bg" id="recipeModal"><div class="modal" id="recipeDetail"></div></div>
 
 <script>
-const navItems=[
-['inicio','home','Inicio'],['plan','calendar','Plan semanal'],['estadisticas','chart','Estadísticas'],['camara','camera','Cámara'],['platillos','food','Platillos'],['bebidas','drink','Bebidas'],['entrenamientos','run','Entrenamientos'],['calendario','calendar','Calendario'],['agua','drink','Agua'],['recomendaciones','heart','Recomendaciones'],['motivacion','heart','Motivación'],['historial','history','Historial'],['configuracion','settings','Configuración']
-];
-const icon=name=>`<svg viewBox="0 0 24 24"><use href="#${name}"/></svg>`;
-let db=JSON.parse(localStorage.getItem('vitalia_ref')||'null')||{survey:false,sports:[],goals:[],events:{},workouts:[],meals:[],water:[],history:[]};
-function persist(){localStorage.setItem('vitalia_ref',JSON.stringify(db));renderAll()}
-function toast(t){let el=document.getElementById('toast');el.textContent=t;el.style.display='block';setTimeout(()=>el.style.display='none',2200)}
-function show(id){
-document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));
-document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
-let n=navItems.find(x=>x[0]===id);document.getElementById('title').textContent=n?n[2]:'VITALIA';
-if(id==='calendario')renderMonth();if(id==='plan')renderWeek();window.scrollTo(0,0)
-}
-function buildNav(){
-let html=navItems.map(n=>`<button data-page="${n[0]}" onclick="show('${n[0]}')">${icon(n[1])}${n[2]}</button>`).join('');
-document.getElementById('nav').innerHTML=html;
-document.getElementById('mobileNav').innerHTML=navItems.slice(0,5).map(n=>`<button data-page="${n[0]}" onclick="show('${n[0]}')">${icon(n[1])}${n[2]}</button>`).join('');
-}
-const sports=['Fútbol','Caminar','Correr','Gimnasio','Ciclismo','Natación','Calistenia'];
-const goals=['Resistencia','Coordinación','Velocidad','Técnica deportiva','Fuerza general','Movilidad'];
-function checks(arr,name,selected=[]){return arr.map(v=>`<label class="choice"><input type="checkbox" name="${name}" value="${v}" ${selected.includes(v)?'checked':''}>${v}</label>`).join('')}
-function setupSurvey(){
-document.getElementById('surveySports').innerHTML=checks(sports,'ss',db.sports);
-document.getElementById('surveyGoals').innerHTML=checks(goals,'sg',db.goals);
-document.getElementById('surveyDays').innerHTML=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(x=>`<label class="choice"><input type="checkbox" name="sd" value="${x}">${x}</label>`).join('');
-document.getElementById('surveyLevel').value=db.level||'Estoy empezando';
-}
-function finishSurvey(){
-db.sports=[...document.querySelectorAll('[name=ss]:checked')].map(x=>x.value);
-db.goals=[...document.querySelectorAll('[name=sg]:checked')].map(x=>x.value);
-db.level=document.getElementById('surveyLevel').value;
-db.days=[...document.querySelectorAll('[name=sd]:checked')].map(x=>x.value);
-db.survey=true;persist();document.getElementById('survey').classList.remove('show');toast('¡Tu experiencia está lista!')
-}
-function closeSurvey(){db.survey=true;persist();document.getElementById('survey').classList.remove('show')}
-function savePlan(){
-db.sports=[...document.querySelectorAll('[name=ps]:checked')].map(x=>x.value);
-db.goals=[...document.querySelectorAll('[name=pg]:checked')].map(x=>x.value);
-persist();toast('Plan actualizado')
-}
-function renderPlanChoices(){document.getElementById('planSports').innerHTML='<b class="tiny">Actividades</b>'+checks(sports,'ps',db.sports)+'<hr style="border:0;border-top:1px solid var(--line);margin:12px 0"><b class="tiny">Objetivos deportivos</b>'+checks(goals,'pg',db.goals)}
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toISOString().slice(0,10);
+const dateKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 
-const pics={
-chicken:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&q=85',
-salad:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&q=85',
-pasta:'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=700&q=85',
-tacos:'https://images.unsplash.com/photo-1551506857-5d0f5b2d3f9b?w=700&q=85',
-oats:'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=700&q=85',
-soup:'https://images.unsplash.com/photo-1547592180-85f173990554?w=700&q=85',
-toast:'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&q=85',
-fish:'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=700&q=85'
+let data;
+try{data=JSON.parse(localStorage.getItem('vitalia_data'))}catch(e){}
+if(!data)data={surveyDone:false,sports:[],goals:[],workouts:[],meals:[],water:[],events:{},history:[],age:'',experience:'',time:''};
+
+function save(){localStorage.setItem('vitalia_data',JSON.stringify(data));renderAll()}
+function notify(msg){let el=document.createElement('div');el.textContent=msg;el.style='position:fixed;bottom:25px;right:20px;background:#183522;color:white;padding:13px 18px;border-radius:12px;z-index:100';document.body.appendChild(el);setTimeout(()=>el.remove(),2200)}
+function log(text){data.history.unshift({text,date:today()});data.history=data.history.slice(0,100)}
+function go(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+ document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+ let item=pages.find(x=>x.id===id);$('pageTitle').textContent=item?item.name:'Entrenamiento';
+ window.scrollTo(0,0);
+ if(id==='calendar')renderMonth();
+ if(id==='plan')renderWeek();
+}
+const pages=[
+ {id:'home',name:'Inicio',icon:'⌂'},
+ {id:'plan',name:'Plan',icon:'▦'},
+ {id:'stats',name:'Estadísticas',icon:'▥'},
+ {id:'scanner',name:'Cámara',icon:'▣'},
+ {id:'recipes',name:'Platillos',icon:'▤'},
+ {id:'drinks',name:'Bebidas',icon:'◉'},
+ {id:'training',name:'Entrenamientos',icon:'⌁'},
+ {id:'calendar',name:'Calendario',icon:'▦'},
+ {id:'water',name:'Agua',icon:'◉'},
+ {id:'recommendations',name:'Recomendaciones',icon:'♡'},
+ {id:'motivation',name:'Motivación',icon:'☆'},
+ {id:'history',name:'Historial',icon:'◷'},
+ {id:'settings',name:'Configuración',icon:'⚙'}
+];
+function buildNav(){
+ $('sideNav').innerHTML=pages.map(p=>`<button data-page="${p.id}" onclick="go('${p.id}')"><span class="navicon">${p.icon}</span>${p.name}</button>`).join('');
+ $('mobileNav').innerHTML=pages.slice(0,5).map(p=>`<button data-page="${p.id}" onclick="go('${p.id}')"><span>${p.icon}</span>${p.name}</button>`).join('');
+}
+const sports=['Fútbol','Caminar','Correr','Gimnasio supervisado','Ciclismo','Natación','Calistenia','Movilidad','Ejercicios militares adaptados'];
+const goals=['Resistencia','Coordinación','Técnica deportiva','Fuerza general','Movilidad','Velocidad'];
+function choices(list,name,selected=[]){return list.map(x=>`<label class="choice"><input type="checkbox" name="${name}" value="${x}" ${selected.includes(x)?'checked':''}>${x}</label>`).join('')}
+function openSurvey(edit=false){
+ $('surveyAge').value=data.age||'';
+ $('surveySports').innerHTML=choices(sports,'surveySport',data.sports);
+ $('surveyGoals').innerHTML=choices(goals,'surveyGoal',data.goals);
+ $('surveyExperience').value=data.experience||'Estoy empezando';
+ $('surveyTime').value=data.time||'20 a 30 minutos';
+ $('surveyModal').classList.add('open');
+}
+function closeSurvey(){$('surveyModal').classList.remove('open')}
+function saveSurvey(){
+ let age=Number($('surveyAge').value);
+ if(!age||age<13||age>100){notify('Ingresá una edad válida');return}
+ data.age=age;
+ data.sports=[...document.querySelectorAll('[name=surveySport]:checked')].map(x=>x.value);
+ data.goals=[...document.querySelectorAll('[name=surveyGoal]:checked')].map(x=>x.value);
+ data.experience=$('surveyExperience').value;
+ data.time=$('surveyTime').value;
+ data.surveyDone=true;
+ log('Actualizaste tu encuesta inicial');
+ save();closeSurvey();notify('Encuesta guardada');
+}
+function renderPlanOptions(){
+ $('planSports').innerHTML=choices(sports,'planSport',data.sports);
+ $('planGoals').innerHTML=choices(goals,'planGoal',data.goals);
+}
+function savePlan(){
+ data.sports=[...document.querySelectorAll('[name=planSport]:checked')].map(x=>x.value);
+ data.goals=[...document.querySelectorAll('[name=planGoal]:checked')].map(x=>x.value);
+ log('Actualizaste tu plan de actividades');save();notify('Plan actualizado');
+}
+
+const images={
+ chicken:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=85',
+ salad:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=85',
+ pasta:'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800&q=85',
+ oats:'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&q=85',
+ fish:'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&q=85',
+ soup:'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=85',
+ taco:'https://images.unsplash.com/photo-1551506857-5d0f5b2d3f9b?w=800&q=85',
+ toast:'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&q=85'
 };
 const recipes=[
-{name:'Pollo con arroz y verduras',cat:['Proteicos','Principales','Económicos'],img:'chicken',time:'30 min',ingredients:['1 pechuga de pollo','1 taza de arroz','1 zanahoria','½ morrón','1 taza de brócoli','Aceite, limón y condimentos'],steps:['Lavá las verduras y cortá la zanahoria y el morrón en trozos pequeños.','Enjuagá el arroz y cocinalo en agua siguiendo las indicaciones del paquete.','Cociná el brócoli al vapor o hervido hasta que esté tierno.','En una sartén con un poco de aceite, cociná el pollo en cubos hasta que esté completamente hecho.','Agregá la zanahoria y el morrón; salteá unos minutos hasta que se ablanden.','Serví el pollo y las verduras junto con el arroz. Terminá con limón y condimentos.']},
-{name:'Ensalada completa',cat:['Proteicos','Principales'],img:'salad',time:'15 min',ingredients:['Hojas verdes','1 tomate','½ pepino','½ taza de garbanzos cocidos','1 huevo cocido','Aceite de oliva y limón'],steps:['Lavá muy bien las hojas verdes, el tomate y el pepino.','Cortá el tomate y el pepino en cubos o rodajas.','Enjuagá y escurrí los garbanzos cocidos.','Herví el huevo durante unos 9 a 11 minutos y dejalo enfriar antes de pelarlo.','Mezclá todos los ingredientes en un recipiente.','Condimentá con aceite, limón y una pizca de sal.']},
-{name:'Pasta integral con tomate',cat:['Económicos','Principales'],img:'pasta',time:'25 min',ingredients:['Pasta integral','2 tomates maduros','½ cebolla','1 diente de ajo','Albahaca','Aceite'],steps:['Poné agua a hervir en una olla y cociná la pasta según el paquete.','Picá la cebolla, el ajo y los tomates.','En una sartén, rehogá la cebolla con un poco de aceite.','Sumá el ajo y el tomate; cociná a fuego medio hasta formar una salsa.','Escurrí la pasta reservando un poco del agua de cocción.','Mezclá la pasta con la salsa, agregá albahaca y serví.']},
-{name:'Tacos de pollo',cat:['Proteicos','Principales'],img:'tacos',time:'25 min',ingredients:['Tortillas de maíz o trigo','Pollo cocido desmenuzado','Tomate','Lechuga','Palta','Limón'],steps:['Cociná el pollo completamente en una sartén o usá pollo ya cocido y refrigerado correctamente.','Desmenuzalo con dos tenedores y condimentá a gusto.','Lavá y cortá el tomate y la lechuga.','Calentá las tortillas unos segundos por lado en una sartén.','Repartí el pollo y los vegetales en cada tortilla.','Agregá palta y unas gotas de limón antes de servir.']},
-{name:'Avena con frutas',cat:['Económicos','Desayunos'],img:'oats',time:'10 min',ingredients:['½ taza de avena','1 taza de leche o bebida vegetal','1 banana','Fruta de estación','Canela'],steps:['Colocá la avena y la leche en una olla pequeña.','Cociná a fuego bajo, revolviendo, durante 4 a 6 minutos.','Si queda muy espesa, agregá un poco más de leche.','Pasá la preparación a un bol.','Cortá la banana y la fruta elegida.','Distribuí la fruta por encima y agregá canela.']},
-{name:'Sopa de verduras',cat:['Económicos','Principales'],img:'soup',time:'35 min',ingredients:['1 papa','1 zanahoria','½ zapallito','½ cebolla','1 litro de agua o caldo','Condimentos'],steps:['Lavá, pelá cuando corresponda y cortá todas las verduras en cubos.','Picá la cebolla y rehogala en una olla con un poco de aceite.','Agregá la papa, zanahoria y zapallito.','Incorporá el agua o caldo y llevá a hervor.','Cociná a fuego medio durante unos 20 a 25 minutos, hasta que las verduras estén tiernas.','Serví así o procesá una parte para lograr una textura más cremosa.']},
-{name:'Tostadas con huevo',cat:['Desayunos','Económicos','Proteicos'],img:'toast',time:'10 min',ingredients:['2 rebanadas de pan','2 huevos','Tomate','Pimienta','Aceite'],steps:['Tostá el pan en una tostadora o sartén.','Calentá una sartén antiadherente con unas gotas de aceite.','Cociná los huevos hasta que la clara y la yema estén firmes.','Lavá y cortá el tomate.','Serví los huevos sobre las tostadas con tomate y pimienta.']},
-{name:'Pescado al horno',cat:['Principales','Proteicos'],img:'fish',time:'30 min',ingredients:['Filetes de pescado','1 papa','½ limón','Perejil','Aceite y condimentos'],steps:['Precalentá el horno a 190 °C.','Lavá la papa y cortala en rodajas finas.','Colocá las papas en una fuente aceitada y horneá unos 12 minutos.','Agregá los filetes de pescado, limón y perejil.','Cociná hasta que el pescado esté opaco y se desmenuce fácilmente.','Serví con las papas y una ensalada fresca.']}
+ {name:'Pollo con arroz y verduras',category:['Principales','Proteicos','Económicos'],image:'chicken',time:'30 minutos',ingredients:['1 pechuga de pollo','1 taza de arroz','1 zanahoria','1 taza de brócoli','½ morrón','Aceite, limón y condimentos'],steps:['Lavá las verduras y cortá la zanahoria y el morrón en trozos pequeños.','Enjuagá el arroz y cocinalo en agua siguiendo las instrucciones del paquete.','Cociná el brócoli al vapor o hervido hasta que esté tierno.','Cortá el pollo en trozos. En una sartén con un poco de aceite, cocinalo hasta que esté completamente hecho.','Agregá la zanahoria y el morrón y salteá hasta que estén tiernos.','Serví el pollo y las verduras junto al arroz. Terminá con limón y condimentos.']},
+ {name:'Ensalada completa',category:['Principales','Proteicos'],image:'salad',time:'15 minutos',ingredients:['Hojas verdes','1 tomate','½ pepino','½ taza de garbanzos cocidos','1 huevo','Aceite y limón'],steps:['Lavá las hojas verdes, el tomate y el pepino.','Cortá el tomate y el pepino.','Enjuagá y escurrí los garbanzos.','Herví el huevo durante 9 a 11 minutos y dejalo enfriar.','Mezclá los ingredientes en un recipiente.','Condimentá con aceite, limón y los condimentos que prefieras.']},
+ {name:'Pasta con salsa de tomate',category:['Principales','Económicos'],image:'pasta',time:'25 minutos',ingredients:['Pasta','2 tomates','½ cebolla','1 diente de ajo','Albahaca','Aceite'],steps:['Herví agua y cociná la pasta según el envase.','Picá la cebolla, el ajo y los tomates.','Rehogá la cebolla en una sartén con un poco de aceite.','Agregá el ajo y los tomates. Cociná a fuego medio hasta formar la salsa.','Escurrí la pasta y reservá un poco del agua de cocción.','Mezclá la pasta con la salsa y agregá albahaca.']},
+ {name:'Avena con frutas',category:['Desayunos','Económicos'],image:'oats',time:'10 minutos',ingredients:['½ taza de avena','1 taza de leche','1 banana','Fruta de estación','Canela'],steps:['Colocá la avena y la leche en una olla pequeña.','Cociná a fuego bajo revolviendo durante 4 a 6 minutos.','Si queda muy espesa, agregá un poco más de leche.','Pasá la preparación a un recipiente.','Cortá la banana y la fruta elegida.','Distribuí la fruta por encima y agregá canela.']},
+ {name:'Pescado al horno',category:['Principales','Proteicos'],image:'fish',time:'30 minutos',ingredients:['Filetes de pescado','1 papa','½ limón','Perejil','Aceite y condimentos'],steps:['Precalentá el horno a 190 °C.','Lavá la papa y cortala en rodajas.','Colocá las papas en una fuente aceitada y horneá unos 12 minutos.','Agregá el pescado, limón y perejil.','Cociná hasta que el pescado esté opaco y se desmenuce fácilmente.','Serví con las papas y verduras.']},
+ {name:'Sopa de verduras',category:['Principales','Económicos'],image:'soup',time:'35 minutos',ingredients:['1 papa','1 zanahoria','½ zapallito','½ cebolla','Agua o caldo','Condimentos'],steps:['Lavá y cortá las verduras en cubos.','Picá la cebolla y rehogala con un poco de aceite.','Agregá las verduras y mezclá.','Incorporá agua o caldo hasta cubrirlas.','Cociná a fuego medio hasta que estén tiernas.','Serví así o procesá una parte para una textura más cremosa.']},
+ {name:'Tacos de pollo',category:['Principales','Proteicos'],image:'taco',time:'25 minutos',ingredients:['Tortillas','Pollo cocido','Tomate','Lechuga','Palta','Limón'],steps:['Cociná completamente el pollo y desmenuzalo.','Lavá y cortá el tomate y la lechuga.','Calentá las tortillas unos segundos por lado.','Repartí el pollo y los vegetales en las tortillas.','Agregá palta y unas gotas de limón.','Serví inmediatamente.']},
+ {name:'Tostadas con huevo',category:['Desayunos','Meriendas','Proteicos'],image:'toast',time:'10 minutos',ingredients:['2 rebanadas de pan','2 huevos','Tomate','Pimienta','Aceite'],steps:['Tostá el pan.','Calentá una sartén antiadherente con un poco de aceite.','Cociná los huevos hasta que estén bien hechos.','Lavá y cortá el tomate.','Serví los huevos sobre las tostadas con tomate y pimienta.']}
 ];
-let recipeCat='Todos';
+let recipeFilter='Todos';
 function renderRecipes(){
-let q=document.getElementById('recipeSearch').value.toLowerCase();
-document.getElementById('recipeGrid').innerHTML=recipes.filter(r=>(recipeCat==='Todos'||r.cat.includes(recipeCat))&&(r.name+' '+r.ingredients.join(' ')).toLowerCase().includes(q)).map(r=>`<article class="tile"><img class="photo" src="${pics[r.img]}" alt="${r.name}" loading="lazy"><div class="content"><strong>${r.name}</strong><p>◷ ${r.time} · ${r.cat[0]}</p><button class="btn small" onclick="openRecipe(${recipes.indexOf(r)})">Ver preparación</button></div></article>`).join('')||'<p class="muted">No hay resultados.</p>'
+ let q=$('recipeSearch').value.toLowerCase();
+ $('recipeGrid').innerHTML=recipes.filter(r=>(recipeFilter==='Todos'||r.category.includes(recipeFilter))&&(r.name+' '+r.ingredients.join(' ')).toLowerCase().includes(q)).map(r=>`<article class="tile"><img class="photo" src="${images[r.image]}" alt="${r.name}" loading="lazy"><div class="tile-body"><strong>${r.name}</strong><p>${r.time} · ${r.category[0]}</p><button class="btn" onclick="openRecipe(${recipes.indexOf(r)})">Ver receta</button></div></article>`).join('')||'<p class="muted">No se encontraron platillos.</p>';
 }
+$('recipeSearch').addEventListener('input',renderRecipes);
+document.querySelectorAll('#recipeTabs button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#recipeTabs button').forEach(x=>x.classList.remove('active'));
+ b.classList.add('active');recipeFilter=b.dataset.category;renderRecipes();
+});
 function openRecipe(i){
-let r=recipes[i];
-document.getElementById('recipeContent').innerHTML=`<button class="btn light small" onclick="closeRecipe()">← Volver</button><img class="photo" style="height:190px;border-radius:13px;margin:12px 0" src="${pics[r.img]}" alt="${r.name}"><h2>${r.name}</h2><span class="tag">◷ ${r.time}</span><h3 style="margin-top:16px">Ingredientes</h3><ul>${r.ingredients.map(x=>`<li>${x}</li>`).join('')}</ul><h3>Preparación paso a paso</h3><ol class="steps">${r.steps.map(x=>`<li>${x}</li>`).join('')}</ol><button class="btn" style="width:100%" onclick="saveRecipe('${r.name.replace(/'/g,'')}')">Guardar en mi historial</button>`;
-document.getElementById('recipeModal').classList.add('show')
+ let r=recipes[i];
+ $('recipeDetail').innerHTML=`<button class="btn secondary" onclick="closeRecipe()">← Volver</button><img class="photo" style="height:190px;border-radius:13px;margin:13px 0" src="${images[r.image]}" alt="${r.name}"><h2>${r.name}</h2><span class="small muted">Tiempo aproximado: ${r.time}</span><h3 style="margin-top:18px">Ingredientes</h3><ul>${r.ingredients.map(x=>`<li>${x}</li>`).join('')}</ul><h3>Preparación</h3><ol>${r.steps.map(x=>`<li style="margin-bottom:8px">${x}</li>`).join('')}</ol><button class="btn full" onclick="saveRecipe('${r.name}')">Guardar receta</button>`;
+ $('recipeModal').classList.add('open');
 }
-function closeRecipe(){document.getElementById('recipeModal').classList.remove('show')}
-function saveRecipe(name){db.meals.push({name,moment:'Receta consultada',date:dateKey(new Date())});addHistory('Consultaste la receta: '+name);persist();closeRecipe();toast('Guardado en tu historial')}
-document.getElementById('recipeSearch').addEventListener('input',renderRecipes);
-document.getElementById('recipeTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#recipeTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');recipeCat=b.dataset.cat;renderRecipes()});
+function closeRecipe(){$('recipeModal').classList.remove('open')}
+function saveRecipe(name){data.meals.push({name,moment:'Receta guardada',date:today()});log('Guardaste la receta: '+name);save();closeRecipe();notify('Receta guardada')}
 
-const drinks=[['Agua','Agua fresca para acompañar el día.','💧'],['Limonada casera','Agua, limón y hojas de menta.','🍋'],['Licuado de banana','Banana y leche o bebida vegetal.','🥛'],['Licuado de frutilla','Frutillas, yogur y leche.','🍓'],['Agua saborizada','Agua con rodajas de naranja y pepino.','🍊'],['Leche','Bebida que aporta calcio y proteínas.','🥛']];
-document.getElementById('drinkGrid').innerHTML=drinks.map(d=>`<div class="tile"><div style="height:110px;background:#eff8e8;display:grid;place-items:center;font-size:45px">${d[2]}</div><div class="content"><strong>${d[0]}</strong><p>${d[1]}</p></div></div>`).join('');
-
-const training=[
-['Calistenia básica','Fuerza','https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=85','Movimientos básicos con el peso corporal. Empezá con variantes cómodas y priorizá técnica.'],
-['Fútbol','Deportes','https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=85','Practicá control, pases, conducción y coordinación con pausas.'],
-['Correr suave','Resistencia','https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=85','Elegí un ritmo cómodo y alterná con caminata si lo necesitás.'],
-['Gimnasio supervisado','Fuerza','https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&q=85','Aprendé técnica con supervisión y cargas apropiadas para tu experiencia.'],
-['Caminata','Resistencia','https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=85','Movimiento suave al aire libre, con calzado cómodo.'],
-['Ciclismo','Resistencia','https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=85','Usá casco y elegí un recorrido seguro.']
+const drinks=[
+ ['Agua','Agua fresca para acompañar tus actividades.','💧'],
+ ['Limonada casera','Agua, limón y hojas de menta.','🍋'],
+ ['Licuado de banana','Banana y leche o bebida vegetal.','🥛'],
+ ['Licuado de frutilla','Frutillas, yogur y leche.','🍓'],
+ ['Agua saborizada','Agua con rodajas de naranja y pepino.','◉'],
+ ['Leche','Aporta proteínas y calcio.','🥛']
 ];
-let trainFilter='Todos';
-function renderTraining(){
-document.getElementById('trainingGrid').innerHTML=training.filter(t=>trainFilter==='Todos'||t[1]===trainFilter).map(t=>`<div class="tile"><img class="photo" src="${t[2]}" alt="${t[0]}" loading="lazy"><div class="content"><strong>${t[0]}</strong><p>${t[1]}</p><button class="btn small" onclick="openExercise(${training.indexOf(t)})">Ver entrenamiento</button></div></div>`).join('')
-}
-document.querySelectorAll('#trainingTabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#trainingTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');trainFilter=b.dataset.filter;renderTraining()});
+$('drinkGrid').innerHTML=drinks.map(d=>`<article class="tile"><div style="height:110px;background:#f0f8e9;display:grid;place-items:center;font-size:40px">${d[2]}</div><div class="tile-body"><strong>${d[0]}</strong><p>${d[1]}</p></div></article>`).join('');
 
-let timer=30,timerId=null;
+const exercises=[
+ {name:'Calistenia inicial',type:'Fuerza',image:'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=85',duration:'15 a 20 minutos',rest:'Pausas según necesidad',description:'Práctica de movimientos básicos con el peso corporal.',benefit:'Ayuda a practicar coordinación, control corporal y fuerza general.',steps:['Prepará un espacio despejado.','Empezá con movimientos sencillos y cómodos.','Mantené una postura controlada.','Descansá cuando lo necesites.']},
+ {name:'Fútbol: técnica y control',type:'Deportes',image:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=85',duration:'20 a 30 minutos',rest:'Pausas para hidratarte',description:'Práctica de conducción, pases y control de pelota.',benefit:'Trabaja coordinación, técnica y percepción del juego.',steps:['Hacé movilidad suave para entrar en calor.','Practicá pases cortos con ambos pies.','Alterná conducción y cambios de dirección.','Terminá con una vuelta a la calma.']},
+ {name:'Caminata',type:'Resistencia',image:'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=85',duration:'15 a 30 minutos',rest:'A tu ritmo',description:'Caminata a un ritmo que te permita hablar cómodamente.',benefit:'Favorece la resistencia general y el bienestar.',steps:['Elegí un lugar seguro.','Comenzá a un ritmo tranquilo.','Mantené una postura natural.','Bajá el ritmo al finalizar.']},
+ {name:'Carrera suave',type:'Resistencia',image:'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=85',duration:'15 a 20 minutos',rest:'Alterná caminata si hace falta',description:'Actividad aeróbica suave y adaptable.',benefit:'Practica la resistencia cardiovascular.',steps:['Elegí un recorrido seguro.','Comenzá caminando.','Trotá a un ritmo cómodo si te sentís bien.','Terminá caminando suavemente.']},
+ {name:'Gimnasio supervisado',type:'Fuerza',image:'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&q=85',duration:'Según orientación profesional',rest:'Según el ejercicio y supervisión',description:'Aprendizaje técnico con supervisión de una persona capacitada.',benefit:'Ayuda a desarrollar técnica y fuerza general.',steps:['Pedí orientación sobre cada máquina.','Aprendé primero el movimiento sin carga.','Usá únicamente cargas apropiadas y supervisadas.','No entrenes con dolor.']},
+ {name:'Ciclismo',type:'Resistencia',image:'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=85',duration:'20 a 30 minutos',rest:'Pausas cuando sean necesarias',description:'Recorrido en bicicleta por un espacio seguro.',benefit:'Practica resistencia y coordinación.',steps:['Revisá la bicicleta.','Usá casco.','Elegí un recorrido seguro.','Mantené un ritmo cómodo.']},
+ {name:'Movilidad general',type:'Movilidad',image:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=85',duration:'10 a 15 minutos',rest:'Movimientos suaves',description:'Movimientos controlados y sin rebotes bruscos.',benefit:'Ayuda a practicar movilidad y control del movimiento.',steps:['Mové suavemente cuello y hombros.','Hacé movimientos cómodos de cadera.','Movilizá tobillos y muñecas.','Evitá forzar rangos dolorosos.']},
+ {name:'Circuito funcional adaptado',type:'Fuerza',image:'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=85',duration:'15 a 20 minutos',rest:'Descanso entre movimientos',description:'Movimientos sencillos de coordinación y control corporal.',benefit:'Practica coordinación y fuerza general.',steps:['Hacé una sentadilla cómoda sin peso.','Practicá equilibrio con apoyo cercano.','Caminá unos pasos con control.','Descansá entre cada actividad.']}
+];
+let exerciseFilter='Todos';
+function renderExercises(){
+ $('trainingGrid').innerHTML=exercises.filter(e=>exerciseFilter==='Todos'||e.type===exerciseFilter).map(e=>`<article class="tile"><img class="photo" src="${e.image}" alt="${e.name}" loading="lazy"><div class="tile-body"><strong>${e.name}</strong><p>${e.type} · ${e.duration}</p><button class="btn" onclick="openExercise(${exercises.indexOf(e)})">Ver ejercicio</button></div></article>`).join('');
+}
+document.querySelectorAll('#trainingTabs button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#trainingTabs button').forEach(x=>x.classList.remove('active'));
+ b.classList.add('active');exerciseFilter=b.dataset.filter;renderExercises();
+});
+let timerSeconds=30,timerInterval=null;
 function openExercise(i){
-let t=training[i];show('detalle');
-document.getElementById('exerciseDetail').innerHTML=`<img class="exercisehero" src="${t[2]}" alt="${t[0]}"><h2 style="margin-top:14px">${t[0]}</h2><p>${t[3]}</p><h3>Antes de empezar</h3><ol class="steps"><li>Prepará un espacio seguro y despejado.</li><li>Empezá suave y practicá la técnica.</li><li>Hacé pausas cuando las necesites.</li><li>Detenete si sentís dolor, mareo o malestar.</li></ol><div class="timer" id="timer">00:30</div><div class="row" style="justify-content:center"><button class="btn" onclick="startTimer()">▶ Iniciar</button><button class="btn light" onclick="pauseTimer()">Ⅱ Pausar</button><button class="btn light" onclick="resetTimer()">↻ Reiniciar</button></div><button class="btn" style="width:100%;margin-top:15px" onclick="completeWorkout('${t[0]}')">Registrar actividad</button><p class="tiny muted">El temporizador es opcional; no es una meta de esfuerzo.</p>`;
-resetTimer()
+ let e=exercises[i];go('exerciseDetail');
+ $('exerciseContent').innerHTML=`<img class="exercise-image" src="${e.image}" alt="${e.name}"><h2 style="margin-top:15px">${e.name}</h2><p>${e.description}</p><div class="grid grid-2"><div class="card"><b>Duración orientativa</b><p>${e.duration}</p></div><div class="card"><b>Descanso</b><p>${e.rest}</p></div></div><h3 style="margin-top:17px">¿Qué practicás?</h3><p>${e.benefit}</p><h3>Cómo realizarlo</h3><ol>${e.steps.map(s=>`<li style="margin:7px 0">${s}</li>`).join('')}</ol><div class="safe-note">La duración es orientativa, no una obligación. Adaptá la actividad a tu experiencia y descansá si lo necesitás.</div><h3 style="margin-top:18px">Temporizador opcional</h3><div class="timer" id="timerText">00:30</div><div class="tabs" style="justify-content:center"><button class="btn" onclick="startTimer()">▶ Iniciar</button><button class="btn secondary" onclick="pauseTimer()">Ⅱ Pausar</button><button class="btn secondary" onclick="resetTimer()">↻ Reiniciar</button></div><button class="btn full" style="margin-top:15px" onclick="completeExercise('${e.name}')">Registrar actividad completada</button>`;
+ resetTimer();
 }
-function timerDraw(){let e=document.getElementById('timer');if(e)e.textContent='00:'+String(timer).padStart(2,'0')}
-function startTimer(){if(timerId)return;timerId=setInterval(()=>{if(timer>0){timer--;timerDraw()}else{pauseTimer();toast('Tiempo terminado. Tomate un descanso.')}},1000)}
-function pauseTimer(){clearInterval(timerId);timerId=null}
-function resetTimer(){pauseTimer();timer=30;timerDraw()}
-function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function addHistory(text){db.history.unshift({text,date:dateKey(new Date())});db.history=db.history.slice(0,60)}
-function completeWorkout(name){db.workouts.push({name,date:dateKey(new Date())});addHistory('Actividad registrada: '+name);persist();toast('Actividad registrada')}
+function drawTimer(){let el=$('timerText');if(el)el.textContent='00:'+String(timerSeconds).padStart(2,'0')}
+function startTimer(){if(timerInterval)return;timerInterval=setInterval(()=>{if(timerSeconds>0){timerSeconds--;drawTimer()}else{pauseTimer();notify('Temporizador terminado. Descansá.')}},1000)}
+function pauseTimer(){clearInterval(timerInterval);timerInterval=null}
+function resetTimer(){pauseTimer();timerSeconds=30;drawTimer()}
+function completeExercise(name){data.workouts.push({name,date:today()});log('Actividad completada: '+name);save();notify('Actividad registrada')}
 
-let monthCursor=new Date(),selectedDate=dateKey(new Date());
+let monthCursor=new Date(),selectedDate=today();
 function renderMonth(){
-let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,last=new Date(y,m+1,0).getDate();
-document.getElementById('monthTitle').textContent=first.toLocaleDateString('es-AR',{month:'long',year:'numeric'});
-let html=['L','M','X','J','V','S','D'].map(x=>`<span>${x}</span>`).join('');
-for(let i=0;i<offset;i++)html+='<span></span>';
-for(let d=1;d<=last;d++){
-let k=dateKey(new Date(y,m,d)),has=(db.events[k]||[]).length||db.workouts.some(x=>x.date===k)||db.meals.some(x=>x.date===k),today=k===dateKey(new Date());
-html+=`<button class="${today?'today ':''}${has?'has ':''}${selectedDate===k?'selected':''}" onclick="selectDate('${k}')">${d}</button>`
+ let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,last=new Date(y,m+1,0).getDate();
+ $('monthLabel').textContent=first.toLocaleDateString('es-AR',{month:'long',year:'numeric'});
+ let html=['L','M','X','J','V','S','D'].map(x=>`<span class="weekday">${x}</span>`).join('');
+ for(let i=0;i<offset;i++)html+='<span></span>';
+ for(let d=1;d<=last;d++){
+  let k=dateKey(new Date(y,m,d));
+  let has=(data.events[k]||[]).length||data.workouts.some(x=>x.date===k);
+  html+=`<button class="${k===today()?'today ':''}${has?'has-event ':''}${k===selectedDate?'chosen':''}" onclick="chooseDate('${k}')">${d}</button>`;
+ }
+ $('monthCalendar').innerHTML=html;renderSelectedDate();
 }
-document.getElementById('monthDays').innerHTML=html;renderSelectedDate()
-}
-function moveMonth(n){monthCursor.setMonth(monthCursor.getMonth()+n);renderMonth()}
-function selectDate(k){selectedDate=k;renderMonth()}
+function shiftMonth(n){monthCursor.setMonth(monthCursor.getMonth()+n);renderMonth()}
+function chooseDate(k){selectedDate=k;renderMonth()}
 function renderSelectedDate(){
-let d=new Date(selectedDate+'T12:00:00');
-document.getElementById('calendarSelected').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'})+(selectedDate===dateKey(new Date())?' · Hoy':'');
-let ev=db.events[selectedDate]||[];
-document.getElementById('eventsList').innerHTML=ev.map((x,i)=>`<div class="listitem"><div class="grow">${x}</div><button class="btn light small" onclick="removeEvent(${i})">Quitar</button></div>`).join('')||'<p class="tiny muted">No hay actividades guardadas para este día.</p>'
+ let d=new Date(selectedDate+'T12:00:00');
+ $('selectedDateLabel').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+(selectedDate===today()?' · Hoy':'');
+ let events=data.events[selectedDate]||[];
+ $('eventList').innerHTML=events.map((x,i)=>`<div class="list-row"><div class="grow">${x}</div><button class="btn secondary" onclick="removeEvent(${i})">Quitar</button></div>`).join('')||'<p class="muted small">No hay eventos para este día.</p>';
 }
-function addEvent(){let v=document.getElementById('eventText').value.trim();if(!v)return;(db.events[selectedDate]??=[]).push(v);document.getElementById('eventText').value='';addHistory('Agregaste al calendario: '+v);persist();renderMonth()}
-function removeEvent(i){db.events[selectedDate].splice(i,1);persist();renderMonth()}
+function addCalendarEvent(){
+ let v=$('eventInput').value.trim();if(!v){notify('Escribí una actividad');return}
+ (data.events[selectedDate]??=[]).push(v);$('eventInput').value='';log('Agregaste al calendario: '+v);save();notify('Evento agregado');
+}
+function removeEvent(i){data.events[selectedDate].splice(i,1);save()}
 
 let weekStart=new Date();
 weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
-function changeWeek(n){weekStart.setDate(weekStart.getDate()+n*7);renderWeek()}
+function shiftWeek(n){weekStart.setDate(weekStart.getDate()+7*n);renderWeek()}
 function renderWeek(){
-document.getElementById('weekLabel').textContent=weekStart.toLocaleDateString('es-AR',{day:'numeric',month:'short'})+' – '+new Date(weekStart.getTime()+6*86400000).toLocaleDateString('es-AR',{day:'numeric',month:'short'});
-let html=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(x=>`<span>${x}</span>`).join('');
-for(let i=0;i<7;i++){let d=new Date(weekStart);d.setDate(d.getDate()+i);let k=dateKey(d),has=db.workouts.some(x=>x.date===k);html+=`<button class="${k===dateKey(new Date())?'today ':''}${has?'has':''}" onclick="weekDay('${k}')">${d.getDate()}</button>`}
-document.getElementById('weekDays').innerHTML=html
+ $('weekTitle').textContent=weekStart.toLocaleDateString('es-AR',{day:'numeric',month:'short'})+' – '+new Date(weekStart.getTime()+6*86400000).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'});
+ let html=['L','M','X','J','V','S','D'].map(x=>`<span class="weekday">${x}</span>`).join('');
+ for(let i=0;i<7;i++){
+  let d=new Date(weekStart);d.setDate(d.getDate()+i);let k=dateKey(d);
+  let has=data.workouts.some(x=>x.date===k);
+  html+=`<button class="${k===today()?'today ':''}${has?'has-event':''}" onclick="showWeekDay('${k}')">${d.getDate()}</button>`;
+ }
+ $('weekCalendar').innerHTML=html;
 }
-function weekDay(k){let d=new Date(k+'T12:00:00');document.getElementById('dayDetails').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'})+' · '+(db.workouts.filter(x=>x.date===k).map(x=>x.name).join(', ')||'Sin actividades registradas')}
+function showWeekDay(k){
+ let d=new Date(k+'T12:00:00');
+ let names=data.workouts.filter(x=>x.date===k).map(x=>x.name);
+ $('weekDetail').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · '+(names.join(', ')||'Sin actividades registradas');
+}
 
-async function openCam(){
-if(!navigator.mediaDevices?.getUserMedia){toast('La cámara necesita HTTPS o localhost');return}
-try{
-window.camStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
-document.getElementById('camera').innerHTML='<video id="video" autoplay playsinline></video>';
-document.getElementById('video').srcObject=window.camStream;
-document.getElementById('takePhoto').disabled=false;document.getElementById('closeCamera').disabled=false;document.getElementById('openCamera').disabled=true
-}catch(e){toast('No se pudo acceder a la cámara. Revisá los permisos.')}
+async function openCamera(){
+ if(!navigator.mediaDevices?.getUserMedia){notify('La cámara requiere HTTPS o localhost');return}
+ try{
+  window.vitaliaStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
+  $('cameraBox').innerHTML='<video id="cameraVideo" autoplay playsinline></video>';
+  $('cameraVideo').srcObject=window.vitaliaStream;
+  $('cameraOpen').disabled=true;$('cameraCapture').disabled=false;$('cameraClose').disabled=false;
+ }catch(e){notify('No se pudo abrir la cámara. Revisá los permisos.')}
 }
-function closeCam(){
-if(window.camStream)window.camStream.getTracks().forEach(t=>t.stop());
-window.camStream=null;
-document.getElementById('camera').innerHTML='<div style="padding:20px">📷 Cámara cerrada</div>';
-document.getElementById('takePhoto').disabled=true;document.getElementById('closeCamera').disabled=true;document.getElementById('openCamera').disabled=false
+function closeCamera(){
+ if(window.vitaliaStream)window.vitaliaStream.getTracks().forEach(t=>t.stop());
+ window.vitaliaStream=null;$('cameraBox').innerHTML='<div>▣ Cámara cerrada</div>';
+ $('cameraOpen').disabled=false;$('cameraCapture').disabled=true;$('cameraClose').disabled=true;
 }
-document.getElementById('openCamera').onclick=openCam;
-document.getElementById('closeCamera').onclick=closeCam;
-document.getElementById('takePhoto').onclick=()=>{
-let v=document.getElementById('video'),c=document.getElementById('canvas');if(!v||!v.videoWidth)return;
-c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
-let img=c.toDataURL('image/jpeg');closeCam();document.getElementById('camera').innerHTML=`<img src="${img}" alt="Foto de comida capturada">`
+$('cameraOpen').onclick=openCamera;$('cameraClose').onclick=closeCamera;
+$('cameraCapture').onclick=()=>{
+ let v=$('cameraVideo'),c=$('cameraCanvas');if(!v||!v.videoWidth)return;
+ c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
+ let image=c.toDataURL('image/jpeg');closeCamera();
+ $('cameraBox').innerHTML=`<img src="${image}" alt="Foto capturada">`;
 };
-function saveMeal(){
-let name=document.getElementById('foodName').value.trim();if(!name){toast('Escribí el nombre del platillo');return}
-db.meals.push({name,moment:document.getElementById('foodMoment').value,date:dateKey(new Date())});
-addHistory('Comida registrada: '+name);
-document.getElementById('foodName').value='';document.getElementById('foodDesc').value='';
-persist();toast('Comida guardada')
+function saveScannedMeal(){
+ let name=$('scanName').value.trim();if(!name){notify('Escribí qué alimento aparece');return}
+ data.meals.push({name,moment:$('scanMoment').value,date:today()});
+ log('Registraste: '+name);save();$('scanName').value='';$('scanIngredients').value='';notify('Comida registrada');
 }
-function addWater(){db.water.push({date:dateKey(new Date())});addHistory('Registraste un vaso de agua');persist();toast('Registro agregado')}
+function addWater(){data.water.push({date:today()});log('Registraste un vaso de agua');save();notify('Registro agregado')}
 
 function renderAll(){
-let today=dateKey(new Date()),wk=db.workouts.filter(x=>{let d=new Date(x.date+'T12:00:00');return d>=weekStart&&d<new Date(weekStart.getTime()+7*86400000)}).length,water=db.water.filter(x=>x.date===today).length,meals=db.meals.filter(x=>x.date===today).length;
-document.getElementById('sActivities').textContent=db.workouts.length;
-document.getElementById('sMeals').textContent=db.meals.length;
-document.getElementById('sWater').textContent=water;
-document.getElementById('sDays').textContent=new Set(db.workouts.map(x=>x.date)).size;
-document.getElementById('weekPercent').textContent=Math.min(100,Math.round(wk/5*100))+'%';
-document.getElementById('weekActivities').textContent=wk+' actividades';
-document.getElementById('homeWater').textContent=water+' vasos';
-document.getElementById('homeMeals').textContent=meals+' comidas';
-document.getElementById('weekBar').style.width=Math.min(100,wk/5*100)+'%';
-document.getElementById('statActivities').textContent=db.workouts.length;
-document.getElementById('statMeals').textContent=db.meals.length;
-document.getElementById('statWater').textContent=db.water.length;
-document.getElementById('waterNum').textContent=water;
-document.getElementById('recent').innerHTML=db.history.slice(0,5).map(x=>`<div class="listitem"><div class="staticon">✓</div><div class="grow"><b>${x.text}</b><div class="tiny muted">${x.date}</div></div></div>`).join('')||'<p class="muted tiny">Todavía no hay registros.</p>';
-document.getElementById('mealRecords').innerHTML=db.meals.slice().reverse().map(x=>`<div class="listitem"><div class="staticon">🥗</div><div class="grow"><b>${x.name}</b><div class="tiny muted">${x.moment} · ${x.date}</div></div></div>`).join('')||'<p class="tiny muted">No hay comidas guardadas.</p>';
-document.getElementById('waterRecords').innerHTML=db.water.slice(-10).reverse().map(x=>`<div class="listitem">💧 <div class="grow">Vaso registrado</div><span class="tiny muted">${x.date}</span></div>`).join('')||'<p class="tiny muted">Sin registros.</p>';
-document.getElementById('statBars').innerHTML=[['Actividades',db.workouts.length],['Comidas',db.meals.length],['Vasos registrados',db.water.length]].map(x=>`<div><div style="display:flex;justify-content:space-between;font-size:12px;margin:8px 0"><b>${x[0]}</b>${x[1]}</div><div class="bar"><i style="width:${Math.min(100,x[1]*8)}%"></i></div></div>`).join('');
-document.getElementById('allHistory').innerHTML=db.history.map(x=>`<div class="listitem"><div class="grow">${x.text}</div><span class="tiny muted">${x.date}</span></div>`).join('')||'<p class="tiny muted">Sin historial todavía.</p>';
-renderMonth();renderWeek()
+ let t=today(),water=data.water.filter(x=>x.date===t).length,meals=data.meals.filter(x=>x.date===t).length;
+ $('totalWorkouts').textContent=data.workouts.length;
+ $('totalMeals').textContent=data.meals.length;
+ $('totalWater').textContent=data.water.length;
+ $('activeDays').textContent=new Set(data.workouts.map(x=>x.date)).size;
+ $('todayWater').textContent=water+' vasos';
+ $('todayMeals').textContent=meals+' comidas';
+ $('waterToday').textContent=water;
+ $('statsWorkouts').textContent=data.workouts.length;
+ $('statsMeals').textContent=data.meals.length;
+ $('statsWater').textContent=data.water.length;
+ let start=new Date();start.setDate(start.getDate()-((start.getDay()+6)%7));start.setHours(0,0,0,0);
+ let end=new Date(start);end.setDate(end.getDate()+7);
+ let count=data.workouts.filter(x=>{let d=new Date(x.date+'T12:00:00');return d>=start&&d<end}).length;
+ let percent=Math.min(100,Math.round(count/5*100));
+ $('weekValue').textContent=percent+'%';
+ $('weekRing').style.setProperty('--progress',percent+'%');
+ $('weekCount').textContent=count+' actividades';
+ $('weekBar').style.width=percent+'%';
+ $('recentList').innerHTML=data.history.slice(0,6).map(x=>`<div class="list-row"><div class="grow"><b>${x.text}</b><div class="muted small">${x.date}</div></div></div>`).join('')||'<p class="muted small">Todavía no hay registros.</p>';
+ $('mealLog').innerHTML=data.meals.slice().reverse().map(x=>`<div class="list-row"><div class="grow"><b>${x.name}</b><div class="muted small">${x.moment} · ${x.date}</div></div></div>`).join('')||'<p class="muted small">Todavía no hay comidas.</p>';
+ $('waterLog').innerHTML=data.water.slice(-12).reverse().map(x=>`<div class="list-row">◉ <div class="grow">Vaso registrado</div><span class="muted small">${x.date}</span></div>`).join('')||'<p class="muted small">Sin registros.</p>';
+ $('statsBars').innerHTML=[['Actividades',data.workouts.length],['Comidas',data.meals.length],['Vasos de agua',data.water.length]].map(x=>`<div><div style="display:flex;justify-content:space-between;margin:8px 0;font-size:12px"><b>${x[0]}</b>${x[1]}</div><div class="bar"><span style="width:${Math.min(100,x[1]*8)}%"></span></div></div>`).join('');
+ $('historyList').innerHTML=data.history.map(x=>`<div class="list-row"><div class="grow">${x.text}</div><span class="muted small">${x.date}</span></div>`).join('')||'<p class="muted small">No hay historial.</p>';
+ renderPlanOptions();renderMonth();renderWeek();
 }
 function exportData(){
-let a=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));
-a.href=url;a.download='vitalia-datos.json';a.click();URL.revokeObjectURL(url)
+ let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='vitalia-datos.json';a.click();URL.revokeObjectURL(url);
 }
-function clearData(){if(confirm('¿Borrar todos los datos guardados en este navegador?')){localStorage.removeItem('vitalia_ref');location.reload()}}
+function eraseData(){
+ if(confirm('¿Seguro que querés borrar todos los datos de VITALIA?')){
+  localStorage.removeItem('vitalia_data');location.reload();
+ }
+}
 
-buildNav();setupSurvey();renderPlanChoices();renderRecipes();renderTraining();renderAll();
-document.getElementById('dateLabel').textContent=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-if(!db.survey)document.getElementById('survey').classList.add('show');
+buildNav();
+$('todayLabel').textContent=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+renderRecipes();renderExercises();renderAll();
+if(!data.surveyDone)openSurvey();
 </script>
 </body>
 </html>
