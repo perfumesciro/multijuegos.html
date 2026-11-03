@@ -1,630 +1,289 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#ffffff">
-<title>VITALIA | Tu bienestar</title>
-
-<style>
-:root{
- --green:#a5f52e;
- --green-dark:#65b91d;
- --green-soft:#effbdc;
- --dark:#17251d;
- --gray:#78827b;
- --line:#e9eee9;
- --bg:#f6f8f6;
- --white:#fff;
- --shadow:0 5px 25px rgba(20,45,25,.055);
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--dark);font-family:Inter,Arial,sans-serif}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--green-dark);outline-offset:2px}
-.app{display:grid;grid-template-columns:245px 1fr;min-height:100vh}
-.sidebar{height:100vh;position:sticky;top:0;background:#10291e;padding:17px 12px;color:white;display:flex;flex-direction:column}
-.logo{height:105px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;font-size:23px;font-weight:900;letter-spacing:2px}
-.logo-mark{font-size:34px;color:var(--green)}
-.navigation{display:grid;gap:4px;margin-top:12px}
-.navigation button{border:0;background:transparent;color:#e7eee8;border-radius:12px;padding:12px;text-align:left;display:flex;align-items:center;gap:12px;font-size:13px}
-.navigation button:hover,.navigation button.active{background:linear-gradient(90deg,#cfff9e,#edffdd);color:#193321;font-weight:800}
-.navicon{width:20px;text-align:center;font-size:17px}
-.side-bottom{margin-top:auto;background:#e5f8d4;color:#21422a;padding:13px;border-radius:13px;font-size:12px}
-main{padding:26px 30px;max-width:1500px;width:100%;margin:auto}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:23px}
-header h1{font-size:25px;margin:0}
-.muted{color:var(--gray)}
-.small{font-size:12px}
-.page{display:none}
-.page.active{display:block}
-.grid{display:grid;gap:15px}
-.grid-2{grid-template-columns:1.1fr .9fr}
-.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
-.card{background:white;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:var(--shadow);min-width:0}
-.card h2{font-size:17px;margin:0 0 13px}
-.card h3{font-size:14px;margin:0 0 8px}
-.btn{background:var(--green);color:#18351e;border:0;border-radius:12px;padding:12px 17px;font-weight:800;transition:.18s}
-.btn:hover{background:#91e921;transform:translateY(-1px)}
-.btn.secondary{background:#f0f3f0;color:#3c493f}
-.btn.danger{background:#fff0ee;color:#a33d31}
-.btn.full{width:100%}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.metric{font-size:27px;font-weight:900}
-.stat{display:flex;align-items:center;gap:12px}
-.stat-icon{height:42px;width:42px;border-radius:13px;background:var(--green-soft);display:grid;place-items:center;font-size:20px}
-.hero{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
-.progress-ring{width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--green-dark) var(--progress,0%),#edf1ed 0);display:grid;place-items:center;position:relative}
-.progress-ring:before{content:"";position:absolute;inset:11px;background:white;border-radius:50%}
-.progress-ring div{position:relative;text-align:center}
-.progress-ring strong{font-size:28px}
-.progress-ring small{display:block;font-size:10px;color:var(--gray)}
-.hero-info{display:grid;gap:9px;flex:1;min-width:180px}
-.info-row{display:flex;align-items:center;gap:10px;padding:10px;background:#f8faf8;border-radius:12px}
-.info-row b{display:block;font-size:13px}
-.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.quick button{background:#f8faf7;border:1px solid var(--line);padding:14px;border-radius:13px;text-align:left;font-weight:750}
-.quick button:hover{background:var(--green-soft);border-color:var(--green-dark)}
-.quick .qicon{display:block;font-size:22px;margin-bottom:8px}
-.bar{height:8px;background:#edf1ed;border-radius:20px;overflow:hidden}
-.bar span{height:100%;display:block;background:var(--green-dark);border-radius:20px;transition:width .3s}
-.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0}
-.pill{border:1px solid transparent;border-radius:30px;background:#f0f3f0;padding:9px 14px;font-size:12px;color:#455047}
-.pill.active,.pill.selected{background:var(--green-soft);border-color:#8bd53d;color:#244a25;font-weight:850;box-shadow:0 0 0 2px #a5f52e55}
-.search,.field,textarea,select{width:100%;border:1px solid var(--line);background:#fafbfa;padding:11px 12px;border-radius:11px;color:var(--dark)}
-.field-label{display:block;font-size:12px;font-weight:750;margin:12px 0 6px}
-.photo{width:100%;height:145px;object-fit:cover;display:block;background:#e9eee9}
-.cards-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.tile{background:white;border:1px solid var(--line);border-radius:15px;overflow:hidden;transition:.18s}
-.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-.tile img{height:145px}
-.tile-body{padding:12px}
-.tile-body strong{font-size:13px;display:block}
-.tile-body p{font-size:11px;color:var(--gray);line-height:1.5}
-.tile-body .btn{padding:8px 11px;font-size:11px}
-.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.choice{border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;align-items:center;gap:9px;cursor:pointer;background:white;font-size:13px;transition:.15s}
-.choice:has(input:checked){background:var(--green-soft);border-color:var(--green-dark);box-shadow:0 0 0 2px #a5f52e55}
-.choice input{accent-color:#70c522;width:17px;height:17px}
-.list{display:grid;gap:9px}
-.list-row{border:1px solid var(--line);border-radius:12px;padding:11px;display:flex;gap:11px;align-items:center;background:white}
-.list-row .grow{flex:1;min-width:0}
-.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
-.days .weekday{font-size:11px;color:var(--gray);padding:8px 0}
-.days button{width:35px;height:35px;border:0;border-radius:50%;background:transparent;margin:auto}
-.days button:hover{background:var(--green-soft)}
-.days button.today{background:var(--green);color:#15251a;font-weight:900}
-.days button.has-event{box-shadow:inset 0 -3px var(--green-dark)}
-.days button.chosen{outline:2px solid var(--green-dark);outline-offset:2px}
-.calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
-.timer{font-size:45px;text-align:center;font-weight:900;margin:16px}
-.exercise-image{width:100%;height:240px;object-fit:cover;border-radius:14px}
-.safe-note{padding:12px;background:#f3f8ed;border-radius:12px;font-size:12px;color:#52624e;line-height:1.6;margin-top:12px}
-.camera-box{min-height:250px;background:#14271d;border-radius:15px;display:grid;place-items:center;overflow:hidden;color:white}
-.camera-box video,.camera-box img{width:100%;max-height:400px;object-fit:contain}
-.modal-bg{display:none;position:fixed;inset:0;background:#0b1c12cc;z-index:50;align-items:center;justify-content:center;padding:15px}
-.modal-bg.open{display:flex}
-.modal{width:min(580px,100%);max-height:92vh;overflow:auto;background:white;border-radius:20px;padding:22px}
-.modal h2{margin-top:0}
-.mobile-nav{display:none}
-@media(max-width:900px){
- .app{grid-template-columns:1fr}
- .sidebar{display:none}
- main{padding:18px 13px 85px}
- .mobile-nav{display:flex;position:fixed;z-index:20;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--line);justify-content:space-around;padding:8px 2px calc(8px + env(safe-area-inset-bottom))}
- .mobile-nav button{border:0;background:none;color:#68746b;font-size:10px;display:grid;justify-items:center;gap:4px}
- .mobile-nav button.active{color:#4d9b20;font-weight:900}
- .grid-4{grid-template-columns:repeat(2,1fr)}
- .grid-2{grid-template-columns:1fr}
-}
-@media(max-width:550px){
- main{padding-left:11px;padding-right:11px}
- .cards-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
- .tile img{height:115px}
- .grid-3{grid-template-columns:repeat(2,1fr)}
- .quick{grid-template-columns:repeat(2,1fr)}
- .card{padding:13px}
- header h1{font-size:21px}
- .progress-ring{width:120px;height:120px}
-}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7faf7">
+<title>VITALIA — Tu bienestar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-<div class="app">
-<aside class="sidebar">
- <div class="logo"><div class="logo-mark">◢V◣</div>VITALIA</div>
- <nav class="navigation" id="sideNav"></nav>
- <div class="side-bottom">Tu bienestar es lo importante.</div>
+<div class="app-shell">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-mark">V</div><span>VITALIA</span>
+    <button class="close-menu" id="closeMenu">×</button>
+  </div>
+  <nav id="sideNav">
+    <button class="nav-item active" data-page="inicio"><span>⌂</span>Inicio</button>
+    <button class="nav-item" data-page="plan"><span>▦</span>Plan semanal</button>
+    <button class="nav-item" data-page="estadisticas"><span>▥</span>Estadísticas</button>
+    <button class="nav-item" data-page="camara"><span>▣</span>Escáner de comida</button>
+    <button class="nav-item" data-page="platillos"><span>♨</span>Platillos</button>
+    <button class="nav-item" data-page="bebidas"><span>◉</span>Bebidas</button>
+    <button class="nav-item" data-page="entrenamientos"><span>✳</span>Entrenamientos</button>
+    <button class="nav-item" data-page="deportes"><span>⚽</span>Deportes</button>
+    <button class="nav-item" data-page="calendario"><span>▦</span>Calendario</button>
+    <button class="nav-item" data-page="agua"><span>♢</span>Agua</button>
+    <button class="nav-item" data-page="recomendaciones"><span>✧</span>Recomendaciones</button>
+    <button class="nav-item" data-page="configuracion"><span>⚙</span>Configuración</button>
+  </nav>
+  <div class="sidebar-foot">Tu salud, nuestra prioridad <b>✦</b></div>
 </aside>
 
-<main>
-<header>
- <div><h1 id="pageTitle">Inicio</h1><div class="muted small" id="todayLabel"></div></div>
- <button class="btn secondary" onclick="exportData()">Exportar datos ↓</button>
+<main class="main">
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn">☰</button>
+  <div class="top-brand">VITALIA</div>
+  <div class="top-right">
+    <span class="live-dot"></span><span id="topDate"></span>
+    <button class="avatar" id="openSurvey">M</button>
+  </div>
 </header>
 
-<!-- INICIO -->
-<section class="page active" id="home">
- <div class="grid grid-4" style="margin-bottom:15px">
-  <div class="card stat"><div class="stat-icon">⌁</div><div><div class="metric" id="totalWorkouts">0</div><div class="muted small">Actividades</div></div></div>
-  <div class="card stat"><div class="stat-icon">▤</div><div><div class="metric" id="totalMeals">0</div><div class="muted small">Comidas</div></div></div>
-  <div class="card stat"><div class="stat-icon">◉</div><div><div class="metric" id="totalWater">0</div><div class="muted small">Vasos registrados</div></div></div>
-  <div class="card stat"><div class="stat-icon">✓</div><div><div class="metric" id="activeDays">0</div><div class="muted small">Días activos</div></div></div>
- </div>
- <div class="grid grid-2">
-  <div class="card">
-   <h2>¡Hola! Este es tu espacio.</h2>
-   <div class="hero">
-    <div class="progress-ring" id="weekRing"><div><strong id="weekValue">0%</strong><small>actividad semanal</small></div></div>
-    <div class="hero-info">
-     <div class="info-row"><span>⌁</span><div><b id="weekCount">0 actividades</b><small class="muted">Esta semana</small></div></div>
-     <div class="info-row"><span>◉</span><div><b id="todayWater">0 vasos</b><small class="muted">Agua registrada hoy</small></div></div>
-     <div class="info-row"><span>▤</span><div><b id="todayMeals">0 comidas</b><small class="muted">Comidas registradas hoy</small></div></div>
+<div class="content" id="content">
+
+<section class="page active" id="page-inicio">
+  <div class="welcome">
+    <div>
+      <p class="eyebrow">TU ESPACIO DE BIENESTAR</p>
+      <h1>¡Hola! <span id="helloName"></span></h1>
+      <p class="muted">Pequeños hábitos, grandes avances.</p>
     </div>
-   </div>
-   <div class="bar" style="margin-top:18px"><span id="weekBar" style="width:0%"></span></div>
-   <p class="muted small">Tu progreso se basa en tus propios registros. Los descansos también cuentan.</p>
-   <h2 style="margin-top:22px">Accesos rápidos</h2>
-   <div class="quick">
-    <button onclick="go('plan')"><span class="qicon">▦</span>Mi plan</button>
-    <button onclick="go('training')"><span class="qicon">⌁</span>Entrenamientos</button>
-    <button onclick="go('scanner')"><span class="qicon">▣</span>Escanear comida</button>
-    <button onclick="go('recipes')"><span class="qicon">▤</span>Platillos</button>
-   </div>
+    <button class="primary" data-go="plan">Ver mi plan <span>→</span></button>
   </div>
-  <div class="card">
-   <h2>Actividad reciente</h2>
-   <div class="list" id="recentList"><p class="muted small">Todavía no hay registros.</p></div>
-   <div class="safe-note">VITALIA acompaña hábitos saludables y actividad física. No reemplaza el consejo de profesionales de salud.</div>
+
+  <div class="hero-grid">
+    <article class="card progress-card">
+      <div class="card-head">
+        <div><p class="eyebrow">TU CONSTANCIA</p><h2>Vas construyendo tu rutina</h2></div>
+        <span class="pill green-pill">En marcha</span>
+      </div>
+      <div class="progress-wrap">
+        <div class="ring" id="ring">
+          <div><strong id="progressNumber">0%</strong><small>de hábitos<br>completados</small></div>
+        </div>
+        <div class="progress-copy">
+          <h3 id="progressTitle">Cada paso cuenta</h3>
+          <p class="muted">Marcá tus actividades cuando las termines. El progreso refleja tus registros, no tu peso.</p>
+          <button class="text-btn" data-go="plan">Abrir plan semanal →</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="card today-card">
+      <p class="eyebrow">HOY</p><h2 id="todayLabel">Tu día</h2>
+      <div class="quick-row"><span class="quick-icon lime">✳</span><div><b id="todayWorkout">Actividad pendiente</b><small>Movimiento</small></div></div>
+      <div class="quick-row"><span class="quick-icon blue">◉</span><div><b>Hidratación consciente</b><small>Tomá agua a lo largo del día</small></div></div>
+      <div class="quick-row"><span class="quick-icon orange">♨</span><div><b>Comidas variadas</b><small>Comé suficiente y con variedad</small></div></div>
+    </article>
   </div>
- </div>
-</section>
 
-<!-- PLAN -->
-<section class="page" id="plan">
- <div class="grid grid-2">
-  <div class="card">
-   <h2>Plan semanal</h2>
-   <div class="calendar-head"><button class="btn secondary" onclick="shiftWeek(-1)">‹</button><b id="weekTitle"></b><button class="btn secondary" onclick="shiftWeek(1)">›</button></div>
-   <div class="days" id="weekCalendar"></div>
-   <p class="muted small">Verde: hoy. Línea verde: actividad registrada.</p>
-   <div class="safe-note" id="weekDetail">Elegí un día para ver tus registros.</div>
+  <div class="section-title">
+    <div><p class="eyebrow">TU RESUMEN</p><h2>Para hoy</h2></div>
+    <span class="muted small" id="todayLong"></span>
   </div>
-  <div class="card">
-   <h2>Editar mi plan</h2>
-   <p class="muted small">Podés elegir varias actividades y objetivos. Cambiarlos no borra tu historial.</p>
-   <h3>Actividades</h3>
-   <div class="choice-grid" id="planSports"></div>
-   <h3 style="margin-top:17px">Objetivos deportivos</h3>
-   <div class="choice-grid" id="planGoals"></div>
-   <button class="btn full" style="margin-top:17px" onclick="savePlan()">Actualizar plan</button>
+
+  <div class="tiles">
+    <article class="tile card">
+      <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=500&auto=format&fit=crop" alt="Comida saludable">
+      <div><b>Comidas</b><p class="muted">Ideas y recetas para preparar.</p><button class="text-btn" data-go="platillos">Explorar →</button></div>
+    </article>
+    <article class="tile card">
+      <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&auto=format&fit=crop" alt="Entrenamiento">
+      <div><b>Movimiento</b><p class="muted">Actividades adaptables y descansos.</p><button class="text-btn" data-go="entrenamientos">Ver ejercicios →</button></div>
+    </article>
+    <article class="tile card">
+      <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&auto=format&fit=crop" alt="Vaso de agua">
+      <div><b>Hidratación</b><p class="muted">Registrá tus vasos de agua.</p><button class="text-btn" data-go="agua">Registrar →</button></div>
+    </article>
   </div>
- </div>
 </section>
 
-<!-- ESTADISTICAS -->
-<section class="page" id="stats">
- <div class="grid grid-3">
-  <div class="card"><div class="metric" id="statsWorkouts">0</div><div class="muted small">Actividades registradas</div></div>
-  <div class="card"><div class="metric" id="statsMeals">0</div><div class="muted small">Comidas registradas</div></div>
-  <div class="card"><div class="metric" id="statsWater">0</div><div class="muted small">Vasos registrados</div></div>
- </div>
- <div class="card" style="margin-top:15px">
-  <h2>Tu actividad</h2><div id="statsBars" class="list"></div>
-  <div class="safe-note">Las estadísticas muestran registros reales de la aplicación. No estiman cambios corporales ni peso.</div>
- </div>
-</section>
-
-<!-- ESCANER -->
-<section class="page" id="scanner">
- <div class="grid grid-2">
-  <div class="card">
-   <h2>Escáner de alimentos</h2>
-   <p class="muted small">La cámara captura la imagen dentro de la aplicación. La identificación automática todavía requiere una conexión con IA.</p>
-   <div class="camera-box" id="cameraBox"><div style="text-align:center">▣<p>Tu cámara aparecerá acá</p></div></div>
-   <div class="tabs">
-    <button class="btn" id="cameraOpen">Abrir cámara</button>
-    <button class="btn secondary" id="cameraCapture" disabled>Capturar foto</button>
-    <button class="btn secondary" id="cameraClose" disabled>Cerrar</button>
-   </div>
-   <canvas id="cameraCanvas" hidden></canvas>
+<section class="page" id="page-plan">
+  <div class="page-heading">
+    <div><p class="eyebrow">ORGANIZACIÓN</p><h1>Mi plan semanal</h1><p class="muted">Tus elecciones y actividades, en un solo lugar.</p></div>
+    <button class="primary" id="editPlan">Actualizar plan</button>
   </div>
-  <div class="card">
-   <h2>Confirmar alimento</h2>
-   <label class="field-label">¿Qué comida aparece en la foto?</label>
-   <input class="field" id="scanName" placeholder="Ej. Pollo con arroz y verduras">
-   <label class="field-label">Ingredientes y cantidades aproximadas</label>
-   <textarea id="scanIngredients" rows="3" placeholder="Ej. 1 porción de pollo, arroz, zanahoria..."></textarea>
-   <label class="field-label">Momento del día</label>
-   <select id="scanMoment" class="field"><option>Desayuno</option><option>Almuerzo</option><option>Merienda</option><option>Cena</option></select>
-   <button class="btn full" style="margin-top:14px" onclick="saveScannedMeal()">Guardar registro</button>
-   <div class="safe-note">No se mostrarán calorías o nutrientes estimados sin una fuente nutricional confiable y cantidades suficientes.</div>
+  <div class="card pad">
+    <h3>Lo que elegiste</h3><div id="chosenSummary" class="chip-list"></div>
+    <p class="muted small">Podés cambiar tus opciones cuando quieras. Tus registros anteriores se conservan.</p>
   </div>
- </div>
- <div class="card" style="margin-top:15px"><h2>Mis comidas registradas</h2><div id="mealLog" class="list"></div></div>
+  <div class="section-title"><h2>Esta semana</h2><span class="muted small">Marcá lo que completaste</span></div>
+  <div id="weeklyTasks" class="task-list"></div>
 </section>
 
-<!-- PLATILLOS -->
-<section class="page" id="recipes">
- <div class="card">
-  <h2>Platillos recomendados</h2>
-  <input class="search" id="recipeSearch" placeholder="Buscar por nombre o ingrediente...">
-  <div class="tabs" id="recipeTabs">
-   <button class="pill active" data-category="Todos">Todos</button>
-   <button class="pill" data-category="Económicos">Económicos</button>
-   <button class="pill" data-category="Principales">Principales</button>
-   <button class="pill" data-category="Desayunos">Desayunos</button>
-   <button class="pill" data-category="Meriendas">Meriendas</button>
-   <button class="pill" data-category="Proteicos">Proteicos</button>
+<section class="page" id="page-estadisticas">
+  <div class="page-heading"><div><p class="eyebrow">TUS REGISTROS</p><h1>Estadísticas</h1><p class="muted">Un resumen de tus hábitos y constancia.</p></div></div>
+  <div class="stats-grid">
+    <article class="card stat"><span class="stat-icon lime">✓</span><small>Actividades realizadas</small><strong id="statDone">0</strong><p class="muted">Registros completados</p></article>
+    <article class="card stat"><span class="stat-icon blue">◷</span><small>Minutos de actividad</small><strong id="statMinutes">0</strong><p class="muted">Según tus sesiones guardadas</p></article>
+    <article class="card stat"><span class="stat-icon orange">♢</span><small>Agua registrada hoy</small><strong id="statWater">0 ml</strong><p class="muted">Solo lo que vos registraste</p></article>
   </div>
-  <div class="cards-grid" id="recipeGrid"></div>
- </div>
+  <div class="card pad"><h3>Tu constancia</h3><div class="bar-chart" id="barChart"></div><p class="muted small">No se estima peso, grasa corporal ni cambios físicos a partir de fotos.</p></div>
 </section>
 
-<!-- BEBIDAS -->
-<section class="page" id="drinks">
- <div class="card"><h2>Bebidas</h2><div class="cards-grid" id="drinkGrid"></div>
- <div class="safe-note">La cantidad de agua que una persona necesita varía según su edad, actividad, clima y salud. No hay una cifra universal para todos.</div></div>
-</section>
-
-<!-- ENTRENAMIENTOS -->
-<section class="page" id="training">
- <div class="card">
-  <h2>Entrenamientos</h2>
-  <div class="tabs" id="trainingTabs">
-   <button class="pill active" data-filter="Todos">Todos</button>
-   <button class="pill" data-filter="Fuerza">Fuerza</button>
-   <button class="pill" data-filter="Resistencia">Resistencia</button>
-   <button class="pill" data-filter="Deportes">Deportes</button>
-   <button class="pill" data-filter="Movilidad">Movilidad</button>
+<section class="page" id="page-camara">
+  <div class="page-heading"><div><p class="eyebrow">REGISTRO DE COMIDAS</p><h1>Escáner de comida</h1><p class="muted">Sacá una foto dentro de la app y anotá qué alimento es.</p></div></div>
+  <div class="card scanner-card">
+    <div class="camera-frame" id="cameraFrame">
+      <div class="camera-placeholder">
+        <div class="camera-symbol">▣</div><h3>Tu cámara</h3>
+        <p class="muted">La foto queda en esta pantalla. El navegador puede pedir permiso la primera vez.</p>
+        <button class="primary" id="startCamera">Abrir cámara</button>
+      </div>
+    </div>
+    <div class="camera-actions">
+      <button class="secondary" id="capturePhoto" disabled>Tomar foto</button>
+      <button class="secondary" id="stopCamera" disabled>Cerrar cámara</button>
+      <label class="secondary upload-label">Elegir foto<input id="photoFile" type="file" accept="image/*" capture="environment" hidden></label>
+    </div>
+    <div id="photoResult" class="photo-result"></div>
+    <div class="form-grid">
+      <label>¿Qué comida es?<input id="foodName" placeholder="Ej. arroz con pollo"></label>
+      <label>Momento del día<select id="foodMoment"><option>Desayuno</option><option>Almuerzo</option><option>Merienda</option><option>Cena</option><option>Colación</option></select></label>
+    </div>
+    <p class="notice">La cámara no identifica alimentos automáticamente en esta versión. No inventamos nutrientes: podés completar los datos desde una etiqueta o una fuente confiable.</p>
+    <div class="form-grid nutrition-inputs">
+      <label>Calorías (si las conocés)<input id="foodCalories" type="number" min="0" placeholder="No obligatorio"></label>
+      <label>Proteínas (g)<input id="foodProtein" type="number" min="0" placeholder="Opcional"></label>
+      <label>Carbohidratos (g)<input id="foodCarbs" type="number" min="0" placeholder="Opcional"></label>
+      <label>Grasas totales (g)<input id="foodFat" type="number" min="0" placeholder="Opcional"></label>
+    </div>
+    <button class="primary" id="saveFood">Guardar registro</button>
   </div>
-  <div class="cards-grid" id="trainingGrid"></div>
- </div>
 </section>
 
-<section class="page" id="exerciseDetail">
- <div class="card"><button class="btn secondary" onclick="go('training')">← Volver</button><div id="exerciseContent" style="margin-top:15px"></div></div>
-</section>
-
-<!-- CALENDARIO -->
-<section class="page" id="calendar">
- <div class="card">
-  <div class="calendar-head">
-   <button class="btn secondary" onclick="shiftMonth(-1)">‹</button>
-   <h2 id="monthLabel"></h2>
-   <button class="btn secondary" onclick="shiftMonth(1)">›</button>
+<section class="page" id="page-platillos">
+  <div class="page-heading"><div><p class="eyebrow">COMER VARIADO</p><h1>Platillos</h1><p class="muted">Recetas con ingredientes y preparación paso a paso.</p></div></div>
+  <div class="toolbar">
+    <input id="mealSearch" placeholder="Buscar un platillo...">
+    <div class="filters" id="mealFilters">
+      <button class="filter active" data-filter="Todos">Todos</button>
+      <button class="filter" data-filter="Económicos">Económicos</button>
+      <button class="filter" data-filter="Principales">Principales</button>
+      <button class="filter" data-filter="Desayunos">Desayunos</button>
+    </div>
   </div>
-  <div class="days" id="monthCalendar"></div>
-  <div class="safe-note" id="selectedDateLabel"></div>
-  <label class="field-label">Agregar actividad o descanso a este día</label>
-  <div style="display:flex;gap:8px"><input class="field" id="eventInput" placeholder="Ej. Fútbol / Descanso"><button class="btn" onclick="addCalendarEvent()">Agregar</button></div>
-  <div class="list" id="eventList" style="margin-top:14px"></div>
- </div>
+  <div class="meal-grid" id="mealGrid"></div>
+  <p class="muted small">Las recetas son ideas generales. Los valores nutricionales varían según ingredientes y porciones; no se muestran cifras sin una fuente verificada.</p>
 </section>
 
-<!-- AGUA -->
-<section class="page" id="water">
- <div class="grid grid-2">
-  <div class="card"><h2>Agua</h2><div class="metric" id="waterToday">0</div><p class="muted small">Vasos que registraste hoy</p><button class="btn" onclick="addWater()">＋ Registrar un vaso</button></div>
-  <div class="card"><h2>Historial de agua</h2><div id="waterLog" class="list"></div></div>
- </div>
+<section class="page" id="page-bebidas">
+  <div class="page-heading"><div><p class="eyebrow">HIDRATACIÓN</p><h1>Bebidas</h1><p class="muted">Opciones sencillas para acompañar tus comidas.</p></div></div>
+  <div class="meal-grid" id="drinkGrid"></div>
 </section>
 
-<!-- RECOMENDACIONES -->
-<section class="page" id="recommendations">
- <div class="card"><h2>Recomendaciones</h2><div class="list">
-  <div class="list-row"><div class="stat-icon">01</div><div class="grow"><b>Comé variado</b><p class="muted small">Combiná frutas, verduras, cereales, proteínas y otros alimentos.</p></div></div>
-  <div class="list-row"><div class="stat-icon">02</div><div class="grow"><b>Priorizá la técnica</b><p class="muted small">Aprender a moverte correctamente es más importante que hacer muchas repeticiones.</p></div></div>
-  <div class="list-row"><div class="stat-icon">03</div><div class="grow"><b>Respetá el descanso</b><p class="muted small">La recuperación ayuda al cuerpo a adaptarse a la actividad.</p></div></div>
-  <div class="list-row"><div class="stat-icon">04</div><div class="grow"><b>Hidratate regularmente</b><p class="muted small">Tené agua disponible y prestá atención a la sed y al calor.</p></div></div>
- </div></div>
+<section class="page" id="page-entrenamientos">
+  <div class="page-heading"><div><p class="eyebrow">MOVIMIENTO SEGURO</p><h1>Entrenamientos</h1><p class="muted">Elegí una actividad adecuada a tu experiencia y descansá cuando lo necesites.</p></div></div>
+  <div class="filters" id="workoutFilters">
+    <button class="filter active" data-filter="Todos">Todos</button>
+    <button class="filter" data-filter="Fuerza">Fuerza</button>
+    <button class="filter" data-filter="Resistencia">Resistencia</button>
+    <button class="filter" data-filter="Movilidad">Movilidad</button>
+  </div>
+  <div class="workout-grid" id="workoutGrid"></div>
 </section>
 
-<section class="page" id="motivation"><div class="card"><h2>Un paso a la vez.</h2><p>Los avances no siempre se ven de un día para otro. Aprender, practicar, descansar y volver a intentarlo también es progresar.</p><div class="safe-note">No necesitás compararte con nadie. Buscá una actividad que disfrutes y que puedas realizar de manera segura.</div></div></section>
+<section class="page" id="page-deportes">
+  <div class="page-heading"><div><p class="eyebrow">ACTIVIDADES</p><h1>Deportes</h1><p class="muted">Combiná las actividades que disfrutás.</p></div></div>
+  <div class="sport-grid" id="sportGrid"></div>
+</section>
 
-<section class="page" id="history"><div class="card"><h2>Historial</h2><div class="list" id="historyList"></div></div></section>
+<section class="page" id="page-calendario">
+  <div class="page-heading"><div><p class="eyebrow">ORGANIZÁ TU RUTINA</p><h1>Calendario</h1><p class="muted">El verde marca el día actual. Elegí una fecha para ver o agregar una actividad.</p></div></div>
+  <div class="card calendar-card">
+    <div class="calendar-head"><button class="icon-btn" id="prevMonth">‹</button><h2 id="monthTitle"></h2><button class="icon-btn" id="nextMonth">›</button></div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    <div class="legend"><span class="today-dot"></span> Hoy <span class="event-dot"></span> Día con actividad</div>
+  </div>
+  <div class="card pad calendar-detail">
+    <h3 id="selectedDateTitle"></h3><div id="selectedEvents"></div>
+    <div class="add-event"><input id="eventInput" placeholder="Agregar una actividad..."><button class="primary" id="addEvent">Agregar</button></div>
+  </div>
+</section>
 
-<section class="page" id="settings"><div class="card"><h2>Configuración</h2><p class="muted small">Tus datos se guardan en este navegador.</p><button class="btn secondary" onclick="openSurvey(true)">Editar encuesta</button> <button class="btn secondary" onclick="exportData()">Exportar mis datos</button> <button class="btn danger" onclick="eraseData()">Borrar mis datos</button></div></section>
+<section class="page" id="page-agua">
+  <div class="page-heading"><div><p class="eyebrow">HIDRATACIÓN</p><h1>Mi agua</h1><p class="muted">Registrá lo que tomás, sin objetivos rígidos.</p></div></div>
+  <div class="card water-card">
+    <div class="water-visual">💧</div><p class="eyebrow">REGISTRADO HOY</p>
+    <strong id="waterTotal">0 ml</strong>
+    <p class="muted">La necesidad de agua cambia según el clima, la actividad y cada persona.</p>
+    <div class="water-buttons">
+      <button class="primary" data-water="150">+ 150 ml</button>
+      <button class="secondary" data-water="250">+ 250 ml</button>
+      <button class="secondary" data-water="500">+ 500 ml</button>
+    </div>
+    <button class="text-btn" id="resetWater">Reiniciar registro de hoy</button>
+  </div>
+</section>
+
+<section class="page" id="page-recomendaciones">
+  <div class="page-heading"><div><p class="eyebrow">IDEAS PRÁCTICAS</p><h1>Recomendaciones</h1></div></div>
+  <div class="recommend-grid">
+    <article class="card pad"><span class="rec-icon">🥗</span><h3>Variedad en el plato</h3><p class="muted">Combiná frutas, verduras, cereales, legumbres y fuentes de proteínas a lo largo del día.</p></article>
+    <article class="card pad"><span class="rec-icon">😴</span><h3>El descanso también cuenta</h3><p class="muted">Dormir y recuperarte ayuda a aprender movimientos y sostener la actividad.</p></article>
+    <article class="card pad"><span class="rec-icon">⚽</span><h3>Disfrutá el movimiento</h3><p class="muted">Elegí deportes que te gusten. La constancia importa más que entrenar al máximo.</p></article>
+    <article class="card pad"><span class="rec-icon">🧑‍⚕️</span><h3>Consejo personalizado</h3><p class="muted">Para cambios de peso o necesidades nutricionales, hablalo con un profesional de salud y un adulto de confianza.</p></article>
+  </div>
+</section>
+
+<section class="page" id="page-configuracion">
+  <div class="page-heading"><div><p class="eyebrow">TU CUENTA</p><h1>Configuración</h1></div></div>
+  <div class="card pad">
+    <h3>Datos de la encuesta</h3><div id="profileSummary" class="profile-summary"></div>
+    <button class="primary" id="editSurvey">Editar encuesta</button>
+    <button class="secondary" id="exportData">Exportar mis registros</button>
+    <button class="text-btn danger" id="clearData">Borrar datos guardados</button>
+  </div>
+</section>
+
+</div>
+<footer class="footer">VITALIA <span>•</span> Bienestar sin presiones</footer>
 </main>
 </div>
 
-<nav class="mobile-nav" id="mobileNav"></nav>
-
-<!-- ENCUESTA -->
-<div class="modal-bg" id="surveyModal">
- <div class="modal">
-  <div class="logo" style="height:65px;color:#173421">VITALIA <span style="color:#75c92a">✦</span></div>
-  <h2>Conocé tu punto de partida</h2>
-  <p class="muted small">Esta encuesta ayuda a organizar tus actividades. No calcula dietas ni objetivos de peso.</p>
-  <label class="field-label">Edad</label>
-  <input class="field" id="surveyAge" type="number" min="13" max="100" placeholder="Tu edad">
-  <label class="field-label">¿Qué actividades te interesan?</label>
-  <div class="choice-grid" id="surveySports"></div>
-  <label class="field-label">¿Qué te gustaría desarrollar?</label>
-  <div class="choice-grid" id="surveyGoals"></div>
-  <label class="field-label">Tu experiencia actual</label>
-  <select class="field" id="surveyExperience"><option>Estoy empezando</option><option>Hago actividad algunas veces</option><option>Practico deporte regularmente</option></select>
-  <label class="field-label">¿Cuánto tiempo tenés disponible normalmente?</label>
-  <select class="field" id="surveyTime"><option>15 a 20 minutos</option><option>20 a 30 minutos</option><option>30 a 45 minutos</option><option>Depende del día</option></select>
-  <div class="safe-note">No hace falta compartir tu peso o altura para organizar actividades seguras. Si tenés dudas sobre tu crecimiento, alimentación o peso, hablalo con un profesional de salud.</div>
-  <button class="btn full" style="margin-top:15px" onclick="saveSurvey()">Guardar respuestas</button>
-  <button class="btn secondary full" style="margin-top:8px" onclick="closeSurvey()">Ahora no</button>
- </div>
+<div class="modal-backdrop" id="surveyModal">
+  <div class="modal">
+    <button class="modal-close" id="closeSurvey">×</button>
+    <p class="eyebrow">ANTES DE EMPEZAR</p><h2>Conocé tu plan</h2>
+    <p class="muted">Esta encuesta adapta la experiencia y las actividades. No calcula dietas ni metas de peso.</p>
+    <form id="surveyForm">
+      <label>¿Cómo te llamás?<input id="userName" placeholder="Tu nombre" maxlength="30"></label>
+      <div class="form-grid">
+        <label>Edad<input id="userAge" type="number" min="5" max="100" placeholder="Años" required></label>
+        <label>Altura (cm)<input id="userHeight" type="number" min="80" max="230" placeholder="Ej. 162" required></label>
+        <label>Peso (kg)<input id="userWeight" type="number" min="20" max="300" step="0.1" placeholder="Opcional"></label>
+        <label>Experiencia<select id="experience"><option>Principiante</option><option>Intermedia</option><option>Avanzada</option></select></label>
+      </div>
+      <label>¿Qué querés incorporar? <small class="muted">Podés elegir varias.</small></label>
+      <div class="choice-grid" id="goalChoices">
+        <button type="button" class="choice" data-choice="Mejorar mi resistencia">Resistencia</button>
+        <button type="button" class="choice" data-choice="Ganar fuerza de forma segura">Fuerza</button>
+        <button type="button" class="choice" data-choice="Mejorar en fútbol">Fútbol</button>
+        <button type="button" class="choice" data-choice="Caminar más">Caminata</button>
+        <button type="button" class="choice" data-choice="Correr progresivamente">Correr</button>
+        <button type="button" class="choice" data-choice="Calistenia adaptada">Calistenia</button>
+        <button type="button" class="choice" data-choice="Mejorar mi alimentación">Alimentación</button>
+        <button type="button" class="choice" data-choice="Hidratarme mejor">Hidratación</button>
+      </div>
+      <p class="notice">El peso es opcional. En menores de edad, la app no fija límites de calorías ni recomienda bajar o subir de peso por cuenta propia.</p>
+      <button class="primary full" type="submit">Guardar y continuar</button>
+    </form>
+  </div>
 </div>
 
-<!-- RECETA -->
-<div class="modal-bg" id="recipeModal"><div class="modal" id="recipeDetail"></div></div>
+<div class="modal-backdrop" id="recipeModal">
+  <div class="modal recipe-modal"><button class="modal-close" id="closeRecipe">×</button><div id="recipeContent"></div></div>
+</div>
+<div class="modal-backdrop" id="exerciseModal">
+  <div class="modal"><button class="modal-close" id="closeExercise">×</button><div id="exerciseContent"></div></div>
+</div>
 
-<script>
-const $=id=>document.getElementById(id);
-const today=()=>new Date().toISOString().slice(0,10);
-const dateKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-
-let data;
-try{data=JSON.parse(localStorage.getItem('vitalia_data'))}catch(e){}
-if(!data)data={surveyDone:false,sports:[],goals:[],workouts:[],meals:[],water:[],events:{},history:[],age:'',experience:'',time:''};
-
-function save(){localStorage.setItem('vitalia_data',JSON.stringify(data));renderAll()}
-function notify(msg){let el=document.createElement('div');el.textContent=msg;el.style='position:fixed;bottom:25px;right:20px;background:#183522;color:white;padding:13px 18px;border-radius:12px;z-index:100';document.body.appendChild(el);setTimeout(()=>el.remove(),2200)}
-function log(text){data.history.unshift({text,date:today()});data.history=data.history.slice(0,100)}
-function go(id){
- document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
- document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
- let item=pages.find(x=>x.id===id);$('pageTitle').textContent=item?item.name:'Entrenamiento';
- window.scrollTo(0,0);
- if(id==='calendar')renderMonth();
- if(id==='plan')renderWeek();
-}
-const pages=[
- {id:'home',name:'Inicio',icon:'⌂'},
- {id:'plan',name:'Plan',icon:'▦'},
- {id:'stats',name:'Estadísticas',icon:'▥'},
- {id:'scanner',name:'Cámara',icon:'▣'},
- {id:'recipes',name:'Platillos',icon:'▤'},
- {id:'drinks',name:'Bebidas',icon:'◉'},
- {id:'training',name:'Entrenamientos',icon:'⌁'},
- {id:'calendar',name:'Calendario',icon:'▦'},
- {id:'water',name:'Agua',icon:'◉'},
- {id:'recommendations',name:'Recomendaciones',icon:'♡'},
- {id:'motivation',name:'Motivación',icon:'☆'},
- {id:'history',name:'Historial',icon:'◷'},
- {id:'settings',name:'Configuración',icon:'⚙'}
-];
-function buildNav(){
- $('sideNav').innerHTML=pages.map(p=>`<button data-page="${p.id}" onclick="go('${p.id}')"><span class="navicon">${p.icon}</span>${p.name}</button>`).join('');
- $('mobileNav').innerHTML=pages.slice(0,5).map(p=>`<button data-page="${p.id}" onclick="go('${p.id}')"><span>${p.icon}</span>${p.name}</button>`).join('');
-}
-const sports=['Fútbol','Caminar','Correr','Gimnasio supervisado','Ciclismo','Natación','Calistenia','Movilidad','Ejercicios militares adaptados'];
-const goals=['Resistencia','Coordinación','Técnica deportiva','Fuerza general','Movilidad','Velocidad'];
-function choices(list,name,selected=[]){return list.map(x=>`<label class="choice"><input type="checkbox" name="${name}" value="${x}" ${selected.includes(x)?'checked':''}>${x}</label>`).join('')}
-function openSurvey(edit=false){
- $('surveyAge').value=data.age||'';
- $('surveySports').innerHTML=choices(sports,'surveySport',data.sports);
- $('surveyGoals').innerHTML=choices(goals,'surveyGoal',data.goals);
- $('surveyExperience').value=data.experience||'Estoy empezando';
- $('surveyTime').value=data.time||'20 a 30 minutos';
- $('surveyModal').classList.add('open');
-}
-function closeSurvey(){$('surveyModal').classList.remove('open')}
-function saveSurvey(){
- let age=Number($('surveyAge').value);
- if(!age||age<13||age>100){notify('Ingresá una edad válida');return}
- data.age=age;
- data.sports=[...document.querySelectorAll('[name=surveySport]:checked')].map(x=>x.value);
- data.goals=[...document.querySelectorAll('[name=surveyGoal]:checked')].map(x=>x.value);
- data.experience=$('surveyExperience').value;
- data.time=$('surveyTime').value;
- data.surveyDone=true;
- log('Actualizaste tu encuesta inicial');
- save();closeSurvey();notify('Encuesta guardada');
-}
-function renderPlanOptions(){
- $('planSports').innerHTML=choices(sports,'planSport',data.sports);
- $('planGoals').innerHTML=choices(goals,'planGoal',data.goals);
-}
-function savePlan(){
- data.sports=[...document.querySelectorAll('[name=planSport]:checked')].map(x=>x.value);
- data.goals=[...document.querySelectorAll('[name=planGoal]:checked')].map(x=>x.value);
- log('Actualizaste tu plan de actividades');save();notify('Plan actualizado');
-}
-
-const images={
- chicken:'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=85',
- salad:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=85',
- pasta:'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800&q=85',
- oats:'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&q=85',
- fish:'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&q=85',
- soup:'https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=85',
- taco:'https://images.unsplash.com/photo-1551506857-5d0f5b2d3f9b?w=800&q=85',
- toast:'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&q=85'
-};
-const recipes=[
- {name:'Pollo con arroz y verduras',category:['Principales','Proteicos','Económicos'],image:'chicken',time:'30 minutos',ingredients:['1 pechuga de pollo','1 taza de arroz','1 zanahoria','1 taza de brócoli','½ morrón','Aceite, limón y condimentos'],steps:['Lavá las verduras y cortá la zanahoria y el morrón en trozos pequeños.','Enjuagá el arroz y cocinalo en agua siguiendo las instrucciones del paquete.','Cociná el brócoli al vapor o hervido hasta que esté tierno.','Cortá el pollo en trozos. En una sartén con un poco de aceite, cocinalo hasta que esté completamente hecho.','Agregá la zanahoria y el morrón y salteá hasta que estén tiernos.','Serví el pollo y las verduras junto al arroz. Terminá con limón y condimentos.']},
- {name:'Ensalada completa',category:['Principales','Proteicos'],image:'salad',time:'15 minutos',ingredients:['Hojas verdes','1 tomate','½ pepino','½ taza de garbanzos cocidos','1 huevo','Aceite y limón'],steps:['Lavá las hojas verdes, el tomate y el pepino.','Cortá el tomate y el pepino.','Enjuagá y escurrí los garbanzos.','Herví el huevo durante 9 a 11 minutos y dejalo enfriar.','Mezclá los ingredientes en un recipiente.','Condimentá con aceite, limón y los condimentos que prefieras.']},
- {name:'Pasta con salsa de tomate',category:['Principales','Económicos'],image:'pasta',time:'25 minutos',ingredients:['Pasta','2 tomates','½ cebolla','1 diente de ajo','Albahaca','Aceite'],steps:['Herví agua y cociná la pasta según el envase.','Picá la cebolla, el ajo y los tomates.','Rehogá la cebolla en una sartén con un poco de aceite.','Agregá el ajo y los tomates. Cociná a fuego medio hasta formar la salsa.','Escurrí la pasta y reservá un poco del agua de cocción.','Mezclá la pasta con la salsa y agregá albahaca.']},
- {name:'Avena con frutas',category:['Desayunos','Económicos'],image:'oats',time:'10 minutos',ingredients:['½ taza de avena','1 taza de leche','1 banana','Fruta de estación','Canela'],steps:['Colocá la avena y la leche en una olla pequeña.','Cociná a fuego bajo revolviendo durante 4 a 6 minutos.','Si queda muy espesa, agregá un poco más de leche.','Pasá la preparación a un recipiente.','Cortá la banana y la fruta elegida.','Distribuí la fruta por encima y agregá canela.']},
- {name:'Pescado al horno',category:['Principales','Proteicos'],image:'fish',time:'30 minutos',ingredients:['Filetes de pescado','1 papa','½ limón','Perejil','Aceite y condimentos'],steps:['Precalentá el horno a 190 °C.','Lavá la papa y cortala en rodajas.','Colocá las papas en una fuente aceitada y horneá unos 12 minutos.','Agregá el pescado, limón y perejil.','Cociná hasta que el pescado esté opaco y se desmenuce fácilmente.','Serví con las papas y verduras.']},
- {name:'Sopa de verduras',category:['Principales','Económicos'],image:'soup',time:'35 minutos',ingredients:['1 papa','1 zanahoria','½ zapallito','½ cebolla','Agua o caldo','Condimentos'],steps:['Lavá y cortá las verduras en cubos.','Picá la cebolla y rehogala con un poco de aceite.','Agregá las verduras y mezclá.','Incorporá agua o caldo hasta cubrirlas.','Cociná a fuego medio hasta que estén tiernas.','Serví así o procesá una parte para una textura más cremosa.']},
- {name:'Tacos de pollo',category:['Principales','Proteicos'],image:'taco',time:'25 minutos',ingredients:['Tortillas','Pollo cocido','Tomate','Lechuga','Palta','Limón'],steps:['Cociná completamente el pollo y desmenuzalo.','Lavá y cortá el tomate y la lechuga.','Calentá las tortillas unos segundos por lado.','Repartí el pollo y los vegetales en las tortillas.','Agregá palta y unas gotas de limón.','Serví inmediatamente.']},
- {name:'Tostadas con huevo',category:['Desayunos','Meriendas','Proteicos'],image:'toast',time:'10 minutos',ingredients:['2 rebanadas de pan','2 huevos','Tomate','Pimienta','Aceite'],steps:['Tostá el pan.','Calentá una sartén antiadherente con un poco de aceite.','Cociná los huevos hasta que estén bien hechos.','Lavá y cortá el tomate.','Serví los huevos sobre las tostadas con tomate y pimienta.']}
-];
-let recipeFilter='Todos';
-function renderRecipes(){
- let q=$('recipeSearch').value.toLowerCase();
- $('recipeGrid').innerHTML=recipes.filter(r=>(recipeFilter==='Todos'||r.category.includes(recipeFilter))&&(r.name+' '+r.ingredients.join(' ')).toLowerCase().includes(q)).map(r=>`<article class="tile"><img class="photo" src="${images[r.image]}" alt="${r.name}" loading="lazy"><div class="tile-body"><strong>${r.name}</strong><p>${r.time} · ${r.category[0]}</p><button class="btn" onclick="openRecipe(${recipes.indexOf(r)})">Ver receta</button></div></article>`).join('')||'<p class="muted">No se encontraron platillos.</p>';
-}
-$('recipeSearch').addEventListener('input',renderRecipes);
-document.querySelectorAll('#recipeTabs button').forEach(b=>b.onclick=()=>{
- document.querySelectorAll('#recipeTabs button').forEach(x=>x.classList.remove('active'));
- b.classList.add('active');recipeFilter=b.dataset.category;renderRecipes();
-});
-function openRecipe(i){
- let r=recipes[i];
- $('recipeDetail').innerHTML=`<button class="btn secondary" onclick="closeRecipe()">← Volver</button><img class="photo" style="height:190px;border-radius:13px;margin:13px 0" src="${images[r.image]}" alt="${r.name}"><h2>${r.name}</h2><span class="small muted">Tiempo aproximado: ${r.time}</span><h3 style="margin-top:18px">Ingredientes</h3><ul>${r.ingredients.map(x=>`<li>${x}</li>`).join('')}</ul><h3>Preparación</h3><ol>${r.steps.map(x=>`<li style="margin-bottom:8px">${x}</li>`).join('')}</ol><button class="btn full" onclick="saveRecipe('${r.name}')">Guardar receta</button>`;
- $('recipeModal').classList.add('open');
-}
-function closeRecipe(){$('recipeModal').classList.remove('open')}
-function saveRecipe(name){data.meals.push({name,moment:'Receta guardada',date:today()});log('Guardaste la receta: '+name);save();closeRecipe();notify('Receta guardada')}
-
-const drinks=[
- ['Agua','Agua fresca para acompañar tus actividades.','💧'],
- ['Limonada casera','Agua, limón y hojas de menta.','🍋'],
- ['Licuado de banana','Banana y leche o bebida vegetal.','🥛'],
- ['Licuado de frutilla','Frutillas, yogur y leche.','🍓'],
- ['Agua saborizada','Agua con rodajas de naranja y pepino.','◉'],
- ['Leche','Aporta proteínas y calcio.','🥛']
-];
-$('drinkGrid').innerHTML=drinks.map(d=>`<article class="tile"><div style="height:110px;background:#f0f8e9;display:grid;place-items:center;font-size:40px">${d[2]}</div><div class="tile-body"><strong>${d[0]}</strong><p>${d[1]}</p></div></article>`).join('');
-
-const exercises=[
- {name:'Calistenia inicial',type:'Fuerza',image:'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=85',duration:'15 a 20 minutos',rest:'Pausas según necesidad',description:'Práctica de movimientos básicos con el peso corporal.',benefit:'Ayuda a practicar coordinación, control corporal y fuerza general.',steps:['Prepará un espacio despejado.','Empezá con movimientos sencillos y cómodos.','Mantené una postura controlada.','Descansá cuando lo necesites.']},
- {name:'Fútbol: técnica y control',type:'Deportes',image:'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=85',duration:'20 a 30 minutos',rest:'Pausas para hidratarte',description:'Práctica de conducción, pases y control de pelota.',benefit:'Trabaja coordinación, técnica y percepción del juego.',steps:['Hacé movilidad suave para entrar en calor.','Practicá pases cortos con ambos pies.','Alterná conducción y cambios de dirección.','Terminá con una vuelta a la calma.']},
- {name:'Caminata',type:'Resistencia',image:'https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&q=85',duration:'15 a 30 minutos',rest:'A tu ritmo',description:'Caminata a un ritmo que te permita hablar cómodamente.',benefit:'Favorece la resistencia general y el bienestar.',steps:['Elegí un lugar seguro.','Comenzá a un ritmo tranquilo.','Mantené una postura natural.','Bajá el ritmo al finalizar.']},
- {name:'Carrera suave',type:'Resistencia',image:'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=85',duration:'15 a 20 minutos',rest:'Alterná caminata si hace falta',description:'Actividad aeróbica suave y adaptable.',benefit:'Practica la resistencia cardiovascular.',steps:['Elegí un recorrido seguro.','Comenzá caminando.','Trotá a un ritmo cómodo si te sentís bien.','Terminá caminando suavemente.']},
- {name:'Gimnasio supervisado',type:'Fuerza',image:'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&q=85',duration:'Según orientación profesional',rest:'Según el ejercicio y supervisión',description:'Aprendizaje técnico con supervisión de una persona capacitada.',benefit:'Ayuda a desarrollar técnica y fuerza general.',steps:['Pedí orientación sobre cada máquina.','Aprendé primero el movimiento sin carga.','Usá únicamente cargas apropiadas y supervisadas.','No entrenes con dolor.']},
- {name:'Ciclismo',type:'Resistencia',image:'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=800&q=85',duration:'20 a 30 minutos',rest:'Pausas cuando sean necesarias',description:'Recorrido en bicicleta por un espacio seguro.',benefit:'Practica resistencia y coordinación.',steps:['Revisá la bicicleta.','Usá casco.','Elegí un recorrido seguro.','Mantené un ritmo cómodo.']},
- {name:'Movilidad general',type:'Movilidad',image:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=85',duration:'10 a 15 minutos',rest:'Movimientos suaves',description:'Movimientos controlados y sin rebotes bruscos.',benefit:'Ayuda a practicar movilidad y control del movimiento.',steps:['Mové suavemente cuello y hombros.','Hacé movimientos cómodos de cadera.','Movilizá tobillos y muñecas.','Evitá forzar rangos dolorosos.']},
- {name:'Circuito funcional adaptado',type:'Fuerza',image:'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=85',duration:'15 a 20 minutos',rest:'Descanso entre movimientos',description:'Movimientos sencillos de coordinación y control corporal.',benefit:'Practica coordinación y fuerza general.',steps:['Hacé una sentadilla cómoda sin peso.','Practicá equilibrio con apoyo cercano.','Caminá unos pasos con control.','Descansá entre cada actividad.']}
-];
-let exerciseFilter='Todos';
-function renderExercises(){
- $('trainingGrid').innerHTML=exercises.filter(e=>exerciseFilter==='Todos'||e.type===exerciseFilter).map(e=>`<article class="tile"><img class="photo" src="${e.image}" alt="${e.name}" loading="lazy"><div class="tile-body"><strong>${e.name}</strong><p>${e.type} · ${e.duration}</p><button class="btn" onclick="openExercise(${exercises.indexOf(e)})">Ver ejercicio</button></div></article>`).join('');
-}
-document.querySelectorAll('#trainingTabs button').forEach(b=>b.onclick=()=>{
- document.querySelectorAll('#trainingTabs button').forEach(x=>x.classList.remove('active'));
- b.classList.add('active');exerciseFilter=b.dataset.filter;renderExercises();
-});
-let timerSeconds=30,timerInterval=null;
-function openExercise(i){
- let e=exercises[i];go('exerciseDetail');
- $('exerciseContent').innerHTML=`<img class="exercise-image" src="${e.image}" alt="${e.name}"><h2 style="margin-top:15px">${e.name}</h2><p>${e.description}</p><div class="grid grid-2"><div class="card"><b>Duración orientativa</b><p>${e.duration}</p></div><div class="card"><b>Descanso</b><p>${e.rest}</p></div></div><h3 style="margin-top:17px">¿Qué practicás?</h3><p>${e.benefit}</p><h3>Cómo realizarlo</h3><ol>${e.steps.map(s=>`<li style="margin:7px 0">${s}</li>`).join('')}</ol><div class="safe-note">La duración es orientativa, no una obligación. Adaptá la actividad a tu experiencia y descansá si lo necesitás.</div><h3 style="margin-top:18px">Temporizador opcional</h3><div class="timer" id="timerText">00:30</div><div class="tabs" style="justify-content:center"><button class="btn" onclick="startTimer()">▶ Iniciar</button><button class="btn secondary" onclick="pauseTimer()">Ⅱ Pausar</button><button class="btn secondary" onclick="resetTimer()">↻ Reiniciar</button></div><button class="btn full" style="margin-top:15px" onclick="completeExercise('${e.name}')">Registrar actividad completada</button>`;
- resetTimer();
-}
-function drawTimer(){let el=$('timerText');if(el)el.textContent='00:'+String(timerSeconds).padStart(2,'0')}
-function startTimer(){if(timerInterval)return;timerInterval=setInterval(()=>{if(timerSeconds>0){timerSeconds--;drawTimer()}else{pauseTimer();notify('Temporizador terminado. Descansá.')}},1000)}
-function pauseTimer(){clearInterval(timerInterval);timerInterval=null}
-function resetTimer(){pauseTimer();timerSeconds=30;drawTimer()}
-function completeExercise(name){data.workouts.push({name,date:today()});log('Actividad completada: '+name);save();notify('Actividad registrada')}
-
-let monthCursor=new Date(),selectedDate=today();
-function renderMonth(){
- let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,last=new Date(y,m+1,0).getDate();
- $('monthLabel').textContent=first.toLocaleDateString('es-AR',{month:'long',year:'numeric'});
- let html=['L','M','X','J','V','S','D'].map(x=>`<span class="weekday">${x}</span>`).join('');
- for(let i=0;i<offset;i++)html+='<span></span>';
- for(let d=1;d<=last;d++){
-  let k=dateKey(new Date(y,m,d));
-  let has=(data.events[k]||[]).length||data.workouts.some(x=>x.date===k);
-  html+=`<button class="${k===today()?'today ':''}${has?'has-event ':''}${k===selectedDate?'chosen':''}" onclick="chooseDate('${k}')">${d}</button>`;
- }
- $('monthCalendar').innerHTML=html;renderSelectedDate();
-}
-function shiftMonth(n){monthCursor.setMonth(monthCursor.getMonth()+n);renderMonth()}
-function chooseDate(k){selectedDate=k;renderMonth()}
-function renderSelectedDate(){
- let d=new Date(selectedDate+'T12:00:00');
- $('selectedDateLabel').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+(selectedDate===today()?' · Hoy':'');
- let events=data.events[selectedDate]||[];
- $('eventList').innerHTML=events.map((x,i)=>`<div class="list-row"><div class="grow">${x}</div><button class="btn secondary" onclick="removeEvent(${i})">Quitar</button></div>`).join('')||'<p class="muted small">No hay eventos para este día.</p>';
-}
-function addCalendarEvent(){
- let v=$('eventInput').value.trim();if(!v){notify('Escribí una actividad');return}
- (data.events[selectedDate]??=[]).push(v);$('eventInput').value='';log('Agregaste al calendario: '+v);save();notify('Evento agregado');
-}
-function removeEvent(i){data.events[selectedDate].splice(i,1);save()}
-
-let weekStart=new Date();
-weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
-function shiftWeek(n){weekStart.setDate(weekStart.getDate()+7*n);renderWeek()}
-function renderWeek(){
- $('weekTitle').textContent=weekStart.toLocaleDateString('es-AR',{day:'numeric',month:'short'})+' – '+new Date(weekStart.getTime()+6*86400000).toLocaleDateString('es-AR',{day:'numeric',month:'short',year:'numeric'});
- let html=['L','M','X','J','V','S','D'].map(x=>`<span class="weekday">${x}</span>`).join('');
- for(let i=0;i<7;i++){
-  let d=new Date(weekStart);d.setDate(d.getDate()+i);let k=dateKey(d);
-  let has=data.workouts.some(x=>x.date===k);
-  html+=`<button class="${k===today()?'today ':''}${has?'has-event':''}" onclick="showWeekDay('${k}')">${d.getDate()}</button>`;
- }
- $('weekCalendar').innerHTML=html;
-}
-function showWeekDay(k){
- let d=new Date(k+'T12:00:00');
- let names=data.workouts.filter(x=>x.date===k).map(x=>x.name);
- $('weekDetail').textContent=d.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' · '+(names.join(', ')||'Sin actividades registradas');
-}
-
-async function openCamera(){
- if(!navigator.mediaDevices?.getUserMedia){notify('La cámara requiere HTTPS o localhost');return}
- try{
-  window.vitaliaStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
-  $('cameraBox').innerHTML='<video id="cameraVideo" autoplay playsinline></video>';
-  $('cameraVideo').srcObject=window.vitaliaStream;
-  $('cameraOpen').disabled=true;$('cameraCapture').disabled=false;$('cameraClose').disabled=false;
- }catch(e){notify('No se pudo abrir la cámara. Revisá los permisos.')}
-}
-function closeCamera(){
- if(window.vitaliaStream)window.vitaliaStream.getTracks().forEach(t=>t.stop());
- window.vitaliaStream=null;$('cameraBox').innerHTML='<div>▣ Cámara cerrada</div>';
- $('cameraOpen').disabled=false;$('cameraCapture').disabled=true;$('cameraClose').disabled=true;
-}
-$('cameraOpen').onclick=openCamera;$('cameraClose').onclick=closeCamera;
-$('cameraCapture').onclick=()=>{
- let v=$('cameraVideo'),c=$('cameraCanvas');if(!v||!v.videoWidth)return;
- c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);
- let image=c.toDataURL('image/jpeg');closeCamera();
- $('cameraBox').innerHTML=`<img src="${image}" alt="Foto capturada">`;
-};
-function saveScannedMeal(){
- let name=$('scanName').value.trim();if(!name){notify('Escribí qué alimento aparece');return}
- data.meals.push({name,moment:$('scanMoment').value,date:today()});
- log('Registraste: '+name);save();$('scanName').value='';$('scanIngredients').value='';notify('Comida registrada');
-}
-function addWater(){data.water.push({date:today()});log('Registraste un vaso de agua');save();notify('Registro agregado')}
-
-function renderAll(){
- let t=today(),water=data.water.filter(x=>x.date===t).length,meals=data.meals.filter(x=>x.date===t).length;
- $('totalWorkouts').textContent=data.workouts.length;
- $('totalMeals').textContent=data.meals.length;
- $('totalWater').textContent=data.water.length;
- $('activeDays').textContent=new Set(data.workouts.map(x=>x.date)).size;
- $('todayWater').textContent=water+' vasos';
- $('todayMeals').textContent=meals+' comidas';
- $('waterToday').textContent=water;
- $('statsWorkouts').textContent=data.workouts.length;
- $('statsMeals').textContent=data.meals.length;
- $('statsWater').textContent=data.water.length;
- let start=new Date();start.setDate(start.getDate()-((start.getDay()+6)%7));start.setHours(0,0,0,0);
- let end=new Date(start);end.setDate(end.getDate()+7);
- let count=data.workouts.filter(x=>{let d=new Date(x.date+'T12:00:00');return d>=start&&d<end}).length;
- let percent=Math.min(100,Math.round(count/5*100));
- $('weekValue').textContent=percent+'%';
- $('weekRing').style.setProperty('--progress',percent+'%');
- $('weekCount').textContent=count+' actividades';
- $('weekBar').style.width=percent+'%';
- $('recentList').innerHTML=data.history.slice(0,6).map(x=>`<div class="list-row"><div class="grow"><b>${x.text}</b><div class="muted small">${x.date}</div></div></div>`).join('')||'<p class="muted small">Todavía no hay registros.</p>';
- $('mealLog').innerHTML=data.meals.slice().reverse().map(x=>`<div class="list-row"><div class="grow"><b>${x.name}</b><div class="muted small">${x.moment} · ${x.date}</div></div></div>`).join('')||'<p class="muted small">Todavía no hay comidas.</p>';
- $('waterLog').innerHTML=data.water.slice(-12).reverse().map(x=>`<div class="list-row">◉ <div class="grow">Vaso registrado</div><span class="muted small">${x.date}</span></div>`).join('')||'<p class="muted small">Sin registros.</p>';
- $('statsBars').innerHTML=[['Actividades',data.workouts.length],['Comidas',data.meals.length],['Vasos de agua',data.water.length]].map(x=>`<div><div style="display:flex;justify-content:space-between;margin:8px 0;font-size:12px"><b>${x[0]}</b>${x[1]}</div><div class="bar"><span style="width:${Math.min(100,x[1]*8)}%"></span></div></div>`).join('');
- $('historyList').innerHTML=data.history.map(x=>`<div class="list-row"><div class="grow">${x.text}</div><span class="muted small">${x.date}</span></div>`).join('')||'<p class="muted small">No hay historial.</p>';
- renderPlanOptions();renderMonth();renderWeek();
-}
-function exportData(){
- let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='vitalia-datos.json';a.click();URL.revokeObjectURL(url);
-}
-function eraseData(){
- if(confirm('¿Seguro que querés borrar todos los datos de VITALIA?')){
-  localStorage.removeItem('vitalia_data');location.reload();
- }
-}
-
-buildNav();
-$('todayLabel').textContent=new Date().toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-renderRecipes();renderExercises();renderAll();
-if(!data.surveyDone)openSurvey();
-</script>
+<script src="script.js"></script>
 </body>
 </html>
