@@ -3,467 +3,592 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ESCAPE WEB | Escape Rooms</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TIME MACHINE | Open World</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 *{box-sizing:border-box}
-body{
- margin:0;background:#090b10;color:white;
- font-family:Inter,Arial,sans-serif;
+body{margin:0;overflow:hidden;background:#080b11;color:white;font-family:Arial,sans-serif}
+canvas{display:block}
+#hud{position:fixed;inset:0;pointer-events:none;z-index:2}
+#top{
+ position:absolute;top:20px;left:25px;
+ background:#101722bb;padding:14px 20px;
+ border-left:3px solid #49d6c4;
 }
-button,input{font:inherit}
-button{cursor:pointer}
-header{
- height:75px;padding:0 6%;
- display:flex;align-items:center;justify-content:space-between;
- border-bottom:1px solid #222631;background:#0c0f16;
+.logo{font-weight:900;letter-spacing:4px;font-size:20px}
+.logo span{color:#49d6c4}
+#year{font-size:12px;color:#49d6c4;margin-top:7px}
+#stats{position:absolute;top:20px;right:25px;text-align:right;
+ background:#101722bb;padding:13px 18px;font-size:12px;line-height:2}
+#objective{
+ position:absolute;bottom:35px;left:30px;
+ background:#101722cc;padding:16px 20px;
+ border-left:3px solid #49d6c4;
 }
-.logo{font-size:23px;font-weight:900;letter-spacing:3px}
-.logo span{color:#e6b65d}
-nav{display:flex;gap:25px;color:#9da5b5;font-size:13px}
-nav a{color:inherit;text-decoration:none}
-nav a:hover{color:white}
-.hero{
- min-height:510px;padding:100px 8%;
- background:linear-gradient(90deg,#090b10 15%,#090b10bb 60%,#090b1066),
- url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1800') center/cover;
- display:flex;align-items:center;
+#objective small{color:#49d6c4;letter-spacing:2px}
+#objective div{font-size:14px;margin-top:8px}
+#crosshair{
+ position:absolute;left:50%;top:50%;
+ transform:translate(-50%,-50%);
+ color:white;font-size:22px;text-shadow:0 0 5px black;
 }
-.hero-content{max-width:650px}
-.tag{color:#e6b65d;font-size:12px;letter-spacing:3px;font-weight:800}
-h1{font-size:clamp(45px,7vw,78px);line-height:1.03;margin:20px 0}
-h1 span{color:#e6b65d}
-.hero p{color:#aab1bf;line-height:1.8;max-width:520px}
-.primary{
- border:0;background:#e6b65d;color:#17130c;
- padding:16px 25px;font-weight:800;border-radius:5px;
- margin-top:20px;
+#prompt{
+ position:absolute;left:50%;top:58%;
+ transform:translateX(-50%);
+ background:#101722dd;padding:12px 20px;
+ font-size:13px;display:none;border:1px solid #49d6c4;
 }
-.primary:hover{background:#f5ca7d}
-section{padding:65px 8%}
-.section-title{font-size:29px;margin:0 0 10px}
-.sub{color:#8992a3;font-size:14px;margin-bottom:30px}
-.rooms{
- display:grid;grid-template-columns:repeat(3,1fr);gap:22px
+#mini{
+ position:absolute;right:25px;bottom:25px;
+ width:150px;height:150px;
+ background:#0a1018dd;border:2px solid #49d6c4;
+ border-radius:50%;
 }
-.room{
- background:#121620;border:1px solid #252b37;border-radius:9px;
- overflow:hidden;transition:.25s
+#start{
+ position:fixed;inset:0;z-index:10;
+ background:linear-gradient(90deg,#080b11ee,#080b1177),
+ url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1800') center/cover;
+ display:flex;align-items:center;padding:9%;
 }
-.room:hover{transform:translateY(-5px);border-color:#b98c44}
-.room img{width:100%;height:185px;object-fit:cover}
-.room-info{padding:21px}
-.room-info h3{margin:0 0 10px}
-.room-info p{color:#929bab;font-size:13px;line-height:1.6;min-height:42px}
-.meta{display:flex;justify-content:space-between;color:#e6b65d;font-size:11px;margin-top:18px}
-.room button{
- width:100%;padding:13px;background:#202735;color:white;
- border:1px solid #30394a;border-radius:5px;margin-top:15px;font-weight:700
+.start-content{max-width:650px}
+.eyebrow{color:#49d6c4;letter-spacing:5px;font-size:12px;font-weight:bold}
+h1{font-size:clamp(55px,9vw,100px);line-height:.9;margin:25px 0}
+h1 span{color:#49d6c4}
+#start p{color:#aeb9c9;line-height:1.8;max-width:480px}
+button{
+ background:#49d6c4;border:0;padding:16px 28px;
+ color:#071311;font-weight:900;letter-spacing:1px;cursor:pointer;
 }
-.room button:hover{background:#e6b65d;color:#17130c}
-footer{padding:35px;text-align:center;color:#697284;border-top:1px solid #222631;font-size:12px}
-
-/* JUEGO */
-#game{
- display:none;min-height:100vh;background:#080a0f;
+button:hover{background:#83f4e6}
+#timeMenu{
+ position:fixed;inset:0;z-index:20;
+ display:none;align-items:center;justify-content:center;
+ background:#03060bdc;padding:20px;
 }
-.game-header{
- display:flex;justify-content:space-between;align-items:center;
- padding:17px 5%;border-bottom:1px solid #252a35;
+.menu-box{
+ width:min(850px,100%);background:#101722;
+ border:1px solid #334351;padding:35px;
 }
-.game-main{max-width:1050px;margin:auto;padding:35px 20px}
-.game-top{display:flex;justify-content:space-between;align-items:center;gap:15px}
-.timer{color:#e6b65d;font-weight:900;font-size:23px}
-.scene{
- position:relative;margin-top:25px;height:430px;
- background:#151820;border:1px solid #343b49;border-radius:9px;
- overflow:hidden;background-size:cover;background-position:center;
+.menu-box h2{font-size:32px;margin:10px 0}
+.menu-box p{color:#9daabd;line-height:1.6}
+.eras{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:25px}
+.era{
+ background:#1a2532;border:1px solid #354353;
+ padding:20px 12px;text-align:left;color:white;
 }
-.scene-overlay{
- position:absolute;inset:0;
- background:linear-gradient(0deg,#07090ce8,transparent 65%);
+.era strong{display:block;font-size:22px;color:#49d6c4;margin-bottom:8px}
+.era span{font-size:12px;color:#9daabd}
+#closeMenu{margin-top:20px;background:#273544;color:white}
+#loading{
+ position:fixed;inset:0;z-index:30;background:#080b11;
+ display:none;align-items:center;justify-content:center;
+ flex-direction:column;gap:15px;
 }
-.scene-label{position:absolute;bottom:20px;left:22px}
-.scene-label h2{font-size:25px;margin:0 0 5px}
-.scene-label p{color:#b4bdca;font-size:12px}
-.hotspot{
- position:absolute;width:45px;height:45px;border-radius:50%;
- border:2px solid #e6b65d;background:#171a21c9;color:#e6b65d;
- font-weight:900;box-shadow:0 0 20px #e6b65d55;
+.bar{width:220px;height:4px;background:#263442}
+.bar span{display:block;width:0;height:100%;background:#49d6c4;transition:width .5s}
+#controls{
+ position:absolute;bottom:30px;right:200px;
+ color:#abb7c8;font-size:11px;line-height:1.9;text-align:right;
 }
-.hotspot:hover{background:#e6b65d;color:black;transform:scale(1.1)}
-.game-columns{
- display:grid;grid-template-columns:1fr 300px;gap:20px;margin-top:20px
-}
-.panel{
- background:#121620;border:1px solid #282e3b;border-radius:8px;padding:20px;
-}
-.panel h3{margin-top:0;font-size:15px}
-.panel p{font-size:13px;color:#9ba4b4;line-height:1.7}
-.inventory{display:flex;gap:8px;flex-wrap:wrap}
-.item{
- padding:9px 12px;background:#242b38;border-radius:5px;
- font-size:12px;color:#e6b65d
-}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
-.secondary{
- background:#222936;border:1px solid #3b4455;color:white;
- padding:12px 15px;border-radius:5px;font-size:12px
-}
-.secondary:hover{border-color:#e6b65d}
-input{
- background:#090c12;border:1px solid #414a59;color:white;
- border-radius:5px;padding:13px;width:100%;outline:none;
-}
-input:focus{border-color:#e6b65d}
-.modal{
- position:fixed;inset:0;background:#000c;z-index:10;
- display:none;align-items:center;justify-content:center;padding:20px;
-}
-.modal-box{
- width:100%;max-width:440px;background:#151a24;
- border:1px solid #55505a;border-radius:10px;padding:27px;
-}
-.modal-box h2{margin-top:0}
-.modal-box p{color:#aab2c0;line-height:1.7;font-size:14px}
-.modal-box input{margin:10px 0}
-.close{float:right;background:none;border:0;color:#aaa;font-size:23px}
-#message{color:#e6b65d;min-height:20px;font-size:13px}
-.win{
- text-align:center;padding:100px 20px;display:none;
-}
-.win h1{font-size:55px;color:#e6b65d}
-@media(max-width:800px){
- .rooms{grid-template-columns:1fr}
- .game-columns{grid-template-columns:1fr}
- nav{display:none}
- .hero{padding:75px 7%}
- .scene{height:350px}
+@media(max-width:650px){
+ #stats{top:90px;right:12px;font-size:10px}
+ #top{left:12px;top:12px}
+ #mini{width:100px;height:100px;right:12px;bottom:12px}
+ #controls{display:none}
+ #objective{left:12px;bottom:125px}
+ .eras{grid-template-columns:1fr 1fr}
+ .menu-box{padding:20px}
+ #start{padding:7%}
 }
 </style>
 </head>
 <body>
 
-<div id="home">
-<header>
- <div class="logo">ESCAPE<span>WEB.</span></div>
- <nav>
-  <a href="#rooms">Habitaciones</a>
-  <a href="#about">Cómo jugar</a>
- </nav>
- <button class="secondary" onclick="showRooms()">JUGAR</button>
-</header>
-
-<div class="hero">
- <div class="hero-content">
-  <div class="tag">EXPERIENCIAS DE ESCAPE VIRTUAL</div>
-  <h1>¿PODRÁS<br> <span>ESCAPAR?</span></h1>
-  <p>Explorá lugares misteriosos, encontrá objetos escondidos, resolvé acertijos y descubrí los secretos que se esconden detrás de cada habitación.</p>
-  <button class="primary" onclick="showRooms()">EXPLORAR HABITACIONES →</button>
+<div id="start">
+ <div class="start-content">
+  <div class="eyebrow">AN OPEN WORLD EXPERIENCE</div>
+  <h1>TIME<br><span>MACHINE</span></h1>
+  <p>
+   El tiempo no tiene límites. Explorá una ciudad en primera persona,
+   viajá a diferentes épocas y descubrí cómo cambia el mundo a través de los siglos.
+  </p>
+  <button id="play">INICIAR EXPERIENCIA →</button>
+  <p style="font-size:11px;color:#738295">3D EXPERIENCE · EXPLORACIÓN LIBRE · VIAJES TEMPORALES</p>
  </div>
 </div>
 
-<section id="rooms">
- <div class="tag">SELECCIONÁ TU EXPERIENCIA</div>
- <h2 class="section-title">Habitaciones disponibles</h2>
- <p class="sub">Cada habitación tiene sus propios secretos. El tiempo corre.</p>
- <div class="rooms">
-  <article class="room">
-   <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800">
-   <div class="room-info">
-    <h3>La habitación abandonada</h3>
-    <p>Despertaste en una habitación desconocida. La puerta está cerrada y hay algo extraño en las paredes.</p>
-    <div class="meta"><span>FÁCIL</span><span>10 MINUTOS</span></div>
-    <button onclick="startGame(0)">ENTRAR A LA HABITACIÓN →</button>
-   </div>
-  </article>
-  <article class="room">
-   <img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=800">
-   <div class="room-info">
-    <h3>El laboratorio secreto</h3>
-    <p>Un laboratorio abandonado, experimentos desconocidos y una contraseña que nadie pudo descifrar.</p>
-    <div class="meta"><span>MEDIO</span><span>15 MINUTOS</span></div>
-    <button onclick="startGame(1)">ENTRAR A LA HABITACIÓN →</button>
-   </div>
-  </article>
-  <article class="room">
-   <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800">
-   <div class="room-info">
-    <h3>El refugio perdido</h3>
-    <p>Estás atrapado en un refugio. Tenés que encontrar la salida antes de que termine el tiempo.</p>
-    <div class="meta"><span>DIFÍCIL</span><span>20 MINUTOS</span></div>
-    <button onclick="startGame(2)">ENTRAR A LA HABITACIÓN →</button>
-   </div>
-  </article>
+<div id="hud" style="display:none">
+ <div id="top">
+  <div class="logo">TIME<span>MACHINE</span></div>
+  <div id="year">AÑO 2026 · PRESENTE</div>
  </div>
-</section>
-
-<section id="about">
- <div class="tag">¿CÓMO FUNCIONA?</div>
- <h2 class="section-title">Tu misión es escapar.</h2>
- <p class="sub">Explorá los puntos interactivos, reuní objetos y resolvé los acertijos para desbloquear la salida.</p>
-</section>
-<footer>ESCAPE WEB © 2026 — EXPERIENCIAS INTERACTIVAS</footer>
+ <div id="stats">
+  <div>LOCALIZACIÓN: <span id="location">DOWNTOWN</span></div>
+  <div>HORA: <span id="clock">12:00</span></div>
+  <div>ESTADO: EXPLORANDO</div>
+ </div>
+ <div id="crosshair">+</div>
+ <div id="prompt">PRESIONÁ E PARA INTERACTUAR</div>
+ <div id="objective">
+  <small>OBJETIVO ACTUAL</small>
+  <div id="objectiveText">Explorá la ciudad y encontrá la máquina del tiempo.</div>
+ </div>
+ <div id="controls">
+  WASD — MOVERSE<br>
+  MOUSE — MIRAR<br>
+  SHIFT — CORRER<br>
+  E — INTERACTUAR<br>
+  ESC — LIBERAR MOUSE
+ </div>
+ <canvas id="mini" width="150" height="150"></canvas>
 </div>
 
-<div id="game">
- <div class="game-header">
-  <div class="logo">ESCAPE<span>WEB.</span></div>
-  <button class="secondary" onclick="exitGame()">← SALIR</button>
- </div>
- <div class="game-main" id="gameContent">
-  <div class="game-top">
-   <div>
-    <div class="tag">TU MISIÓN</div>
-    <h2 id="roomTitle">Habitación</h2>
-   </div>
-   <div class="timer" id="timer">10:00</div>
+<div id="timeMenu">
+ <div class="menu-box">
+  <div class="eyebrow">CENTRO TEMPORAL</div>
+  <h2>Seleccioná una época</h2>
+  <p>Cada viaje modifica la atmósfera, los edificios y la apariencia de la ciudad.</p>
+  <div class="eras">
+   <button class="era" data-year="1880">
+    <strong>1880</strong><span>La ciudad antigua</span>
+   </button>
+   <button class="era" data-year="1920">
+    <strong>1920</strong><span>Era industrial</span>
+   </button>
+   <button class="era" data-year="1980">
+    <strong>1980</strong><span>Ciudad retro</span>
+   </button>
+   <button class="era" data-year="2026">
+    <strong>2026</strong><span>Presente moderno</span>
+   </button>
+   <button class="era" data-year="2120">
+    <strong>2120</strong><span>Futuro tecnológico</span>
+   </button>
   </div>
-  <div class="scene" id="scene">
-   <div class="scene-overlay"></div>
-   <div class="scene-label">
-    <h2 id="sceneTitle">Habitación</h2>
-    <p>Explorá los objetos marcados para encontrar pistas.</p>
-   </div>
-  </div>
-  <div class="game-columns">
-   <div class="panel">
-    <h3>OBJETOS Y PISTAS</h3>
-    <p>Todo lo que encuentres aparecerá en tu inventario.</p>
-    <div class="inventory" id="inventory"><span class="item">Inventario vacío</span></div>
-    <div class="actions">
-     <button class="secondary" onclick="openClue()">VER PISTA</button>
-     <button class="secondary" onclick="openCode()">INTRODUCIR CÓDIGO</button>
-    </div>
-   </div>
-   <div class="panel">
-    <h3>REGISTRO DE MISIÓN</h3>
-    <p id="log">La misión comenzó. Investigá la habitación.</p>
-    <p id="progress">Objetos encontrados: 0/3</p>
-   </div>
-  </div>
- </div>
- <div class="win" id="win">
-  <div class="tag">MISIÓN COMPLETADA</div>
-  <h1>¡ESCAPASTE!</h1>
-  <p id="winText">Lograste resolver todos los acertijos.</p>
-  <button class="primary" onclick="exitGame()">VOLVER AL MENÚ</button>
+  <button id="closeMenu">VOLVER A LA CIUDAD</button>
  </div>
 </div>
 
-<div class="modal" id="modal">
- <div class="modal-box">
-  <button class="close" onclick="closeModal()">×</button>
-  <div class="tag">INVESTIGACIÓN</div>
-  <h2 id="modalTitle">Objeto</h2>
-  <p id="modalText"></p>
-  <input id="codeInput" placeholder="Introducí el código..." style="display:none">
-  <p id="message"></p>
-  <button class="primary" id="modalAction" onclick="modalAction()">CONTINUAR</button>
- </div>
+<div id="loading">
+ <div class="eyebrow">TRANSPORTANDO AL JUGADOR</div>
+ <h2 id="loadText">CAMBIANDO DE ÉPOCA...</h2>
+ <div class="bar"><span id="bar"></span></div>
 </div>
 
-<script>
-const rooms=[
+<script type="importmap">
 {
- title:"La habitación abandonada",time:600,
- image:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1400",
- objects:[
-  {name:"Nota antigua",x:24,y:42,desc:"Una nota dice: El primer número es 3. El segundo es el doble del primero.",item:"Nota antigua"},
-  {name:"Libro misterioso",x:60,y:30,desc:"En el libro encontrás un mensaje: El tercer número es 2.",item:"Libro misterioso"},
-  {name:"Caja cerrada",x:82,y:62,desc:"Una caja con un teclado numérico. Parece necesitar tres números.",item:"Caja cerrada"}
- ],
- code:"362",
- clue:"La nota contiene el primer número y el segundo. El libro revela el tercero."
-},
-{
- title:"El laboratorio secreto",time:900,
- image:"https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1400",
- objects:[
-  {name:"Pizarra",x:25,y:35,desc:"En la pizarra aparece: 5 + 2 = 7. El primer número del código es 7.",item:"Pista de la pizarra"},
-  {name:"Computadora",x:60,y:58,desc:"En la pantalla dice: El segundo número es 4.",item:"Pista digital"},
-  {name:"Archivador",x:83,y:35,desc:"Un archivo revela: El último número es 9.",item:"Archivo secreto"}
- ],
- code:"749",
- clue:"Observá la pizarra, la computadora y el archivador."
-},
-{
- title:"El refugio perdido",time:1200,
- image:"https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1400",
- objects:[
-  {name:"Mapa",x:20,y:40,desc:"El mapa marca el número 8.",item:"Mapa"},
-  {name:"Reloj",x:55,y:30,desc:"El reloj está detenido a las 6. Ese es el segundo número.",item:"Reloj"},
-  {name:"Cofre",x:82,y:60,desc:"El cofre tiene grabado el número 2.",item:"Cofre"}
- ],
- code:"862",
- clue:"El código está escondido entre el mapa, el reloj y el cofre."
-}
-];
-
-let current=0,found=[],seconds=0,interval=null;
-let activeObject=null,modalMode="object",hints=0;
-
-function showRooms(){
- document.getElementById("rooms").scrollIntoView({behavior:"smooth"});
-}
-
-function startGame(index){
- current=index;
- found=[];
- hints=0;
- seconds=rooms[index].time;
- document.getElementById("home").style.display="none";
- document.getElementById("game").style.display="block";
- document.getElementById("gameContent").style.display="block";
- document.getElementById("win").style.display="none";
- document.getElementById("roomTitle").textContent=rooms[index].title;
- document.getElementById("sceneTitle").textContent=rooms[index].title;
- document.getElementById("scene").style.backgroundImage=
- "linear-gradient(#0002,#0008),url("+rooms[index].image+")";
- document.getElementById("log").textContent="La misión comenzó. Investigá la habitación.";
- document.getElementById("progress").textContent="Objetos encontrados: 0/3";
- renderObjects();
- renderInventory();
- updateTimer();
- clearInterval(interval);
- interval=setInterval(()=>{
-  seconds--;
-  updateTimer();
-  if(seconds<=0){
-   clearInterval(interval);
-   alert("¡Se terminó el tiempo! Podés volver a intentarlo.");
-   exitGame();
-  }
- },1000);
- window.scrollTo(0,0);
-}
-
-function renderObjects(){
- document.querySelectorAll(".hotspot").forEach(e=>e.remove());
- rooms[current].objects.forEach((obj,i)=>{
-  if(found.includes(i))return;
-  const b=document.createElement("button");
-  b.className="hotspot";
-  b.textContent="?";
-  b.style.left=obj.x+"%";
-  b.style.top=obj.y+"%";
-  b.style.transform="translate(-50%,-50%)";
-  b.onclick=()=>inspect(i);
-  document.getElementById("scene").appendChild(b);
- });
-}
-
-function inspect(index){
- activeObject=index;
- modalMode="object";
- const obj=rooms[current].objects[index];
- document.getElementById("modalTitle").textContent=obj.name;
- document.getElementById("modalText").textContent=obj.desc;
- document.getElementById("codeInput").style.display="none";
- document.getElementById("message").textContent="";
- document.getElementById("modalAction").textContent="RECOGER OBJETO";
- document.getElementById("modal").style.display="flex";
-}
-
-function modalAction(){
- if(modalMode==="object"){
-  const obj=rooms[current].objects[activeObject];
-  if(!found.includes(activeObject)){
-   found.push(activeObject);
-   document.getElementById("log").textContent="Encontraste: "+obj.name;
-   renderObjects();
-   renderInventory();
-   document.getElementById("progress").textContent=
-   "Objetos encontrados: "+found.length+"/3";
-  }
-  closeModal();
-  if(found.length===3){
-   document.getElementById("log").textContent="¡Ya tenés todas las pistas! Descifrá el código.";
-  }
+ "imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
  }
 }
+</script>
 
-function renderInventory(){
- const inv=document.getElementById("inventory");
- inv.innerHTML="";
- if(found.length===0){
-  inv.innerHTML='<span class="item">Inventario vacío</span>';
-  return;
- }
- found.forEach(i=>{
-  const el=document.createElement("span");
-  el.className="item";
-  el.textContent=rooms[current].objects[i].item;
-  inv.appendChild(el);
- });
+<script type="module">
+import * as THREE from 'three';
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x899eae);
+scene.fog=new THREE.FogExp2(0x899eae,0.006);
+
+const camera=new THREE.PerspectiveCamera(
+ 75,innerWidth/innerHeight,0.1,600
+);
+camera.position.set(0,1.7,12);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.2;
+document.body.appendChild(renderer.domElement);
+
+const ambient=new THREE.HemisphereLight(0xc4ddff,0x37302b,2);
+scene.add(ambient);
+
+const sun=new THREE.DirectionalLight(0xffe4c0,3);
+sun.position.set(-40,70,30);
+sun.castShadow=true;
+sun.shadow.mapSize.set(1024,1024);
+sun.shadow.camera.left=-100;
+sun.shadow.camera.right=100;
+sun.shadow.camera.top=100;
+sun.shadow.camera.bottom=-100;
+scene.add(sun);
+
+const world=new THREE.Group();
+scene.add(world);
+
+const buildings=[];
+const props=[];
+const colliders=[];
+const clock=new THREE.Clock();
+
+function material(color,roughness=0.85){
+ return new THREE.MeshStandardMaterial({color,roughness});
 }
 
-function openClue(){
- hints++;
- document.getElementById("modalTitle").textContent="Pista de investigación";
- document.getElementById("modalText").textContent=
- hints===1?rooms[current].clue:
- "Revisá los objetos encontrados y ordená los números según las pistas.";
- document.getElementById("codeInput").style.display="none";
- document.getElementById("modalAction").textContent="ENTENDIDO";
- document.getElementById("message").textContent="";
- modalMode="hint";
- document.getElementById("modal").style.display="flex";
+function cube(parent,x,y,z,w,h,d,mat,shadow=true){
+ const mesh=new THREE.Mesh(
+  new THREE.BoxGeometry(w,h,d),mat
+ );
+ mesh.position.set(x,y+h/2,z);
+ mesh.castShadow=shadow;
+ mesh.receiveShadow=true;
+ parent.add(mesh);
+ return mesh;
 }
 
-function openCode(){
- document.getElementById("modalTitle").textContent="Desbloquear la salida";
- document.getElementById("modalText").textContent=
- "Introducí el código de tres números que descubriste durante la investigación.";
- document.getElementById("codeInput").style.display="block";
- document.getElementById("codeInput").value="";
- document.getElementById("message").textContent="";
- document.getElementById("modalAction").textContent="COMPROBAR CÓDIGO";
- modalMode="code";
- document.getElementById("modal").style.display="flex";
-}
+// SUELO Y CALLES
+const ground=cube(world,0,-.5,0,300,1,300,material(0x343a3d));
+ground.receiveShadow=true;
 
-function closeModal(){
- document.getElementById("modal").style.display="none";
-}
-
-function updateTimer(){
- const m=Math.floor(seconds/60);
- const s=seconds%60;
- document.getElementById("timer").textContent=
- String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
- document.getElementById("timer").style.color=
- seconds<60?"#ff6262":"#e6b65d";
-}
-
-function exitGame(){
- clearInterval(interval);
- document.getElementById("game").style.display="none";
- document.getElementById("home").style.display="block";
- closeModal();
- window.scrollTo(0,0);
-}
-
-document.getElementById("modalAction").addEventListener("click",()=>{
- if(modalMode==="code"){
-  const value=document.getElementById("codeInput").value.trim();
-  if(value===rooms[current].code){
-   closeModal();
-   clearInterval(interval);
-   document.getElementById("gameContent").style.display="none";
-   document.getElementById("win").style.display="block";
-   document.getElementById("winText").textContent=
-   "Escapaste de "+rooms[current].title+" en "+document.getElementById("timer").textContent+".";
-  }else{
-   document.getElementById("message").textContent="Código incorrecto. Seguí investigando.";
+function road(x,z,w,d){
+ cube(world,x,.01,z,w,.05,d,material(0x252a2d),false);
+ if(w>d){
+  for(let i=-Math.floor(w/12);i<Math.floor(w/12);i++){
+   cube(world,x+i*12,.045,z,w>10?3:1,.02,.18,material(0xc5bda3),false);
   }
- }else if(modalMode==="hint"){
-  closeModal();
  }else{
-  modalAction();
+  for(let i=-Math.floor(d/12);i<Math.floor(d/12);i++){
+   cube(world,x,.045,z+i*12,.18,.02,3,material(0xc5bda3),false);
+  }
  }
+}
+for(let i=-2;i<=2;i++){
+ road(i*55,0,13,280);
+ road(0,i*55,280,13);
+}
+
+// EDIFICIOS
+const palettes={
+ 1880:[0x77716a,0x8d806e,0x655c55,0xa18b72],
+ 1920:[0x665d52,0x807365,0x625e58,0x8d8074],
+ 1980:[0x646e75,0x7b7770,0x545b61,0x8e8170],
+ 2026:[0x667987,0x89959d,0x485b69,0xa0a6a4],
+ 2120:[0x344c61,0x456d82,0x33485c,0x718a9c]
+};
+
+function createCity(){
+ for(let x=-3;x<=3;x++){
+  for(let z=-3;z<=3;z++){
+   if(x===0||z===0)continue;
+   const px=x*55+ (Math.random()-.5)*9;
+   const pz=z*55+ (Math.random()-.5)*9;
+   const w=19+Math.random()*10;
+   const d=19+Math.random()*10;
+   const h=10+Math.random()*38;
+   const mat=material(0x74818b);
+   const b=cube(world,px,h/2,pz,w,h,d,mat);
+   b.userData={height:h};
+   buildings.push(b);
+   colliders.push({x:px,z:pz,w,d});
+   // ventanas
+   const windows=new THREE.Group();
+   const windowMat=new THREE.MeshStandardMaterial({
+    color:0x9ccbd7,emissive:0x263c49,roughness:.3
+   });
+   for(let yy=3;yy<h-2;yy+=4){
+    for(let xx=-w/2+2;xx<w/2-1;xx+=4){
+     for(const side of [-1,1]){
+      const win=new THREE.Mesh(new THREE.BoxGeometry(1.3,1.7,.08),windowMat);
+      win.position.set(px+xx,yy,pz+side*(d/2+.05));
+      windows.add(win);
+     }
+    }
+   }
+   world.add(windows);
+   b.userData.windows=windows;
+  }
+ }
+}
+createCity();
+
+// ÁRBOLES
+function tree(x,z){
+ const trunk=cube(world,x,0.1,z,.65,3,.65,material(0x51402f));
+ const top=new THREE.Mesh(
+  new THREE.SphereGeometry(2.3,8,7),
+  material(0x345b42)
+ );
+ top.position.set(x,4,z);
+ top.castShadow=true;
+ world.add(top);
+ props.push({top});
+}
+for(let i=0;i<35;i++){
+ let x=(Math.random()-.5)*200;
+ let z=(Math.random()-.5)*200;
+ if(Math.abs(x%55)<12||Math.abs(z%55)<12)continue;
+ tree(x,z);
+}
+
+// LUMINARIAS
+function lamp(x,z){
+ const group=new THREE.Group();
+ const pole=new THREE.Mesh(
+  new THREE.CylinderGeometry(.12,.16,5,8),
+  material(0x414950)
+ );
+ pole.position.y=2.5;
+ group.add(pole);
+ const light=new THREE.PointLight(0xffd59c,1.2,13);
+ light.position.y=5;
+ group.add(light);
+ const bulb=new THREE.Mesh(
+  new THREE.SphereGeometry(.23,8,8),
+  new THREE.MeshBasicMaterial({color:0xffe0a0})
+ );
+ bulb.position.y=5;
+ group.add(bulb);
+ group.position.set(x,0,z);
+ world.add(group);
+}
+for(let i=-4;i<=4;i++){
+ lamp(i*22+10,10);
+ lamp(i*22-10,-10);
+}
+
+// MÁQUINA DEL TIEMPO
+const machine=new THREE.Group();
+machine.position.set(0,0,-17);
+world.add(machine);
+
+const base=new THREE.Mesh(
+ new THREE.CylinderGeometry(5,5.8,.8,32),
+ material(0x243b48)
+);
+base.position.y=.4;
+machine.add(base);
+
+const ring=new THREE.Mesh(
+ new THREE.TorusGeometry(3.5,.3,16,80),
+ new THREE.MeshStandardMaterial({
+  color:0x49d6c4,emissive:0x087c75,emissiveIntensity:3
+ })
+);
+ring.position.y=4;
+machine.add(ring);
+
+const ring2=ring.clone();
+ring2.scale.set(.75,.75,.75);
+machine.add(ring2);
+
+const core=new THREE.Mesh(
+ new THREE.IcosahedronGeometry(1.4,2),
+ new THREE.MeshStandardMaterial({
+  color:0x5affed,emissive:0x087f83,emissiveIntensity:3,
+  metalness:.6,roughness:.2
+ })
+);
+core.position.y=4;
+machine.add(core);
+
+const machineLight=new THREE.PointLight(0x49d6c4,30,35);
+machineLight.position.y=4;
+machine.add(machineLight);
+
+// CÁMARA
+let yaw=0,pitch=0;
+let locked=false;
+const keys={};
+let active=false;
+let selectedYear=2026;
+
+const player={
+ speed:8,
+ radius:.7
+};
+
+document.addEventListener('keydown',e=>{
+ keys[e.code]=true;
+ if(e.code==="KeyE"&&active)interact();
+});
+document.addEventListener('keyup',e=>keys[e.code]=false);
+
+renderer.domElement.addEventListener('click',()=>{
+ if(active&&!document.pointerLockElement){
+  renderer.domElement.requestPointerLock();
+ }
+});
+
+document.addEventListener('pointerlockchange',()=>{
+ locked=document.pointerLockElement===renderer.domElement;
+});
+
+document.addEventListener('mousemove',e=>{
+ if(!locked)return;
+ yaw-=e.movementX*.002;
+ pitch-=e.movementY*.002;
+ pitch=Math.max(-1.35,Math.min(1.35,pitch));
+ camera.rotation.set(pitch,yaw,0,'YXZ');
+});
+
+function collision(x,z){
+ for(const c of colliders){
+  if(Math.abs(x-c.x)<c.w/2+player.radius &&
+     Math.abs(z-c.z)<c.d/2+player.radius)return true;
+ }
+ return false;
+}
+
+// EPOCAS
+const eraData={
+ 1880:{sky:0xb2a08c,fog:0xb2a08c,density:.009,exposure:.85},
+ 1920:{sky:0x9c9386,fog:0x9c9386,density:.008,exposure:.9},
+ 1980:{sky:0x9bb1bc,fog:0x9bb1bc,density:.006,exposure:1},
+ 2026:{sky:0x899eae,fog:0x899eae,density:.006,exposure:1.2},
+ 2120:{sky:0x263b59,fog:0x263b59,density:.007,exposure:1.35}
+};
+
+function travel(year){
+ selectedYear=year;
+ const data=eraData[year];
+ scene.background.setHex(data.sky);
+ scene.fog.color.setHex(data.fog);
+ scene.fog.density=data.density;
+ renderer.toneMappingExposure=data.exposure;
+
+ buildings.forEach(b=>{
+  const colors=palettes[year];
+  b.material.color.setHex(colors[Math.floor(Math.random()*colors.length)]);
+  if(year===1880||year===1920){
+   b.scale.y=year===1880?0.75:0.9;
+  }else if(year===2120){
+   b.scale.y=1.25;
+  }else{
+   b.scale.y=1;
+  }
+  b.userData.windows.visible=year>=1920;
+ });
+
+ if(year===1880){
+  document.getElementById("year").textContent="AÑO 1880 · CIUDAD ANTIGUA";
+  sun.color.setHex(0xffd2a0);
+ }else if(year===1920){
+  document.getElementById("year").textContent="AÑO 1920 · ERA INDUSTRIAL";
+  sun.color.setHex(0xffc18c);
+ }else if(year===1980){
+  document.getElementById("year").textContent="AÑO 1980 · ERA RETRO";
+  sun.color.setHex(0xffe2b1);
+ }else if(year===2026){
+  document.getElementById("year").textContent="AÑO 2026 · PRESENTE";
+  sun.color.setHex(0xffe4c0);
+ }else{
+  document.getElementById("year").textContent="AÑO 2120 · FUTURO";
+  sun.color.setHex(0x78aaff);
+ }
+ document.getElementById("timeMenu").style.display="none";
+ document.getElementById("objectiveText").textContent=
+ "Estás explorando el año "+year+". Descubrí cómo cambió la ciudad.";
+}
+
+document.querySelectorAll(".era").forEach(button=>{
+ button.addEventListener("click",()=>{
+  const year=Number(button.dataset.year);
+  document.getElementById("timeMenu").style.display="none";
+  document.getElementById("loading").style.display="flex";
+  document.getElementById("bar").style.width="0";
+  setTimeout(()=>document.getElementById("bar").style.width="100%",50);
+  setTimeout(()=>{
+   travel(year);
+   document.getElementById("loading").style.display="none";
+   if(!locked&&active)renderer.domElement.requestPointerLock();
+  },900);
+ });
+});
+
+document.getElementById("closeMenu").onclick=()=>{
+ document.getElementById("timeMenu").style.display="none";
+ if(active&&!locked)renderer.domElement.requestPointerLock();
+};
+
+function interact(){
+ const dist=camera.position.distanceTo(machine.position);
+ if(dist<10){
+  document.exitPointerLock();
+  document.getElementById("timeMenu").style.display="flex";
+ }
+}
+
+function updatePlayer(dt){
+ if(!active||!locked)return;
+ const direction=new THREE.Vector3();
+ const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
+ const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+
+ if(keys.KeyW)direction.add(forward);
+ if(keys.KeyS)direction.sub(forward);
+ if(keys.KeyD)direction.add(right);
+ if(keys.KeyA)direction.sub(right);
+
+ if(direction.lengthSq()>0){
+  direction.normalize();
+  const speed=keys.ShiftLeft?15:player.speed;
+  const dx=direction.x*speed*dt;
+  const dz=direction.z*speed*dt;
+  if(!collision(camera.position.x+dx,camera.position.z))
+   camera.position.x+=dx;
+  if(!collision(camera.position.x,camera.position.z+dz))
+   camera.position.z+=dz;
+ }
+ camera.position.y=1.7;
+}
+
+function updateUI(){
+ const dist=camera.position.distanceTo(machine.position);
+ document.getElementById("prompt").style.display=
+ dist<10?"block":"none";
+ const cx=Math.floor(camera.position.x/55);
+ const cz=Math.floor(camera.position.z/55);
+ document.getElementById("location").textContent=
+ Math.abs(cx)<1&&Math.abs(cz)<1?"CENTRO": "DOWNTOWN";
+ const mins=new Date();
+ document.getElementById("clock").textContent=
+ String(mins.getHours()).padStart(2,"0")+":"+
+ String(mins.getMinutes()).padStart(2,"0");
+ const ctx=document.getElementById("mini").getContext("2d");
+ ctx.clearRect(0,0,150,150);
+ ctx.fillStyle="#18232b";
+ ctx.fillRect(0,0,150,150);
+ ctx.strokeStyle="#71808b";
+ ctx.lineWidth=9;
+ for(let i=0;i<5;i++){
+  const p=20+i*28;
+  ctx.beginPath();ctx.moveTo(p,0);ctx.lineTo(p,150);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,p);ctx.lineTo(150,p);ctx.stroke();
+ }
+ ctx.fillStyle="#49d6c4";
+ ctx.beginPath();
+ ctx.arc(75+(camera.position.x%55),75+(camera.position.z%55),5,0,Math.PI*2);
+ ctx.fill();
+}
+
+document.getElementById("play").onclick=()=>{
+ document.getElementById("start").style.display="none";
+ document.getElementById("hud").style.display="block";
+ active=true;
+ renderer.domElement.requestPointerLock();
+};
+
+function animate(){
+ requestAnimationFrame(animate);
+ const dt=Math.min(clock.getDelta(),.04);
+ updatePlayer(dt);
+ updateUI();
+ ring.rotation.y+=dt*.35;
+ ring2.rotation.y-=dt*.5;
+ core.rotation.y+=dt*.6;
+ core.rotation.x+=dt*.3;
+ renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener("resize",()=>{
+ camera.aspect=innerWidth/innerHeight;
+ camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight);
 });
 </script>
 </body>
