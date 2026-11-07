@@ -3,593 +3,506 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TIME MACHINE | Open World</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOPS VIRAL</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;overflow:hidden;background:#080b11;color:white;font-family:Arial,sans-serif}
-canvas{display:block}
-#hud{position:fixed;inset:0;pointer-events:none;z-index:2}
-#top{
- position:absolute;top:20px;left:25px;
- background:#101722bb;padding:14px 20px;
- border-left:3px solid #49d6c4;
+body{
+  margin:0;background:#101116;color:white;
+  font-family:Arial,sans-serif;
 }
-.logo{font-weight:900;letter-spacing:4px;font-size:20px}
-.logo span{color:#49d6c4}
-#year{font-size:12px;color:#49d6c4;margin-top:7px}
-#stats{position:absolute;top:20px;right:25px;text-align:right;
- background:#101722bb;padding:13px 18px;font-size:12px;line-height:2}
-#objective{
- position:absolute;bottom:35px;left:30px;
- background:#101722cc;padding:16px 20px;
- border-left:3px solid #49d6c4;
+header{
+  text-align:center;padding:25px 10px;
+  background:#191a23;border-bottom:2px solid #343541;
 }
-#objective small{color:#49d6c4;letter-spacing:2px}
-#objective div{font-size:14px;margin-top:8px}
-#crosshair{
- position:absolute;left:50%;top:50%;
- transform:translate(-50%,-50%);
- color:white;font-size:22px;text-shadow:0 0 5px black;
+header h1{font-size:38px;margin:0;color:#ff4242}
+header p{color:#aaa}
+main{max-width:1200px;margin:auto;padding:20px}
+input,select,button{
+  padding:11px;border-radius:8px;border:1px solid #444;
+  background:#252631;color:white;font-size:14px;
 }
-#prompt{
- position:absolute;left:50%;top:58%;
- transform:translateX(-50%);
- background:#101722dd;padding:12px 20px;
- font-size:13px;display:none;border:1px solid #49d6c4;
+button{cursor:pointer}
+button:hover{filter:brightness(1.25)}
+.controls{
+  display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;
 }
-#mini{
- position:absolute;right:25px;bottom:25px;
- width:150px;height:150px;
- background:#0a1018dd;border:2px solid #49d6c4;
- border-radius:50%;
+#title{
+  width:100%;font-size:25px;font-weight:bold;
+  text-align:center;background:#20212b;
 }
-#start{
- position:fixed;inset:0;z-index:10;
- background:linear-gradient(90deg,#080b11ee,#080b1177),
- url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=1800') center/cover;
- display:flex;align-items:center;padding:9%;
+.tiers{display:flex;flex-direction:column;gap:8px;margin:20px 0}
+.tier{
+  display:flex;min-height:125px;background:#22232d;
+  border:2px solid #444;border-radius:10px;overflow:hidden;
 }
-.start-content{max-width:650px}
-.eyebrow{color:#49d6c4;letter-spacing:5px;font-size:12px;font-weight:bold}
-h1{font-size:clamp(55px,9vw,100px);line-height:.9;margin:25px 0}
-h1 span{color:#49d6c4}
-#start p{color:#aeb9c9;line-height:1.8;max-width:480px}
-button{
- background:#49d6c4;border:0;padding:16px 28px;
- color:#071311;font-weight:900;letter-spacing:1px;cursor:pointer;
+.tier-label{
+  width:125px;min-width:125px;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:8px;padding:8px;
+  font-weight:bold;color:#111;text-align:center;
 }
-button:hover{background:#83f4e6}
-#timeMenu{
- position:fixed;inset:0;z-index:20;
- display:none;align-items:center;justify-content:center;
- background:#03060bdc;padding:20px;
+.tier-label input{
+  width:90%;text-align:center;color:#111;
+  background:#ffffff99;border:none;font-weight:bold;
 }
-.menu-box{
- width:min(850px,100%);background:#101722;
- border:1px solid #334351;padding:35px;
+.tier-label input[type=color]{
+  width:45px;height:30px;padding:2px;
 }
-.menu-box h2{font-size:32px;margin:10px 0}
-.menu-box p{color:#9daabd;line-height:1.6}
-.eras{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:25px}
-.era{
- background:#1a2532;border:1px solid #354353;
- padding:20px 12px;text-align:left;color:white;
+.tier-tools{display:flex;gap:4px}
+.tier-tools button{padding:5px;color:white}
+.dropzone{
+  flex:1;display:flex;flex-wrap:wrap;align-content:flex-start;
+  gap:5px;padding:7px;min-height:120px;
 }
-.era strong{display:block;font-size:22px;color:#49d6c4;margin-bottom:8px}
-.era span{font-size:12px;color:#9daabd}
-#closeMenu{margin-top:20px;background:#273544;color:white}
-#loading{
- position:fixed;inset:0;z-index:30;background:#080b11;
- display:none;align-items:center;justify-content:center;
- flex-direction:column;gap:15px;
+.photo{
+  width:90px;height:100px;position:relative;
+  cursor:grab;background:#333;border-radius:5px;
+  overflow:hidden;
 }
-.bar{width:220px;height:4px;background:#263442}
-.bar span{display:block;width:0;height:100%;background:#49d6c4;transition:width .5s}
-#controls{
- position:absolute;bottom:30px;right:200px;
- color:#abb7c8;font-size:11px;line-height:1.9;text-align:right;
+.photo img{width:100%;height:100%;object-fit:cover}
+.photo button{
+  position:absolute;right:2px;top:2px;
+  padding:2px 6px;background:#a00;
 }
-@media(max-width:650px){
- #stats{top:90px;right:12px;font-size:10px}
- #top{left:12px;top:12px}
- #mini{width:100px;height:100px;right:12px;bottom:12px}
- #controls{display:none}
- #objective{left:12px;bottom:125px}
- .eras{grid-template-columns:1fr 1fr}
- .menu-box{padding:20px}
- #start{padding:7%}
+.photo.dragging{opacity:.35}
+.section{
+  background:#1b1c25;border-radius:12px;
+  padding:17px;margin-top:20px;
+}
+.section h2{margin-top:0}
+#gallery{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));
+  gap:10px;margin-top:15px;
+}
+.gallery-item{
+  cursor:grab;background:#292a35;border-radius:8px;
+  overflow:hidden;text-align:center;
+}
+.gallery-item img{
+  width:100%;height:110px;object-fit:cover;
+}
+.gallery-item p{font-size:12px;padding:4px}
+.gallery-item button{margin-bottom:7px}
+.small{font-size:12px;color:#aaa}
+@media(max-width:600px){
+ .tier-label{width:90px;min-width:90px}
+ .photo{width:65px;height:75px}
+ header h1{font-size:29px}
 }
 </style>
 </head>
 <body>
 
-<div id="start">
- <div class="start-content">
-  <div class="eyebrow">AN OPEN WORLD EXPERIENCE</div>
-  <h1>TIME<br><span>MACHINE</span></h1>
-  <p>
-   El tiempo no tiene límites. Explorá una ciudad en primera persona,
-   viajá a diferentes épocas y descubrí cómo cambia el mundo a través de los siglos.
-  </p>
-  <button id="play">INICIAR EXPERIENCIA →</button>
-  <p style="font-size:11px;color:#738295">3D EXPERIENCE · EXPLORACIÓN LIBRE · VIAJES TEMPORALES</p>
- </div>
+<header>
+  <h1>🔥 TOPS VIRAL 🔥</h1>
+  <p>¡Crea tus rankings, organiza tus tops y comparte tus opiniones!</p>
+</header>
+
+<main>
+
+<input id="title" value="MI TOP DEFINITIVO" placeholder="Escribe el título de tu top">
+
+<div class="controls">
+  <select id="category">
+    <option value="animals">🐯 Animales famosos</option>
+    <option value="dogs">🐶 Razas de perros</option>
+    <option value="cats">🐱 Razas de gatos</option>
+    <option value="dinosaurs">🦖 Dinosaurios</option>
+    <option value="sea">🦈 Animales marinos</option>
+    <option value="birds">🦅 Aves</option>
+    <option value="countries">🌎 Países</option>
+    <option value="football">⚽ Fútbol</option>
+    <option value="players">🏆 Futbolistas</option>
+    <option value="games">🎮 Videojuegos</option>
+    <option value="characters">🦸 Personajes famosos</option>
+    <option value="movies">🎬 Películas</option>
+    <option value="horror">👻 Terror</option>
+    <option value="monsters">👹 Monstruos</option>
+    <option value="food">🍕 Comidas</option>
+    <option value="cars">🏎️ Autos</option>
+    <option value="youtubers">📹 Youtubers</option>
+    <option value="history">📜 Personajes históricos</option>
+    <option value="assassins">🕵️ Asesinos famosos de la historia</option>
+    <option value="space">🚀 Espacio</option>
+    <option value="anime">🎌 Anime</option>
+  </select>
+  <button onclick="loadCategory()">🔎 Cargar 50 imágenes</button>
+  <button onclick="resetBoard()">🗑️ Limpiar ranking</button>
+  <button onclick="saveBoard()">💾 Guardar ranking</button>
 </div>
 
-<div id="hud" style="display:none">
- <div id="top">
-  <div class="logo">TIME<span>MACHINE</span></div>
-  <div id="year">AÑO 2026 · PRESENTE</div>
- </div>
- <div id="stats">
-  <div>LOCALIZACIÓN: <span id="location">DOWNTOWN</span></div>
-  <div>HORA: <span id="clock">12:00</span></div>
-  <div>ESTADO: EXPLORANDO</div>
- </div>
- <div id="crosshair">+</div>
- <div id="prompt">PRESIONÁ E PARA INTERACTUAR</div>
- <div id="objective">
-  <small>OBJETIVO ACTUAL</small>
-  <div id="objectiveText">Explorá la ciudad y encontrá la máquina del tiempo.</div>
- </div>
- <div id="controls">
-  WASD — MOVERSE<br>
-  MOUSE — MIRAR<br>
-  SHIFT — CORRER<br>
-  E — INTERACTUAR<br>
-  ESC — LIBERAR MOUSE
- </div>
- <canvas id="mini" width="150" height="150"></canvas>
+<div class="controls">
+  <button onclick="addTier()">➕ Agregar nivel</button>
+  <button onclick="exportBoard()">📸 Descargar ranking</button>
+  <button onclick="freeMode()">⭐ OPCIÓN LIBRE</button>
 </div>
 
-<div id="timeMenu">
- <div class="menu-box">
-  <div class="eyebrow">CENTRO TEMPORAL</div>
-  <h2>Seleccioná una época</h2>
-  <p>Cada viaje modifica la atmósfera, los edificios y la apariencia de la ciudad.</p>
-  <div class="eras">
-   <button class="era" data-year="1880">
-    <strong>1880</strong><span>La ciudad antigua</span>
-   </button>
-   <button class="era" data-year="1920">
-    <strong>1920</strong><span>Era industrial</span>
-   </button>
-   <button class="era" data-year="1980">
-    <strong>1980</strong><span>Ciudad retro</span>
-   </button>
-   <button class="era" data-year="2026">
-    <strong>2026</strong><span>Presente moderno</span>
-   </button>
-   <button class="era" data-year="2120">
-    <strong>2120</strong><span>Futuro tecnológico</span>
-   </button>
+<div class="tiers" id="tiers"></div>
+
+<div class="section">
+  <h2>🖼️ Galería de imágenes</h2>
+  <p class="small">Selecciona una temática. Puedes arrastrar las imágenes a cualquier nivel del ranking. Se buscan hasta 50 imágenes disponibles.</p>
+  <div class="controls">
+    <input id="search" placeholder="Buscar otras imágenes...">
+    <button onclick="searchImages()">Buscar</button>
+    <label>
+      <input type="file" id="upload" accept="image/*" multiple hidden>
+      <button onclick="document.getElementById('upload').click()">📁 Subir mis fotos</button>
+    </label>
   </div>
-  <button id="closeMenu">VOLVER A LA CIUDAD</button>
- </div>
+  <div id="status" class="small"></div>
+  <div id="gallery"></div>
 </div>
 
-<div id="loading">
- <div class="eyebrow">TRANSPORTANDO AL JUGADOR</div>
- <h2 id="loadText">CAMBIANDO DE ÉPOCA...</h2>
- <div class="bar"><span id="bar"></span></div>
-</div>
+</main>
 
-<script type="importmap">
-{
- "imports":{
-  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
- }
-}
-</script>
-
-<script type="module">
-import * as THREE from 'three';
-
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x899eae);
-scene.fog=new THREE.FogExp2(0x899eae,0.006);
-
-const camera=new THREE.PerspectiveCamera(
- 75,innerWidth/innerHeight,0.1,600
-);
-camera.position.set(0,1.7,12);
-
-const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
-renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.2;
-document.body.appendChild(renderer.domElement);
-
-const ambient=new THREE.HemisphereLight(0xc4ddff,0x37302b,2);
-scene.add(ambient);
-
-const sun=new THREE.DirectionalLight(0xffe4c0,3);
-sun.position.set(-40,70,30);
-sun.castShadow=true;
-sun.shadow.mapSize.set(1024,1024);
-sun.shadow.camera.left=-100;
-sun.shadow.camera.right=100;
-sun.shadow.camera.top=100;
-sun.shadow.camera.bottom=-100;
-scene.add(sun);
-
-const world=new THREE.Group();
-scene.add(world);
-
-const buildings=[];
-const props=[];
-const colliders=[];
-const clock=new THREE.Clock();
-
-function material(color,roughness=0.85){
- return new THREE.MeshStandardMaterial({color,roughness});
-}
-
-function cube(parent,x,y,z,w,h,d,mat,shadow=true){
- const mesh=new THREE.Mesh(
-  new THREE.BoxGeometry(w,h,d),mat
- );
- mesh.position.set(x,y+h/2,z);
- mesh.castShadow=shadow;
- mesh.receiveShadow=true;
- parent.add(mesh);
- return mesh;
-}
-
-// SUELO Y CALLES
-const ground=cube(world,0,-.5,0,300,1,300,material(0x343a3d));
-ground.receiveShadow=true;
-
-function road(x,z,w,d){
- cube(world,x,.01,z,w,.05,d,material(0x252a2d),false);
- if(w>d){
-  for(let i=-Math.floor(w/12);i<Math.floor(w/12);i++){
-   cube(world,x+i*12,.045,z,w>10?3:1,.02,.18,material(0xc5bda3),false);
-  }
- }else{
-  for(let i=-Math.floor(d/12);i<Math.floor(d/12);i++){
-   cube(world,x,.045,z+i*12,.18,.02,3,material(0xc5bda3),false);
-  }
- }
-}
-for(let i=-2;i<=2;i++){
- road(i*55,0,13,280);
- road(0,i*55,280,13);
-}
-
-// EDIFICIOS
-const palettes={
- 1880:[0x77716a,0x8d806e,0x655c55,0xa18b72],
- 1920:[0x665d52,0x807365,0x625e58,0x8d8074],
- 1980:[0x646e75,0x7b7770,0x545b61,0x8e8170],
- 2026:[0x667987,0x89959d,0x485b69,0xa0a6a4],
- 2120:[0x344c61,0x456d82,0x33485c,0x718a9c]
+<script>
+const categories={
+ animals:"famous animals",
+ dogs:"dog breeds",
+ cats:"cat breeds",
+ dinosaurs:"dinosaurs",
+ sea:"marine animals",
+ birds:"famous birds",
+ countries:"world countries landmarks",
+ football:"football",
+ players:"famous football players",
+ games:"popular video games",
+ characters:"famous fictional characters",
+ movies:"famous movies",
+ horror:"horror movie monsters",
+ monsters:"mythological monsters",
+ food:"popular food",
+ cars:"famous cars",
+ youtubers:"famous YouTubers",
+ history:"famous historical figures",
+ assassins:"historical assassins portraits",
+ space:"planets and space",
+ anime:"famous anime characters"
 };
 
-function createCity(){
- for(let x=-3;x<=3;x++){
-  for(let z=-3;z<=3;z++){
-   if(x===0||z===0)continue;
-   const px=x*55+ (Math.random()-.5)*9;
-   const pz=z*55+ (Math.random()-.5)*9;
-   const w=19+Math.random()*10;
-   const d=19+Math.random()*10;
-   const h=10+Math.random()*38;
-   const mat=material(0x74818b);
-   const b=cube(world,px,h/2,pz,w,h,d,mat);
-   b.userData={height:h};
-   buildings.push(b);
-   colliders.push({x:px,z:pz,w,d});
-   // ventanas
-   const windows=new THREE.Group();
-   const windowMat=new THREE.MeshStandardMaterial({
-    color:0x9ccbd7,emissive:0x263c49,roughness:.3
-   });
-   for(let yy=3;yy<h-2;yy+=4){
-    for(let xx=-w/2+2;xx<w/2-1;xx+=4){
-     for(const side of [-1,1]){
-      const win=new THREE.Mesh(new THREE.BoxGeometry(1.3,1.7,.08),windowMat);
-      win.position.set(px+xx,yy,pz+side*(d/2+.05));
-      windows.add(win);
-     }
-    }
+let levels=[
+ {name:"1",color:"#ed3030",items:[]},
+ {name:"2",color:"#f39a32",items:[]},
+ {name:"3",color:"#91d96b",items:[]},
+ {name:"4",color:"#167d36",items:[]}
+];
+
+let currentImages=[];
+let dragData=null;
+let free=true;
+
+function render(){
+ const container=document.getElementById("tiers");
+ container.innerHTML="";
+
+ levels.forEach((level,index)=>{
+  const row=document.createElement("div");
+  row.className="tier";
+
+  const label=document.createElement("div");
+  label.className="tier-label";
+  label.style.background=level.color;
+
+  const name=document.createElement("input");
+  name.value=level.name;
+  name.title="Nombre del nivel";
+  name.onchange=()=>level.name=name.value;
+
+  const color=document.createElement("input");
+  color.type="color";
+  color.value=level.color;
+  color.title="Cambiar color";
+  color.oninput=()=>{
+   level.color=color.value;
+   label.style.background=color.value;
+  };
+
+  const tools=document.createElement("div");
+  tools.className="tier-tools";
+
+  const up=document.createElement("button");
+  up.textContent="↑";
+  up.title="Subir nivel";
+  up.onclick=()=>moveLevel(index,-1);
+
+  const down=document.createElement("button");
+  down.textContent="↓";
+  down.title="Bajar nivel";
+  down.onclick=()=>moveLevel(index,1);
+
+  const remove=document.createElement("button");
+  remove.textContent="×";
+  remove.title="Eliminar nivel";
+  remove.onclick=()=>{
+   if(confirm("¿Eliminar este nivel y sus imágenes?")){
+    levels.splice(index,1);render();
    }
-   world.add(windows);
-   b.userData.windows=windows;
-  }
- }
-}
-createCity();
+  };
 
-// ÁRBOLES
-function tree(x,z){
- const trunk=cube(world,x,0.1,z,.65,3,.65,material(0x51402f));
- const top=new THREE.Mesh(
-  new THREE.SphereGeometry(2.3,8,7),
-  material(0x345b42)
- );
- top.position.set(x,4,z);
- top.castShadow=true;
- world.add(top);
- props.push({top});
-}
-for(let i=0;i<35;i++){
- let x=(Math.random()-.5)*200;
- let z=(Math.random()-.5)*200;
- if(Math.abs(x%55)<12||Math.abs(z%55)<12)continue;
- tree(x,z);
-}
+  tools.append(up,down,remove);
+  label.append(name,color,tools);
 
-// LUMINARIAS
-function lamp(x,z){
- const group=new THREE.Group();
- const pole=new THREE.Mesh(
-  new THREE.CylinderGeometry(.12,.16,5,8),
-  material(0x414950)
- );
- pole.position.y=2.5;
- group.add(pole);
- const light=new THREE.PointLight(0xffd59c,1.2,13);
- light.position.y=5;
- group.add(light);
- const bulb=new THREE.Mesh(
-  new THREE.SphereGeometry(.23,8,8),
-  new THREE.MeshBasicMaterial({color:0xffe0a0})
- );
- bulb.position.y=5;
- group.add(bulb);
- group.position.set(x,0,z);
- world.add(group);
-}
-for(let i=-4;i<=4;i++){
- lamp(i*22+10,10);
- lamp(i*22-10,-10);
-}
+  const zone=document.createElement("div");
+  zone.className="dropzone";
+  zone.dataset.level=index;
 
-// MÁQUINA DEL TIEMPO
-const machine=new THREE.Group();
-machine.position.set(0,0,-17);
-world.add(machine);
+  zone.ondragover=e=>e.preventDefault();
+  zone.ondrop=e=>{
+   e.preventDefault();
+   if(dragData){
+    const photo=dragData.photo;
+    if(dragData.source!==null){
+     levels[dragData.source].items.splice(dragData.position,1);
+    }
+    levels[index].items.push(photo);
+    dragData=null;
+    render();
+   }
+  };
 
-const base=new THREE.Mesh(
- new THREE.CylinderGeometry(5,5.8,.8,32),
- material(0x243b48)
-);
-base.position.y=.4;
-machine.add(base);
+  level.items.forEach((photo,position)=>{
+   zone.appendChild(createPhoto(photo,index,position));
+  });
 
-const ring=new THREE.Mesh(
- new THREE.TorusGeometry(3.5,.3,16,80),
- new THREE.MeshStandardMaterial({
-  color:0x49d6c4,emissive:0x087c75,emissiveIntensity:3
- })
-);
-ring.position.y=4;
-machine.add(ring);
-
-const ring2=ring.clone();
-ring2.scale.set(.75,.75,.75);
-machine.add(ring2);
-
-const core=new THREE.Mesh(
- new THREE.IcosahedronGeometry(1.4,2),
- new THREE.MeshStandardMaterial({
-  color:0x5affed,emissive:0x087f83,emissiveIntensity:3,
-  metalness:.6,roughness:.2
- })
-);
-core.position.y=4;
-machine.add(core);
-
-const machineLight=new THREE.PointLight(0x49d6c4,30,35);
-machineLight.position.y=4;
-machine.add(machineLight);
-
-// CÁMARA
-let yaw=0,pitch=0;
-let locked=false;
-const keys={};
-let active=false;
-let selectedYear=2026;
-
-const player={
- speed:8,
- radius:.7
-};
-
-document.addEventListener('keydown',e=>{
- keys[e.code]=true;
- if(e.code==="KeyE"&&active)interact();
-});
-document.addEventListener('keyup',e=>keys[e.code]=false);
-
-renderer.domElement.addEventListener('click',()=>{
- if(active&&!document.pointerLockElement){
-  renderer.domElement.requestPointerLock();
- }
-});
-
-document.addEventListener('pointerlockchange',()=>{
- locked=document.pointerLockElement===renderer.domElement;
-});
-
-document.addEventListener('mousemove',e=>{
- if(!locked)return;
- yaw-=e.movementX*.002;
- pitch-=e.movementY*.002;
- pitch=Math.max(-1.35,Math.min(1.35,pitch));
- camera.rotation.set(pitch,yaw,0,'YXZ');
-});
-
-function collision(x,z){
- for(const c of colliders){
-  if(Math.abs(x-c.x)<c.w/2+player.radius &&
-     Math.abs(z-c.z)<c.d/2+player.radius)return true;
- }
- return false;
-}
-
-// EPOCAS
-const eraData={
- 1880:{sky:0xb2a08c,fog:0xb2a08c,density:.009,exposure:.85},
- 1920:{sky:0x9c9386,fog:0x9c9386,density:.008,exposure:.9},
- 1980:{sky:0x9bb1bc,fog:0x9bb1bc,density:.006,exposure:1},
- 2026:{sky:0x899eae,fog:0x899eae,density:.006,exposure:1.2},
- 2120:{sky:0x263b59,fog:0x263b59,density:.007,exposure:1.35}
-};
-
-function travel(year){
- selectedYear=year;
- const data=eraData[year];
- scene.background.setHex(data.sky);
- scene.fog.color.setHex(data.fog);
- scene.fog.density=data.density;
- renderer.toneMappingExposure=data.exposure;
-
- buildings.forEach(b=>{
-  const colors=palettes[year];
-  b.material.color.setHex(colors[Math.floor(Math.random()*colors.length)]);
-  if(year===1880||year===1920){
-   b.scale.y=year===1880?0.75:0.9;
-  }else if(year===2120){
-   b.scale.y=1.25;
-  }else{
-   b.scale.y=1;
-  }
-  b.userData.windows.visible=year>=1920;
+  row.append(label,zone);
+  container.appendChild(row);
  });
-
- if(year===1880){
-  document.getElementById("year").textContent="AÑO 1880 · CIUDAD ANTIGUA";
-  sun.color.setHex(0xffd2a0);
- }else if(year===1920){
-  document.getElementById("year").textContent="AÑO 1920 · ERA INDUSTRIAL";
-  sun.color.setHex(0xffc18c);
- }else if(year===1980){
-  document.getElementById("year").textContent="AÑO 1980 · ERA RETRO";
-  sun.color.setHex(0xffe2b1);
- }else if(year===2026){
-  document.getElementById("year").textContent="AÑO 2026 · PRESENTE";
-  sun.color.setHex(0xffe4c0);
- }else{
-  document.getElementById("year").textContent="AÑO 2120 · FUTURO";
-  sun.color.setHex(0x78aaff);
- }
- document.getElementById("timeMenu").style.display="none";
- document.getElementById("objectiveText").textContent=
- "Estás explorando el año "+year+". Descubrí cómo cambió la ciudad.";
 }
 
-document.querySelectorAll(".era").forEach(button=>{
- button.addEventListener("click",()=>{
-  const year=Number(button.dataset.year);
-  document.getElementById("timeMenu").style.display="none";
-  document.getElementById("loading").style.display="flex";
-  document.getElementById("bar").style.width="0";
-  setTimeout(()=>document.getElementById("bar").style.width="100%",50);
-  setTimeout(()=>{
-   travel(year);
-   document.getElementById("loading").style.display="none";
-   if(!locked&&active)renderer.domElement.requestPointerLock();
-  },900);
+function createPhoto(photo,level,position){
+ const div=document.createElement("div");
+ div.className="photo";
+ div.draggable=true;
+
+ const img=document.createElement("img");
+ img.src=photo.url;
+ img.alt=photo.name;
+ img.onerror=()=>div.remove();
+
+ const del=document.createElement("button");
+ del.textContent="×";
+ del.onclick=()=>{
+  levels[level].items.splice(position,1);
+  render();
+ };
+
+ div.ondragstart=()=>{
+  dragData={photo,source:level,position};
+  div.classList.add("dragging");
+ };
+ div.ondragend=()=>div.classList.remove("dragging");
+
+ div.append(img,del);
+ return div;
+}
+
+function moveLevel(index,direction){
+ const target=index+direction;
+ if(target<0||target>=levels.length)return;
+ [levels[index],levels[target]]=[levels[target],levels[index]];
+ render();
+}
+
+function addTier(){
+ levels.push({
+  name:"NUEVO",
+  color:"#777777",
+  items:[]
  });
+ render();
+}
+
+function resetBoard(){
+ if(!confirm("¿Seguro que quieres borrar todas las imágenes del ranking?"))return;
+ levels.forEach(l=>l.items=[]);
+ render();
+}
+
+function freeMode(){
+ free=true;
+ document.getElementById("search").value="";
+ document.getElementById("status").textContent=
+ "⭐ Modo libre: sube tus propias imágenes o busca las que quieras.";
+ document.getElementById("gallery").innerHTML="";
+}
+
+async function loadCategory(){
+ const category=document.getElementById("category").value;
+ const query=categories[category];
+ await fetchImages(query);
+}
+
+async function searchImages(){
+ const query=document.getElementById("search").value.trim();
+ if(!query)return;
+ await fetchImages(query);
+}
+
+async function fetchImages(query){
+ const gallery=document.getElementById("gallery");
+ const status=document.getElementById("status");
+
+ gallery.innerHTML="";
+ status.textContent="Buscando imágenes...";
+
+ try{
+  const url="https://commons.wikimedia.org/w/api.php"+
+   "?action=query&generator=search"+
+   "&gsrsearch="+encodeURIComponent(query)+
+   "&gsrnamespace=6&gsrlimit=50"+
+   "&prop=imageinfo&iiprop=url&iiurlwidth=240"+
+   "&format=json&origin=*";
+
+  const response=await fetch(url);
+  const data=await response.json();
+  const pages=Object.values(data.query?.pages||{});
+
+  currentImages=pages
+   .filter(p=>p.imageinfo?.[0]?.thumburl)
+   .map(p=>({
+    name:p.title.replace("File:",""),
+    url:p.imageinfo[0].thumburl,
+    original:p.imageinfo[0].descriptionurl
+   }));
+
+  currentImages.forEach(photo=>{
+   const card=document.createElement("div");
+   card.className="gallery-item";
+   card.draggable=true;
+
+   const img=document.createElement("img");
+   img.src=photo.url;
+   img.alt=photo.name;
+
+   const name=document.createElement("p");
+   name.textContent=photo.name.slice(0,55);
+
+   const button=document.createElement("button");
+   button.textContent="➕ Agregar";
+   button.onclick=()=>addPhoto(photo);
+
+   card.ondragstart=()=>{
+    dragData={photo,source:null,position:null};
+   };
+
+   card.append(img,name,button);
+   gallery.appendChild(card);
+  });
+
+  status.textContent=currentImages.length+
+   " imágenes encontradas. Arrástralas a tus niveles.";
+
+  if(!currentImages.length){
+   status.textContent="No se encontraron imágenes. Prueba otra búsqueda.";
+  }
+ }catch(error){
+  status.textContent="No se pudieron cargar las imágenes. Comprueba tu conexión.";
+ }
+}
+
+function addPhoto(photo){
+ levels[0].items.push(photo);
+ render();
+}
+
+document.getElementById("upload").addEventListener("change",e=>{
+ const files=Array.from(e.target.files);
+
+ files.forEach(file=>{
+  const reader=new FileReader();
+  reader.onload=event=>{
+   const photo={
+    name:file.name,
+    url:event.target.result
+   };
+   addPhoto(photo);
+  };
+  reader.readAsDataURL(file);
+ });
+ e.target.value="";
 });
 
-document.getElementById("closeMenu").onclick=()=>{
- document.getElementById("timeMenu").style.display="none";
- if(active&&!locked)renderer.domElement.requestPointerLock();
-};
+function saveBoard(){
+ const board={
+  title:document.getElementById("title").value,
+  levels
+ };
+ localStorage.setItem("topsViral",JSON.stringify(board));
+ alert("¡Ranking guardado!");
+}
 
-function interact(){
- const dist=camera.position.distanceTo(machine.position);
- if(dist<10){
-  document.exitPointerLock();
-  document.getElementById("timeMenu").style.display="flex";
+function restoreBoard(){
+ const saved=localStorage.getItem("topsViral");
+ if(!saved)return;
+ try{
+  const board=JSON.parse(saved);
+  document.getElementById("title").value=board.title;
+  levels=board.levels;
+ }catch(e){}
+}
+
+function exportBoard(){
+ const title=document.getElementById("title").value;
+ const canvas=document.createElement("canvas");
+ const width=1200;
+ const rowHeight=180;
+ canvas.width=width;
+ canvas.height=130+levels.length*rowHeight;
+
+ const ctx=canvas.getContext("2d");
+ ctx.fillStyle="#101116";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ ctx.fillStyle="white";
+ ctx.font="bold 38px Arial";
+ ctx.textAlign="center";
+ ctx.fillText(title,600,65);
+
+ let pending=0;
+ const draw=()=>{
+  levels.forEach((level,i)=>{
+   const y=105+i*rowHeight;
+   ctx.fillStyle=level.color;
+   ctx.fillRect(0,y,130,rowHeight-5);
+   ctx.fillStyle="white";
+   ctx.font="bold 24px Arial";
+   ctx.fillText(level.name,65,y+90);
+
+   level.items.forEach((photo,j)=>{
+    const img=new Image();
+    img.crossOrigin="anonymous";
+    img.onload=()=>{
+     const x=140+(j%10)*105;
+     const py=y+5+Math.floor(j/10)*55;
+     ctx.drawImage(img,x,py,100,50);
+     pending--;
+     if(pending===0)download();
+    };
+    img.onerror=()=>{
+     pending--;
+     if(pending===0)download();
+    };
+    pending++;
+    img.src=photo.url;
+   });
+  });
+  if(pending===0)download();
+ };
+
+ function download(){
+  const link=document.createElement("a");
+  link.download="mi-top-viral.png";
+  link.href=canvas.toDataURL("image/png");
+  link.click();
  }
+
+ draw();
 }
 
-function updatePlayer(dt){
- if(!active||!locked)return;
- const direction=new THREE.Vector3();
- const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
- const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
-
- if(keys.KeyW)direction.add(forward);
- if(keys.KeyS)direction.sub(forward);
- if(keys.KeyD)direction.add(right);
- if(keys.KeyA)direction.sub(right);
-
- if(direction.lengthSq()>0){
-  direction.normalize();
-  const speed=keys.ShiftLeft?15:player.speed;
-  const dx=direction.x*speed*dt;
-  const dz=direction.z*speed*dt;
-  if(!collision(camera.position.x+dx,camera.position.z))
-   camera.position.x+=dx;
-  if(!collision(camera.position.x,camera.position.z+dz))
-   camera.position.z+=dz;
- }
- camera.position.y=1.7;
-}
-
-function updateUI(){
- const dist=camera.position.distanceTo(machine.position);
- document.getElementById("prompt").style.display=
- dist<10?"block":"none";
- const cx=Math.floor(camera.position.x/55);
- const cz=Math.floor(camera.position.z/55);
- document.getElementById("location").textContent=
- Math.abs(cx)<1&&Math.abs(cz)<1?"CENTRO": "DOWNTOWN";
- const mins=new Date();
- document.getElementById("clock").textContent=
- String(mins.getHours()).padStart(2,"0")+":"+
- String(mins.getMinutes()).padStart(2,"0");
- const ctx=document.getElementById("mini").getContext("2d");
- ctx.clearRect(0,0,150,150);
- ctx.fillStyle="#18232b";
- ctx.fillRect(0,0,150,150);
- ctx.strokeStyle="#71808b";
- ctx.lineWidth=9;
- for(let i=0;i<5;i++){
-  const p=20+i*28;
-  ctx.beginPath();ctx.moveTo(p,0);ctx.lineTo(p,150);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(0,p);ctx.lineTo(150,p);ctx.stroke();
- }
- ctx.fillStyle="#49d6c4";
- ctx.beginPath();
- ctx.arc(75+(camera.position.x%55),75+(camera.position.z%55),5,0,Math.PI*2);
- ctx.fill();
-}
-
-document.getElementById("play").onclick=()=>{
- document.getElementById("start").style.display="none";
- document.getElementById("hud").style.display="block";
- active=true;
- renderer.domElement.requestPointerLock();
-};
-
-function animate(){
- requestAnimationFrame(animate);
- const dt=Math.min(clock.getDelta(),.04);
- updatePlayer(dt);
- updateUI();
- ring.rotation.y+=dt*.35;
- ring2.rotation.y-=dt*.5;
- core.rotation.y+=dt*.6;
- core.rotation.x+=dt*.3;
- renderer.render(scene,camera);
-}
-animate();
-
-window.addEventListener("resize",()=>{
- camera.aspect=innerWidth/innerHeight;
- camera.updateProjectionMatrix();
- renderer.setSize(innerWidth,innerHeight);
-});
+restoreBoard();
+render();
 </script>
 </body>
 </html>
