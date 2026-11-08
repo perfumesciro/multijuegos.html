@@ -3,215 +3,195 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dino Run Plus</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BLACK TERMINAL // Hacker Simulator</title>
 <style>
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: #f7f7f7;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+*{box-sizing:border-box}
+body{
+ margin:0;background:#020604;color:#00ff66;
+ font-family:Consolas,monospace;overflow-x:hidden;
 }
-.game {
-  width: min(900px, 95vw);
-  text-align: center;
+canvas{position:fixed;inset:0;z-index:-1;opacity:.22}
+header{
+ padding:20px;text-align:center;
+ border-bottom:1px solid #00ff6655;
+ background:#001307cc;
 }
-h1 { color: #333; }
-canvas {
-  width: 100%;
-  background: white;
-  border-bottom: 3px solid #535353;
-  display: block;
+h1{letter-spacing:5px;text-shadow:0 0 15px #00ff66}
+main{max-width:950px;margin:35px auto;padding:15px}
+.panel{
+ background:#020c07ed;border:1px solid #00ff6680;
+ padding:20px;border-radius:8px;
+ box-shadow:0 0 25px #00ff6620;margin-bottom:20px;
 }
-.info {
-  display: flex;
-  justify-content: space-between;
-  margin: 12px 0;
-  font-weight: bold;
+.status{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.green{color:#00ff66}
+.red{color:#ff3030}
+#terminal{
+ height:350px;overflow-y:auto;
+ font-size:14px;line-height:1.7;
+ white-space:pre-wrap;
 }
-button {
-  padding: 12px 24px;
-  border: 0;
-  background: #333;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
+.inputline{display:flex;gap:10px}
+input{
+ background:transparent;color:#00ff66;
+ border:0;border-bottom:1px solid #00ff66;
+ outline:none;font:inherit;width:100%;padding:10px;
 }
-button:hover { background: #555; }
+button{
+ background:#003b19;color:#00ff66;
+ border:1px solid #00ff66;padding:12px;
+ font-family:inherit;cursor:pointer;
+}
+button:hover{background:#00ff66;color:black}
+.buttons{display:flex;flex-wrap:wrap;gap:10px}
+.progress{height:8px;background:#183021;margin-top:10px}
+.bar{height:100%;width:0;background:#00ff66}
 </style>
 </head>
 <body>
-<div class="game">
-  <h1>🦖 DINO RUN PLUS</h1>
-  <div class="info">
-    <span id="score">Puntos: 0</span>
-    <span id="record">Récord: 0</span>
-  </div>
-  <canvas id="game" width="900" height="300"></canvas>
-  <p id="message">Presioná ESPACIO para comenzar</p>
-  <button onclick="restart()">REINICIAR</button>
-  <p>ESPACIO: Saltar | ↓: Agacharse</p>
+
+<canvas id="matrix"></canvas>
+
+<header>
+<h1>BLACK TERMINAL</h1>
+<div>ADVANCED HACKER SIMULATOR v3.0</div>
+</header>
+
+<main>
+<div class="panel status">
+ <span>● SISTEMA: <b class="green">ONLINE</b></span>
+ <span>USUARIO: GUEST_404</span>
+ <span id="clock"></span>
 </div>
 
+<div class="panel">
+ <div>TERMINAL DE COMANDOS</div>
+ <hr style="border-color:#00ff6644">
+ <div id="terminal">
+BLACK TERMINAL BOOT SYSTEM...
+Inicializando módulos...
+Conexión simulada establecida.
+Escribí HELP para ver los comandos.
+--------------------------------
+ </div>
+ <div class="inputline">
+ <span>root@black:~$</span>
+ <input id="command" autocomplete="off" autofocus
+ placeholder="Escribí un comando...">
+ </div>
+</div>
+
+<div class="panel">
+ <h3>HERRAMIENTAS SIMULADAS</h3>
+ <div class="buttons">
+ <button onclick="scan()">ESCANEAR RED</button>
+ <button onclick="decrypt()">DESCIFRAR</button>
+ <button onclick="alertMode()">MODO ALERTA</button>
+ <button onclick="secretFile()">ARCHIVO SECRETO</button>
+ </div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+ <p id="progressText">Esperando operación...</p>
+</div>
+</main>
+
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-let dino, obstacles, score, speed, running, gameOver;
-let frame = 0;
-let furyUntil = 0;
-let record = Number(localStorage.getItem("dinoRecord")) || 0;
-
-const scoreText = document.getElementById("score");
-const recordText = document.getElementById("record");
-const message = document.getElementById("message");
-
-recordText.textContent = "Récord: " + record;
-
-function restart() {
-  dino = { x: 65, y: 220, w: 40, h: 45, vy: 0, jumping: false, duck: false };
-  obstacles = [];
-  score = 0;
-  speed = 6;
-  frame = 0;
-  furyUntil = 0;
-  running = true;
-  gameOver = false;
-  message.textContent = "¡Corré, dinosaurio!";
-  loop();
+// MATRIX RAIN
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+let drops=[];
+function resize(){
+ canvas.width=innerWidth;
+ canvas.height=innerHeight;
+ drops=Array(Math.floor(canvas.width/16)).fill(1);
 }
+resize();
+window.addEventListener("resize",resize);
+setInterval(()=>{
+ ctx.fillStyle="rgba(0,0,0,.08)";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle="#00ff66";
+ ctx.font="15px monospace";
+ drops.forEach((y,i)=>{
+  const char=String.fromCharCode(0x30A0+Math.random()*96);
+  ctx.fillText(char,i*16,y*16);
+  if(y*16>canvas.height&&Math.random()>.975)drops[i]=0;
+  drops[i]++;
+ });
+},45);
 
-function jump() {
-  if (!running) {
-    if (gameOver) restart();
-    return;
-  }
-  if (!dino.jumping) {
-    dino.vy = -13;
-    dino.jumping = true;
-  }
+// TERMINAL
+const terminal=document.getElementById("terminal");
+const input=document.getElementById("command");
+function print(text){
+ terminal.textContent+="\n"+text;
+ terminal.scrollTop=terminal.scrollHeight;
 }
-
-document.addEventListener("keydown", e => {
-  if (e.code === "Space" || e.code === "ArrowUp") {
-    e.preventDefault();
-    jump();
-  }
-  if (e.code === "ArrowDown" && running) dino.duck = true;
+const commands={
+ help:()=>print("COMANDOS: HELP, ABOUT, CLEAR, DATE, WHOAMI, MATRIX, SCAN, DECRYPT, ALERT"),
+ about:()=>print("BLACK TERMINAL v3.0 - Simulador ficticio de ciberseguridad."),
+ whoami:()=>print("USUARIO: GUEST_404 | RANGO: NOVATO"),
+ date:()=>print(new Date().toLocaleString()),
+ matrix:()=>print("MATRIX VISUAL ACTIVADA."),
+ scan:()=>scan(),
+ decrypt:()=>decrypt(),
+ alert:()=>alertMode(),
+ clear:()=>terminal.textContent="Terminal limpiada."
+};
+input.addEventListener("keydown",e=>{
+ if(e.key==="Enter"){
+  const cmd=input.value.trim().toLowerCase();
+  print("root@black:~$ "+cmd);
+  if(commands[cmd])commands[cmd]();
+  else print("Comando desconocido. Escribí HELP.");
+  input.value="";
+ }
 });
 
-document.addEventListener("keyup", e => {
-  if (e.code === "ArrowDown" && dino) dino.duck = false;
-});
-
-canvas.addEventListener("click", jump);
-
-function spawnObstacle() {
-  obstacles.push({
-    x: 900,
-    w: 22 + Math.random() * 15,
-    h: 30 + Math.random() * 35
-  });
+function progress(name){
+ let value=0;
+ const bar=document.getElementById("bar");
+ document.getElementById("progressText").textContent=name;
+ const timer=setInterval(()=>{
+  value+=Math.random()*12+3;
+  if(value>=100){
+   value=100;clearInterval(timer);
+   document.getElementById("progressText").textContent=
+   name+" - COMPLETADO (SIMULACIÓN)";
+   print(">> "+name+" COMPLETADO.");
+  }
+  bar.style.width=value+"%";
+ },180);
 }
 
-function drawDino() {
-  const fury = Date.now() < furyUntil;
-  ctx.font = "42px Arial";
-  ctx.fillText(fury ? "🔥🦖" : "🦖", dino.x, dino.y + 40);
+function scan(){
+ progress("Analizando red ficticia");
 }
-
-function loop() {
-  if (!running) return;
-
-  ctx.clearRect(0, 0, 900, 300);
-
-  // Suelo
-  ctx.strokeStyle = "#555";
-  ctx.beginPath();
-  ctx.moveTo(0, 265);
-  ctx.lineTo(900, 265);
-  ctx.stroke();
-
-  // Dinosaurio
-  dino.vy += 0.65;
-  dino.y += dino.vy;
-
-  if (dino.y >= 220) {
-    dino.y = 220;
-    dino.vy = 0;
-    dino.jumping = false;
-  }
-
-  drawDino();
-
-  // Obstáculos
-  if (frame % Math.max(35, 90 - Math.floor(speed * 3)) === 0) {
-    spawnObstacle();
-  }
-
-  obstacles.forEach((o, i) => {
-    o.x -= speed;
-    ctx.fillStyle = "#397b39";
-    ctx.fillRect(o.x, 265 - o.h, o.w, o.h);
-
-    const fury = Date.now() < furyUntil;
-    const ducking = dino.duck && !dino.jumping;
-    const dinoHeight = ducking ? 25 : 40;
-    const dinoTop = dino.y + (ducking ? 15 : 0);
-
-    if (
-      dino.x + 30 > o.x &&
-      dino.x + 5 < o.x + o.w &&
-      dinoTop + dinoHeight > 265 - o.h
-    ) {
-      if (fury) {
-        obstacles.splice(i, 1);
-      } else {
-        endGame();
-      }
-    }
-
-    if (o.x + o.w < 0) obstacles.splice(i, 1);
-  });
-
-  // Puntuación
-  frame++;
-  score += 0.15;
-  speed += 0.001;
-
-  if (Math.floor(score) === 100) {
-    furyUntil = Date.now() + 5000;
-    message.textContent = "🔥 ¡MODO FURIA ACTIVADO!";
-  }
-
-  scoreText.textContent = "Puntos: " + Math.floor(score);
-  recordText.textContent = "Récord: " + record;
-
-  if (Date.now() > furyUntil && Math.floor(score) > 100) {
-    message.textContent = "¡Seguí corriendo!";
-  }
-
-  requestAnimationFrame(loop);
+function decrypt(){
+ progress("Descifrando archivo de prueba");
+ setTimeout(()=>{
+  print("CLAVE DE PRUEBA: MATRIX-404");
+ },2200);
 }
-
-function endGame() {
-  running = false;
-  gameOver = true;
-
-  if (Math.floor(score) > record) {
-    record = Math.floor(score);
-    localStorage.setItem("dinoRecord", record);
-  }
-
-  recordText.textContent = "Récord: " + record;
-  message.textContent = "💀 GAME OVER - Presioná ESPACIO para volver a jugar";
+function alertMode(){
+ document.body.style.background="#260000";
+ document.body.style.color="#ff3030";
+ print("!!! ALERTA VISUAL ACTIVADA !!!");
+ setTimeout(()=>{
+  document.body.style.background="#020604";
+  document.body.style.color="#00ff66";
+ },3000);
 }
-
-restart();
+function secretFile(){
+ print("=== ARCHIVO SECRETO ===");
+ print("PROYECTO: PHANTOM");
+ print("ESTADO: ARCHIVO FICTICIO");
+ print("MENSAJE: El verdadero hacker nunca deja de aprender.");
+}
+setInterval(()=>{
+ document.getElementById("clock").textContent=
+ new Date().toLocaleTimeString();
+},1000);
 </script>
 </body>
 </html>
