@@ -4,505 +4,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TOPS VIRAL</title>
+<title>Dino Run Plus</title>
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;background:#101116;color:white;
-  font-family:Arial,sans-serif;
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #f7f7f7;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
-header{
-  text-align:center;padding:25px 10px;
-  background:#191a23;border-bottom:2px solid #343541;
+.game {
+  width: min(900px, 95vw);
+  text-align: center;
 }
-header h1{font-size:38px;margin:0;color:#ff4242}
-header p{color:#aaa}
-main{max-width:1200px;margin:auto;padding:20px}
-input,select,button{
-  padding:11px;border-radius:8px;border:1px solid #444;
-  background:#252631;color:white;font-size:14px;
+h1 { color: #333; }
+canvas {
+  width: 100%;
+  background: white;
+  border-bottom: 3px solid #535353;
+  display: block;
 }
-button{cursor:pointer}
-button:hover{filter:brightness(1.25)}
-.controls{
-  display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  font-weight: bold;
 }
-#title{
-  width:100%;font-size:25px;font-weight:bold;
-  text-align:center;background:#20212b;
+button {
+  padding: 12px 24px;
+  border: 0;
+  background: #333;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
 }
-.tiers{display:flex;flex-direction:column;gap:8px;margin:20px 0}
-.tier{
-  display:flex;min-height:125px;background:#22232d;
-  border:2px solid #444;border-radius:10px;overflow:hidden;
-}
-.tier-label{
-  width:125px;min-width:125px;
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:8px;padding:8px;
-  font-weight:bold;color:#111;text-align:center;
-}
-.tier-label input{
-  width:90%;text-align:center;color:#111;
-  background:#ffffff99;border:none;font-weight:bold;
-}
-.tier-label input[type=color]{
-  width:45px;height:30px;padding:2px;
-}
-.tier-tools{display:flex;gap:4px}
-.tier-tools button{padding:5px;color:white}
-.dropzone{
-  flex:1;display:flex;flex-wrap:wrap;align-content:flex-start;
-  gap:5px;padding:7px;min-height:120px;
-}
-.photo{
-  width:90px;height:100px;position:relative;
-  cursor:grab;background:#333;border-radius:5px;
-  overflow:hidden;
-}
-.photo img{width:100%;height:100%;object-fit:cover}
-.photo button{
-  position:absolute;right:2px;top:2px;
-  padding:2px 6px;background:#a00;
-}
-.photo.dragging{opacity:.35}
-.section{
-  background:#1b1c25;border-radius:12px;
-  padding:17px;margin-top:20px;
-}
-.section h2{margin-top:0}
-#gallery{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));
-  gap:10px;margin-top:15px;
-}
-.gallery-item{
-  cursor:grab;background:#292a35;border-radius:8px;
-  overflow:hidden;text-align:center;
-}
-.gallery-item img{
-  width:100%;height:110px;object-fit:cover;
-}
-.gallery-item p{font-size:12px;padding:4px}
-.gallery-item button{margin-bottom:7px}
-.small{font-size:12px;color:#aaa}
-@media(max-width:600px){
- .tier-label{width:90px;min-width:90px}
- .photo{width:65px;height:75px}
- header h1{font-size:29px}
-}
+button:hover { background: #555; }
 </style>
 </head>
 <body>
-
-<header>
-  <h1>🔥 TOPS VIRAL 🔥</h1>
-  <p>¡Crea tus rankings, organiza tus tops y comparte tus opiniones!</p>
-</header>
-
-<main>
-
-<input id="title" value="MI TOP DEFINITIVO" placeholder="Escribe el título de tu top">
-
-<div class="controls">
-  <select id="category">
-    <option value="animals">🐯 Animales famosos</option>
-    <option value="dogs">🐶 Razas de perros</option>
-    <option value="cats">🐱 Razas de gatos</option>
-    <option value="dinosaurs">🦖 Dinosaurios</option>
-    <option value="sea">🦈 Animales marinos</option>
-    <option value="birds">🦅 Aves</option>
-    <option value="countries">🌎 Países</option>
-    <option value="football">⚽ Fútbol</option>
-    <option value="players">🏆 Futbolistas</option>
-    <option value="games">🎮 Videojuegos</option>
-    <option value="characters">🦸 Personajes famosos</option>
-    <option value="movies">🎬 Películas</option>
-    <option value="horror">👻 Terror</option>
-    <option value="monsters">👹 Monstruos</option>
-    <option value="food">🍕 Comidas</option>
-    <option value="cars">🏎️ Autos</option>
-    <option value="youtubers">📹 Youtubers</option>
-    <option value="history">📜 Personajes históricos</option>
-    <option value="assassins">🕵️ Asesinos famosos de la historia</option>
-    <option value="space">🚀 Espacio</option>
-    <option value="anime">🎌 Anime</option>
-  </select>
-  <button onclick="loadCategory()">🔎 Cargar 50 imágenes</button>
-  <button onclick="resetBoard()">🗑️ Limpiar ranking</button>
-  <button onclick="saveBoard()">💾 Guardar ranking</button>
-</div>
-
-<div class="controls">
-  <button onclick="addTier()">➕ Agregar nivel</button>
-  <button onclick="exportBoard()">📸 Descargar ranking</button>
-  <button onclick="freeMode()">⭐ OPCIÓN LIBRE</button>
-</div>
-
-<div class="tiers" id="tiers"></div>
-
-<div class="section">
-  <h2>🖼️ Galería de imágenes</h2>
-  <p class="small">Selecciona una temática. Puedes arrastrar las imágenes a cualquier nivel del ranking. Se buscan hasta 50 imágenes disponibles.</p>
-  <div class="controls">
-    <input id="search" placeholder="Buscar otras imágenes...">
-    <button onclick="searchImages()">Buscar</button>
-    <label>
-      <input type="file" id="upload" accept="image/*" multiple hidden>
-      <button onclick="document.getElementById('upload').click()">📁 Subir mis fotos</button>
-    </label>
+<div class="game">
+  <h1>🦖 DINO RUN PLUS</h1>
+  <div class="info">
+    <span id="score">Puntos: 0</span>
+    <span id="record">Récord: 0</span>
   </div>
-  <div id="status" class="small"></div>
-  <div id="gallery"></div>
+  <canvas id="game" width="900" height="300"></canvas>
+  <p id="message">Presioná ESPACIO para comenzar</p>
+  <button onclick="restart()">REINICIAR</button>
+  <p>ESPACIO: Saltar | ↓: Agacharse</p>
 </div>
-
-</main>
 
 <script>
-const categories={
- animals:"famous animals",
- dogs:"dog breeds",
- cats:"cat breeds",
- dinosaurs:"dinosaurs",
- sea:"marine animals",
- birds:"famous birds",
- countries:"world countries landmarks",
- football:"football",
- players:"famous football players",
- games:"popular video games",
- characters:"famous fictional characters",
- movies:"famous movies",
- horror:"horror movie monsters",
- monsters:"mythological monsters",
- food:"popular food",
- cars:"famous cars",
- youtubers:"famous YouTubers",
- history:"famous historical figures",
- assassins:"historical assassins portraits",
- space:"planets and space",
- anime:"famous anime characters"
-};
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
-let levels=[
- {name:"1",color:"#ed3030",items:[]},
- {name:"2",color:"#f39a32",items:[]},
- {name:"3",color:"#91d96b",items:[]},
- {name:"4",color:"#167d36",items:[]}
-];
+let dino, obstacles, score, speed, running, gameOver;
+let frame = 0;
+let furyUntil = 0;
+let record = Number(localStorage.getItem("dinoRecord")) || 0;
 
-let currentImages=[];
-let dragData=null;
-let free=true;
+const scoreText = document.getElementById("score");
+const recordText = document.getElementById("record");
+const message = document.getElementById("message");
 
-function render(){
- const container=document.getElementById("tiers");
- container.innerHTML="";
+recordText.textContent = "Récord: " + record;
 
- levels.forEach((level,index)=>{
-  const row=document.createElement("div");
-  row.className="tier";
-
-  const label=document.createElement("div");
-  label.className="tier-label";
-  label.style.background=level.color;
-
-  const name=document.createElement("input");
-  name.value=level.name;
-  name.title="Nombre del nivel";
-  name.onchange=()=>level.name=name.value;
-
-  const color=document.createElement("input");
-  color.type="color";
-  color.value=level.color;
-  color.title="Cambiar color";
-  color.oninput=()=>{
-   level.color=color.value;
-   label.style.background=color.value;
-  };
-
-  const tools=document.createElement("div");
-  tools.className="tier-tools";
-
-  const up=document.createElement("button");
-  up.textContent="↑";
-  up.title="Subir nivel";
-  up.onclick=()=>moveLevel(index,-1);
-
-  const down=document.createElement("button");
-  down.textContent="↓";
-  down.title="Bajar nivel";
-  down.onclick=()=>moveLevel(index,1);
-
-  const remove=document.createElement("button");
-  remove.textContent="×";
-  remove.title="Eliminar nivel";
-  remove.onclick=()=>{
-   if(confirm("¿Eliminar este nivel y sus imágenes?")){
-    levels.splice(index,1);render();
-   }
-  };
-
-  tools.append(up,down,remove);
-  label.append(name,color,tools);
-
-  const zone=document.createElement("div");
-  zone.className="dropzone";
-  zone.dataset.level=index;
-
-  zone.ondragover=e=>e.preventDefault();
-  zone.ondrop=e=>{
-   e.preventDefault();
-   if(dragData){
-    const photo=dragData.photo;
-    if(dragData.source!==null){
-     levels[dragData.source].items.splice(dragData.position,1);
-    }
-    levels[index].items.push(photo);
-    dragData=null;
-    render();
-   }
-  };
-
-  level.items.forEach((photo,position)=>{
-   zone.appendChild(createPhoto(photo,index,position));
-  });
-
-  row.append(label,zone);
-  container.appendChild(row);
- });
+function restart() {
+  dino = { x: 65, y: 220, w: 40, h: 45, vy: 0, jumping: false, duck: false };
+  obstacles = [];
+  score = 0;
+  speed = 6;
+  frame = 0;
+  furyUntil = 0;
+  running = true;
+  gameOver = false;
+  message.textContent = "¡Corré, dinosaurio!";
+  loop();
 }
 
-function createPhoto(photo,level,position){
- const div=document.createElement("div");
- div.className="photo";
- div.draggable=true;
-
- const img=document.createElement("img");
- img.src=photo.url;
- img.alt=photo.name;
- img.onerror=()=>div.remove();
-
- const del=document.createElement("button");
- del.textContent="×";
- del.onclick=()=>{
-  levels[level].items.splice(position,1);
-  render();
- };
-
- div.ondragstart=()=>{
-  dragData={photo,source:level,position};
-  div.classList.add("dragging");
- };
- div.ondragend=()=>div.classList.remove("dragging");
-
- div.append(img,del);
- return div;
-}
-
-function moveLevel(index,direction){
- const target=index+direction;
- if(target<0||target>=levels.length)return;
- [levels[index],levels[target]]=[levels[target],levels[index]];
- render();
-}
-
-function addTier(){
- levels.push({
-  name:"NUEVO",
-  color:"#777777",
-  items:[]
- });
- render();
-}
-
-function resetBoard(){
- if(!confirm("¿Seguro que quieres borrar todas las imágenes del ranking?"))return;
- levels.forEach(l=>l.items=[]);
- render();
-}
-
-function freeMode(){
- free=true;
- document.getElementById("search").value="";
- document.getElementById("status").textContent=
- "⭐ Modo libre: sube tus propias imágenes o busca las que quieras.";
- document.getElementById("gallery").innerHTML="";
-}
-
-async function loadCategory(){
- const category=document.getElementById("category").value;
- const query=categories[category];
- await fetchImages(query);
-}
-
-async function searchImages(){
- const query=document.getElementById("search").value.trim();
- if(!query)return;
- await fetchImages(query);
-}
-
-async function fetchImages(query){
- const gallery=document.getElementById("gallery");
- const status=document.getElementById("status");
-
- gallery.innerHTML="";
- status.textContent="Buscando imágenes...";
-
- try{
-  const url="https://commons.wikimedia.org/w/api.php"+
-   "?action=query&generator=search"+
-   "&gsrsearch="+encodeURIComponent(query)+
-   "&gsrnamespace=6&gsrlimit=50"+
-   "&prop=imageinfo&iiprop=url&iiurlwidth=240"+
-   "&format=json&origin=*";
-
-  const response=await fetch(url);
-  const data=await response.json();
-  const pages=Object.values(data.query?.pages||{});
-
-  currentImages=pages
-   .filter(p=>p.imageinfo?.[0]?.thumburl)
-   .map(p=>({
-    name:p.title.replace("File:",""),
-    url:p.imageinfo[0].thumburl,
-    original:p.imageinfo[0].descriptionurl
-   }));
-
-  currentImages.forEach(photo=>{
-   const card=document.createElement("div");
-   card.className="gallery-item";
-   card.draggable=true;
-
-   const img=document.createElement("img");
-   img.src=photo.url;
-   img.alt=photo.name;
-
-   const name=document.createElement("p");
-   name.textContent=photo.name.slice(0,55);
-
-   const button=document.createElement("button");
-   button.textContent="➕ Agregar";
-   button.onclick=()=>addPhoto(photo);
-
-   card.ondragstart=()=>{
-    dragData={photo,source:null,position:null};
-   };
-
-   card.append(img,name,button);
-   gallery.appendChild(card);
-  });
-
-  status.textContent=currentImages.length+
-   " imágenes encontradas. Arrástralas a tus niveles.";
-
-  if(!currentImages.length){
-   status.textContent="No se encontraron imágenes. Prueba otra búsqueda.";
+function jump() {
+  if (!running) {
+    if (gameOver) restart();
+    return;
   }
- }catch(error){
-  status.textContent="No se pudieron cargar las imágenes. Comprueba tu conexión.";
- }
+  if (!dino.jumping) {
+    dino.vy = -13;
+    dino.jumping = true;
+  }
 }
 
-function addPhoto(photo){
- levels[0].items.push(photo);
- render();
-}
-
-document.getElementById("upload").addEventListener("change",e=>{
- const files=Array.from(e.target.files);
-
- files.forEach(file=>{
-  const reader=new FileReader();
-  reader.onload=event=>{
-   const photo={
-    name:file.name,
-    url:event.target.result
-   };
-   addPhoto(photo);
-  };
-  reader.readAsDataURL(file);
- });
- e.target.value="";
+document.addEventListener("keydown", e => {
+  if (e.code === "Space" || e.code === "ArrowUp") {
+    e.preventDefault();
+    jump();
+  }
+  if (e.code === "ArrowDown" && running) dino.duck = true;
 });
 
-function saveBoard(){
- const board={
-  title:document.getElementById("title").value,
-  levels
- };
- localStorage.setItem("topsViral",JSON.stringify(board));
- alert("¡Ranking guardado!");
-}
+document.addEventListener("keyup", e => {
+  if (e.code === "ArrowDown" && dino) dino.duck = false;
+});
 
-function restoreBoard(){
- const saved=localStorage.getItem("topsViral");
- if(!saved)return;
- try{
-  const board=JSON.parse(saved);
-  document.getElementById("title").value=board.title;
-  levels=board.levels;
- }catch(e){}
-}
+canvas.addEventListener("click", jump);
 
-function exportBoard(){
- const title=document.getElementById("title").value;
- const canvas=document.createElement("canvas");
- const width=1200;
- const rowHeight=180;
- canvas.width=width;
- canvas.height=130+levels.length*rowHeight;
-
- const ctx=canvas.getContext("2d");
- ctx.fillStyle="#101116";
- ctx.fillRect(0,0,canvas.width,canvas.height);
-
- ctx.fillStyle="white";
- ctx.font="bold 38px Arial";
- ctx.textAlign="center";
- ctx.fillText(title,600,65);
-
- let pending=0;
- const draw=()=>{
-  levels.forEach((level,i)=>{
-   const y=105+i*rowHeight;
-   ctx.fillStyle=level.color;
-   ctx.fillRect(0,y,130,rowHeight-5);
-   ctx.fillStyle="white";
-   ctx.font="bold 24px Arial";
-   ctx.fillText(level.name,65,y+90);
-
-   level.items.forEach((photo,j)=>{
-    const img=new Image();
-    img.crossOrigin="anonymous";
-    img.onload=()=>{
-     const x=140+(j%10)*105;
-     const py=y+5+Math.floor(j/10)*55;
-     ctx.drawImage(img,x,py,100,50);
-     pending--;
-     if(pending===0)download();
-    };
-    img.onerror=()=>{
-     pending--;
-     if(pending===0)download();
-    };
-    pending++;
-    img.src=photo.url;
-   });
+function spawnObstacle() {
+  obstacles.push({
+    x: 900,
+    w: 22 + Math.random() * 15,
+    h: 30 + Math.random() * 35
   });
-  if(pending===0)download();
- };
-
- function download(){
-  const link=document.createElement("a");
-  link.download="mi-top-viral.png";
-  link.href=canvas.toDataURL("image/png");
-  link.click();
- }
-
- draw();
 }
 
-restoreBoard();
-render();
+function drawDino() {
+  const fury = Date.now() < furyUntil;
+  ctx.font = "42px Arial";
+  ctx.fillText(fury ? "🔥🦖" : "🦖", dino.x, dino.y + 40);
+}
+
+function loop() {
+  if (!running) return;
+
+  ctx.clearRect(0, 0, 900, 300);
+
+  // Suelo
+  ctx.strokeStyle = "#555";
+  ctx.beginPath();
+  ctx.moveTo(0, 265);
+  ctx.lineTo(900, 265);
+  ctx.stroke();
+
+  // Dinosaurio
+  dino.vy += 0.65;
+  dino.y += dino.vy;
+
+  if (dino.y >= 220) {
+    dino.y = 220;
+    dino.vy = 0;
+    dino.jumping = false;
+  }
+
+  drawDino();
+
+  // Obstáculos
+  if (frame % Math.max(35, 90 - Math.floor(speed * 3)) === 0) {
+    spawnObstacle();
+  }
+
+  obstacles.forEach((o, i) => {
+    o.x -= speed;
+    ctx.fillStyle = "#397b39";
+    ctx.fillRect(o.x, 265 - o.h, o.w, o.h);
+
+    const fury = Date.now() < furyUntil;
+    const ducking = dino.duck && !dino.jumping;
+    const dinoHeight = ducking ? 25 : 40;
+    const dinoTop = dino.y + (ducking ? 15 : 0);
+
+    if (
+      dino.x + 30 > o.x &&
+      dino.x + 5 < o.x + o.w &&
+      dinoTop + dinoHeight > 265 - o.h
+    ) {
+      if (fury) {
+        obstacles.splice(i, 1);
+      } else {
+        endGame();
+      }
+    }
+
+    if (o.x + o.w < 0) obstacles.splice(i, 1);
+  });
+
+  // Puntuación
+  frame++;
+  score += 0.15;
+  speed += 0.001;
+
+  if (Math.floor(score) === 100) {
+    furyUntil = Date.now() + 5000;
+    message.textContent = "🔥 ¡MODO FURIA ACTIVADO!";
+  }
+
+  scoreText.textContent = "Puntos: " + Math.floor(score);
+  recordText.textContent = "Récord: " + record;
+
+  if (Date.now() > furyUntil && Math.floor(score) > 100) {
+    message.textContent = "¡Seguí corriendo!";
+  }
+
+  requestAnimationFrame(loop);
+}
+
+function endGame() {
+  running = false;
+  gameOver = true;
+
+  if (Math.floor(score) > record) {
+    record = Math.floor(score);
+    localStorage.setItem("dinoRecord", record);
+  }
+
+  recordText.textContent = "Récord: " + record;
+  message.textContent = "💀 GAME OVER - Presioná ESPACIO para volver a jugar";
+}
+
+restart();
 </script>
 </body>
 </html>
